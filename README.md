@@ -763,7 +763,7 @@ const APPLE_TYPES = [
 // 成就系统
 const ACHIEVEMENTS = [
     { id: 'first_match', name: '初次消除', desc: '完成第一次消除', icon: '🎯' },
-    { id: 'combo_master', name: '连击高手', desc: '达成5连击', icon: '⚡' },
+    { id: 'combo_master', name: '连击高手', desc: '达成10连击', icon: '⚡' },
     { id: 'score_hunter', name: '分数猎人', desc: '单局得分超过5000', icon: '🏆' },
     { id: 'perfect_level', name: '完美通关', desc: '剩余步数≥10通关', icon: '💎' },
     { id: 'power_master', name: '道具大师', desc: '使用所有类型道具', icon: '🎮' },
@@ -2297,7 +2297,7 @@ function checkAchievements() {
         newAchievements.push('first_match');
     }
     
-    if (gameState.maxCombo >= 5 && !gameState.achievements.has('combo_master')) {
+    if (gameState.maxCombo >= 10 && !gameState.achievements.has('combo_master')) {
         newAchievements.push('combo_master');
     }
     
