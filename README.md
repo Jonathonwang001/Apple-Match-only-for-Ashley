@@ -763,7 +763,7 @@ const APPLE_TYPES = [
 // 成就系统
 const ACHIEVEMENTS = [
     { id: 'first_match', name: '初次消除', desc: '完成第一次消除', icon: '🎯' },
-    { id: 'combo_master', name: '连击高手', desc: '达成10连击', icon: '⚡' },
+    { id: 'combo_master', name: '连击高手', desc: '达成5连击', icon: '⚡' },
     { id: 'score_hunter', name: '分数猎人', desc: '单局得分超过5000', icon: '🏆' },
     { id: 'perfect_level', name: '完美通关', desc: '剩余步数≥10通关', icon: '💎' },
     { id: 'power_master', name: '道具大师', desc: '使用所有类型道具', icon: '🎮' },
@@ -1513,12 +1513,71 @@ function dropCells() {
 }
 
 // 补充空单元格
+// 填充空单元格 - 优化版
 function fillEmptyCells() {
+    // 记录每列需要填充的空格数量
+    const emptyCellsPerCol = Array(8).fill(0);
+    
+    // 第一遍：计算每列需要填充的空格数量
     for (let col = 0; col < 8; col++) {
         for (let row = 0; row < 8; row++) {
             if (gameState.grid[row][col] === null) {
-                gameState.grid[row][col] = createRandomApple();
+                emptyCellsPerCol[col]++;
+            }
+        }
+    }
+    
+    // 第二遍：填充空格
+    for (let col = 0; col < 8; col++) {
+        let fillCount = 0;
+        for (let row = 0; row < 8; row++) {
+            if (gameState.grid[row][col] === null) {
+                // 获取相邻单元格的类型（左侧和上方）
+                const adjacentTypes = [];
+                
+                // 左侧单元格（如果存在）
+                if (col > 0 && gameState.grid[row][col-1]) {
+                    adjacentTypes.push(gameState.grid[row][col-1].type);
+                }
+                
+                // 上方单元格（如果存在）
+                if (row > 0 && gameState.grid[row-1][col]) {
+                    adjacentTypes.push(gameState.grid[row-1][col].type);
+                }
+                
+                // 尝试创建匹配机会
+                if (adjacentTypes.length > 0 && Math.random() < 0.6) { // 60%概率创建匹配
+                    // 选择最常出现的相邻类型
+                    const typeCounts = {};
+                    adjacentTypes.forEach(type => {
+                        typeCounts[type] = (typeCounts[type] || 0) + 1;
+                    });
+                    
+                    const mostCommonType = Object.keys(typeCounts).reduce((a, b) => 
+                        typeCounts[a] > typeCounts[b] ? a : b
+                    );
+                    
+                    gameState.grid[row][col] = APPLE_TYPES.find(t => t.type === mostCommonType);
+                } else {
+                    // 随机生成苹果
+                    gameState.grid[row][col] = createRandomApple();
+                }
+                
+                // 更新显示
                 updateCellDisplay(row, col);
+                
+                // 恢复背景色
+                const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+                if (cell) {
+                    cell.style.background = '';
+                }
+                
+                fillCount++;
+                if (fillCount >= emptyCellsPerCol[col]) break;
+            }
+        }
+    }
+}
                 
                 // 恢复背景色
                 const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
@@ -2297,7 +2356,7 @@ function checkAchievements() {
         newAchievements.push('first_match');
     }
     
-    if (gameState.maxCombo >= 10 && !gameState.achievements.has('combo_master')) {
+    if (gameState.maxCombo >= 5 && !gameState.achievements.has('combo_master')) {
         newAchievements.push('combo_master');
     }
     
