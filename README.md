@@ -2552,21 +2552,102 @@ function showMessage(message) {
 
 // 菜单功能
 function showAchievements() {
-    let achievementText = '🏆 成就系统 🏆\n\n';
+    // 创建成就弹窗
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    `;
     
-    ACHIEVEMENTS.forEach(achievement => {
-        const unlocked = gameState.achievements.has(achievement.id);
-        achievementText += `${unlocked ? '✅' : '🔒'} ${achievement.icon} ${achievement.name}\n`;
-        achievementText += `   ${achievement.desc}\n\n`;
-    });
+    overlay.innerHTML = `
+        <div style="background: linear-gradient(135deg, #6a11cb, #2575fc); 
+                    color: white; padding: 2rem; border-radius: 20px; 
+                    max-width: 90vw; max-height: 90vh; overflow-y: auto;">
+            <h2 style="text-align: center; margin-bottom: 1.5rem;">🏆 成就系统 🏆</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+                        gap: 1rem; margin-bottom: 2rem;">
+                ${ACHIEVEMENTS.map(achievement => {
+                    const unlocked = gameState.achievements.has(achievement.id);
+                    return `
+                        <div style="background: rgba(255, 255, 255, ${unlocked ? '0.15' : '0.1'}); 
+                                    padding: 1rem; border-radius: 15px; text-align: center;">
+                            <div style="font-size: 2rem;">${unlocked ? achievement.icon : '🔒'}</div>
+                            <div style="font-weight: bold; margin: 0.5rem 0;">${achievement.name}</div>
+                            <div style="font-size: 0.9rem; opacity: 0.9;">${achievement.desc}</div>
+                            <div style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.7;">
+                                ${unlocked ? '已解锁' : '未解锁'}
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+            
+            <div style="background: rgba(255, 255, 255, 0.1); padding: 1rem; border-radius: 15px; 
+                        margin-bottom: 1.5rem;">
+                <h3 style="text-align: center; margin-bottom: 1rem;">📊 游戏统计</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                    <div>游戏局数:</div>
+                    <div style="text-align: right;">${gameState.gamesPlayed}</div>
+                    <div>总得分:</div>
+                    <div style="text-align: right;">${gameState.totalScore}</div>
+                    <div>完美通关:</div>
+                    <div style="text-align: right;">${gameState.perfectGames}</div>
+                    <div>最高连击:</div>
+                    <div style="text-align: right;">${gameState.maxCombo}</div>
+                    <div>总消除数:</div>
+                    <div style="text-align: right;">${gameState.totalMatches}</div>
+                </div>
+            </div>
+            
+            <div style="display: flex; justify-content: center; gap: 1rem;">
+                <button onclick="this.parentElement.parentElement.parentElement.remove();" 
+                        style="padding: 0.8rem 1.5rem; background: rgba(255,255,255,0.2); 
+                               color: white; border: 2px solid white; border-radius: 25px; 
+                               cursor: pointer;">
+                    关闭
+                </button>
+                <button onclick="resetAchievements(); this.parentElement.parentElement.parentElement.remove();" 
+                        style="padding: 0.8rem 1.5rem; background: rgba(255,0,0,0.3); 
+                               color: white; border: 2px solid #ff6b6b; border-radius: 25px; 
+                               cursor: pointer;">
+                    重置成就
+                </button>
+            </div>
+        </div>
+    `;
     
-    achievementText += `\n📊 游戏统计:\n`;
-    achievementText += `游戏局数: ${gameState.gamesPlayed}\n`;
-    achievementText += `总得分: ${gameState.totalScore}\n`;
-    achievementText += `完美通关: ${gameState.perfectGames}\n`;
-    achievementText += `最高连击: ${gameState.maxCombo}`;
-    
-    alert(achievementText);
+    document.body.appendChild(overlay);
+}
+
+// 添加这个新函数到代码中
+function resetAchievements() {
+    if (confirm("确定要清空所有成就和游戏记录吗？此操作不可撤销！")) {
+        // 重置成就数据
+        gameState.achievements = new Set();
+        gameState.totalScore = 0;
+        gameState.gamesPlayed = 0;
+        gameState.perfectGames = 0;
+        gameState.maxCombo = 0;
+        gameState.totalMatches = 0;
+        
+        // 清除本地存储
+        localStorage.removeItem('appleGameSave');
+        
+        // 显示成功消息
+        showMessage("🎮 所有成就和记录已重置！");
+        
+        // 重新加载页面以应用更改
+        setTimeout(() => location.reload(), 2000);
+    }
 }
 
 function showLoveMessages() {
