@@ -557,7 +557,7 @@ Creating an interesting game only for my love, Ashley. Hope her happy everyday!
             <button class="menu-btn" onclick="showLevelSelect()">开始游戏 🎮</button>
             <button class="menu-btn" onclick="showAchievements()">成就系统 🏆</button>
             <button class="menu-btn" onclick="showLoveMessages()">专属情话 💕</button>
-            <button class="menu-btn" onclick="showSettings()">游戏设置 ⚙️</button>
+            <button class="menu-btn" onclick="showSettings()">游戏说明 ⚙️</button>
         </div>
     </div>
     
@@ -736,18 +736,18 @@ const gameState = new GameState();
 
 // 关卡数据和情话
 const LEVELS = [
-    { id: 1, name: "初遇", target: 1000, moves: 25, quote: "就像第一次见到你，心跳不已 💕", special: false },
-    { id: 2, name: "怦然心动", target: 1200, moves: 24, quote: "每一个眼神交汇，都是命运的安排 ✨", special: false },
-    { id: 3, name: "甜蜜约会", target: 1500, moves: 23, quote: "和你在一起的每一秒都是甜蜜的 🍯", special: false },
-    { id: 4, name: "告白时刻", target: 1800, moves: 22, quote: "三个字，说给全世界听：我爱你 💖", special: true },
-    { id: 5, name: "牵手漫步", target: 2000, moves: 21, quote: "十指紧扣，走过春夏秋冬 🌸", special: false },
-    { id: 6, name: "浪漫晚餐", target: 2300, moves: 20, quote: "烛光晚餐，你是我唯一的风景 🕯️", special: false },
-    { id: 7, name: "星空许愿", target: 2600, moves: 19, quote: "对着流星许愿，愿与你白头偕老 🌟", special: false },
-    { id: 8, name: "生日惊喜", target: 3000, moves: 18, quote: "3月25日，为你准备最美的惊喜 🎂", special: true },
-    { id: 9, name: "情人节", target: 3300, moves: 17, quote: "玫瑰花海，不及你的笑颜 🌹", special: true },
-    { id: 10, name: "永恒承诺", target: 3600, moves: 16, quote: "此生此世，只想和你在一起 💍", special: true },
-    { id: 11, name: "梦中情人", target: 4000, moves: 15, quote: "梦里梦外，都是你的身影 💭", special: false },
-    { id: 12, name: "心有灵犀", target: 4500, moves: 14, quote: "不用言语，我们就能读懂彼此 💫", special: false }
+    { id: 1, name: "初遇", target: 1800, moves: 1000, quote: "就像第一次见到你，心跳不已 💕", special: false },
+    { id: 2, name: "怦然心动", target: 2300, moves: 840, quote: "每一个眼神交汇，都是命运的安排 ✨", special: false },
+    { id: 3, name: "甜蜜约会", target: 2500, moves: 830, quote: "和你在一起的每一秒都是甜蜜的 🍯", special: false },
+    { id: 4, name: "告白时刻", target: 2800, moves: 820, quote: "三个字，说给全世界听：我爱你 💖", special: true },
+    { id: 5, name: "牵手漫步", target: 3000, moves: 810, quote: "十指紧扣，走过春夏秋冬 🌸", special: false },
+    { id: 6, name: "浪漫晚餐", target: 3500, moves: 800, quote: "烛光晚餐，你是我唯一的风景 🕯️", special: false },
+    { id: 7, name: "星空许愿", target: 4000, moves: 890, quote: "对着流星许愿，愿与你白头偕老 🌟", special: false },
+    { id: 8, name: "生日惊喜", target: 4600, moves: 880, quote: "3月25日，为你准备最美的惊喜 🎂", special: true },
+    { id: 9, name: "情人节", target: 5300, moves: 870, quote: "玫瑰花海，不及你的笑颜 🌹", special: true },
+    { id: 10, name: "永恒承诺", target: 6600, moves: 860, quote: "此生此世，只想和你在一起 💍", special: true },
+    { id: 11, name: "梦中情人", target: 7000, moves: 850, quote: "梦里梦外，都是你的身影 💭", special: false },
+    { id: 12, name: "心有灵犀", target: 8000, moves: 840, quote: "不用言语，我们就能读懂彼此 💫", special: false }
 ];
 
 // 苹果类型定义
@@ -957,12 +957,12 @@ function startLevel(levelId) {
         gameState.moves = level.moves;
         // 重置道具
         gameState.powerUps = {
-            bomb: 3,
-            lightning: 3,
-            rainbow: 2,
-            hammer: 5,
-            shuffle: 2,
-            time: 2
+            bomb: 30,
+            lightning: 30,
+            rainbow: 20,
+            hammer: 50,
+            shuffle: 20,
+            time: 20
         };
     }
     
