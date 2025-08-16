@@ -4,364 +4,266 @@ Creating an interesting game only for my love, Ashley. Hope her happy everyday!
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="format-detection" content="telephone=no">
-    <title>苹果消消乐 - 为Ashley定制</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Apple-Match-only-for-Ashley | 为我最爱的Ashley定制的专属游戏 ❤️</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
         }
 
-        html, body {
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-            position: fixed;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 30%, #fad0c4 100%);
-        }
-
-        /* 强制全屏显示 */
-        .app-container {
-            width: 100vw;
-            height: 100vh;
-            height: 100dvh; /* 动态视口高度 */
-            position: relative;
-            overflow: hidden;
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+            padding: 10px;
+            position: relative;
         }
 
         .screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
             display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: max(env(safe-area-inset-top), 20px) env(safe-area-inset-right) max(env(safe-area-inset-bottom), 20px) env(safe-area-inset-left);
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
+            animation: fadeIn 0.5s ease-in-out;
         }
 
         .screen.active {
-            display: flex;
+            display: block;
         }
 
-        .love-message {
-            background: rgba(255,255,255,0.95);
-            padding: 20px;
-            border-radius: 20px;
-            margin: 10px 20px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
             text-align: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            font-size: 16px;
-            color: #ff6b6b;
-            font-weight: bold;
-            animation: heartbeat 2s infinite;
-        }
-
-        @keyframes heartbeat {
-            0%, 50%, 100% { transform: scale(1); }
-            25%, 75% { transform: scale(1.05); }
+            margin-bottom: 20px;
         }
 
         .title {
-            font-size: clamp(2rem, 8vw, 4rem);
-            color: #ff6b6b;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
-            margin-bottom: 20px;
-            animation: bounce 2s infinite;
-            text-align: center;
+            font-size: clamp(24px, 6vw, 32px);
             font-weight: bold;
-            line-height: 1.2;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-15px); }
-            60% { transform: translateY(-8px); }
+        .love-message {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            line-height: 1.6;
         }
 
         .btn {
-            background: linear-gradient(45deg, #ff6b6b, #ffa726);
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
             color: white;
             border: none;
             padding: 15px 25px;
-            margin: 8px 10px;
+            font-size: 16px;
             border-radius: 25px;
-            font-size: clamp(16px, 4vw, 20px);
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+            margin: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
             font-weight: bold;
-            min-width: 200px;
             min-height: 50px;
-            text-align: center;
             touch-action: manipulation;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
-        .btn:active {
-            transform: scale(0.95);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-        }
-
-        .btn:hover {
+        .btn:hover, .btn:active {
             transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
 
+        /* 关卡网格优化 */
         .level-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            padding: 10px;
-            width: min(95vw, 600px);
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 20px 0;
             max-height: 60vh;
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
+            padding: 10px;
         }
 
-        .level-btn {
-            aspect-ratio: 1.1;
-            background: linear-gradient(45deg, #4ecdc4, #44a08d);
-            color: white;
-            border: none;
-            border-radius: 20px;
-            font-size: 14px;
+        .level-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 12px;
+            text-align: center;
             cursor: pointer;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
+            border: 2px solid transparent;
+            min-height: 120px;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            font-weight: bold;
-            touch-action: manipulation;
-            min-height: 100px;
         }
 
-        .level-btn:active {
-            transform: scale(0.95);
+        .level-card.unlocked:hover, .level-card.unlocked:active {
+            transform: scale(1.05);
+            border-color: #feca57;
+            background: rgba(255, 255, 255, 0.25);
         }
 
-        .level-btn.unlocked {
+        .level-card.completed {
             background: linear-gradient(45deg, #4ecdc4, #44a08d);
         }
 
-        .level-btn.locked {
-            background: linear-gradient(45deg, #666, #444);
-            opacity: 0.6;
-        }
-
-        .level-btn.completed {
-            background: linear-gradient(45deg, #ffd700, #ffb347);
-        }
-
-        /* 游戏界面完全重新设计 */
-        .game-wrapper {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            padding: max(env(safe-area-inset-top), 10px) env(safe-area-inset-right) max(env(safe-area-inset-bottom), 10px) env(safe-area-inset-left);
-            gap: 8px;
-        }
-
-        .game-header {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 8px;
-            width: 100%;
+        .level-number {
+            font-size: 24px;
+            font-weight: bold;
             margin-bottom: 5px;
         }
 
-        .game-info {
-            background: rgba(255,255,255,0.9);
-            padding: 8px 12px;
-            border-radius: 15px;
+        .level-name {
+            font-size: 12px;
+            margin-bottom: 5px;
             font-weight: bold;
-            color: #333;
-            font-size: clamp(12px, 3.5vw, 16px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            text-align: center;
+            color: #feca57;
+        }
+
+        .level-difficulty {
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+
+        .level-target, .level-moves {
+            font-size: 10px;
+            opacity: 0.9;
+        }
+
+        /* 游戏界面优化 */
+        .game-wrapper {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.3);
+            padding: 12px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .game-info {
+            font-weight: bold;
+            font-size: 14px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            min-height: 40px;
+            gap: 5px;
+            min-width: 80px;
         }
 
         .progress-container {
-            width: 100%;
-            margin: 5px 0;
+            margin-bottom: 10px;
         }
 
         .progress-bar {
             width: 100%;
             height: 8px;
             background: rgba(255,255,255,0.3);
-            border-radius: 10px;
+            border-radius: 4px;
             overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #4caf50, #8bc34a);
-            transition: width 0.5s ease;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(76,175,80,0.5);
+            background: linear-gradient(90deg, #4ecdc4, #44a08d);
+            transition: width 0.3s ease;
         }
 
-        /* 游戏网格完全重构 */
         .game-board-container {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            min-height: 0; /* 重要：允许收缩 */
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 10px;
         }
 
         .game-board {
-            width: min(95vw, 95vh, 450px);
-            height: min(95vw, 95vh, 450px);
-            background: rgba(255,255,255,0.98);
-            border-radius: 20px;
-            padding: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             position: relative;
-            overflow: hidden;
+            width: 100%;
+            max-width: 320px;
+            margin: 0 auto;
         }
 
         .grid {
-            width: 100%;
-            height: 100%;
             display: grid;
             grid-template-columns: repeat(8, 1fr);
-            grid-template-rows: repeat(8, 1fr);
             gap: 2px;
-            border-radius: 15px;
-            overflow: hidden;
+            background: rgba(0,0,0,0.2);
+            padding: 5px;
+            border-radius: 10px;
+            aspect-ratio: 1;
         }
 
         .cell {
-            background: #f5f5f5;
+            background: rgba(255,255,255,0.8);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all 0.2s ease;
             position: relative;
-            touch-action: manipulation;
-            border-radius: 4px;
-            min-height: 0;
+            aspect-ratio: 1;
+            min-height: 35px;
         }
 
-        .cell:active {
-            transform: scale(0.9);
-            background: #e0e0e0;
+        .cell:hover, .cell:active {
+            transform: scale(1.1);
+            z-index: 10;
         }
 
         .cell.selected {
-            background: #ffeb3b;
-            box-shadow: inset 0 0 0 3px #ff6b6b;
-            animation: selectedGlow 0.8s infinite alternate;
-        }
-
-        @keyframes selectedGlow {
-            from { transform: scale(1); box-shadow: inset 0 0 0 3px #ff6b6b; }
-            to { transform: scale(1.05); box-shadow: inset 0 0 0 3px #ff1744; }
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            box-shadow: 0 0 15px rgba(255,107,107,0.7);
         }
 
         .fruit {
-            width: 90%;
-            height: 90%;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: clamp(14px, 3vw, 24px);
-            font-weight: bold;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
+            font-size: clamp(18px, 4vw, 24px);
+            transition: all 0.3s ease;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
-        /* 水果类型样式 */
-        .apple { background: linear-gradient(135deg, #ff6b6b, #ff5252); box-shadow: 0 4px 8px rgba(255,107,107,0.3); }
-        .orange { background: linear-gradient(135deg, #ffa726, #ff9800); box-shadow: 0 4px 8px rgba(255,167,38,0.3); }
-        .banana { background: linear-gradient(135deg, #ffeb3b, #fdd835); box-shadow: 0 4px 8px rgba(255,235,59,0.3); }
-        .grape { background: linear-gradient(135deg, #ab47bc, #8e24aa); box-shadow: 0 4px 8px rgba(171,71,188,0.3); }
-        .strawberry { background: linear-gradient(135deg, #ec407a, #e91e63); box-shadow: 0 4px 8px rgba(236,64,122,0.3); }
-        .lemon { background: linear-gradient(135deg, #cddc39, #afb42b); box-shadow: 0 4px 8px rgba(205,220,57,0.3); }
-        .cherry { background: linear-gradient(135deg, #f44336, #d32f2f); box-shadow: 0 4px 8px rgba(244,67,54,0.3); }
-        .kiwi { background: linear-gradient(135deg, #4caf50, #388e3c); box-shadow: 0 4px 8px rgba(76,175,80,0.3); }
+        .special-fruit { animation: glow 2s ease-in-out infinite alternate; }
+        .ultra-fruit { animation: rainbow 3s linear infinite; }
+        .mega-fruit { animation: pulse 1s ease-in-out infinite; }
+        .legendary-fruit { animation: legendary 2s ease-in-out infinite; }
 
-        /* 超级水果效果大幅增强 */
-        .special-fruit {
-            animation: specialGlow 1.5s infinite, rotate 3s infinite linear;
-            box-shadow: 0 0 20px rgba(255,215,0,0.8), 0 0 40px rgba(255,215,0,0.4);
-        }
-
-        .ultra-fruit {
-            animation: ultraGlow 1s infinite, rainbow 2s infinite, pulse 0.8s infinite;
-            box-shadow: 0 0 25px rgba(255,255,255,0.9), 0 0 50px rgba(255,255,255,0.5);
-        }
-
-        .mega-fruit {
-            animation: megaGlow 0.8s infinite, megaRotate 4s infinite, megaPulse 1.2s infinite;
-            box-shadow: 0 0 30px rgba(255,0,255,1), 0 0 60px rgba(255,0,255,0.6), 0 0 90px rgba(255,0,255,0.3);
-        }
-
-        .legendary-fruit {
-            animation: legendaryGlow 0.6s infinite, legendaryRotate 2s infinite, legendaryPulse 0.4s infinite;
-            box-shadow: 0 0 40px rgba(0,255,255,1), 0 0 80px rgba(0,255,255,0.8), 0 0 120px rgba(0,255,255,0.4);
-        }
-
-        @keyframes specialGlow {
-            0%, 100% { filter: brightness(1) saturate(1); }
-            50% { filter: brightness(1.4) saturate(1.5); }
-        }
-
-        @keyframes ultraGlow {
-            0%, 100% { filter: brightness(1.2) saturate(1.3); }
-            50% { filter: brightness(1.6) saturate(1.8); }
-        }
-
-        @keyframes megaGlow {
-            0%, 100% { filter: brightness(1.4) saturate(1.6) hue-rotate(0deg); }
-            33% { filter: brightness(1.8) saturate(2) hue-rotate(120deg); }
-            66% { filter: brightness(1.6) saturate(1.8) hue-rotate(240deg); }
-        }
-
-        @keyframes legendaryGlow {
-            0%, 100% { filter: brightness(1.6) saturate(2) hue-rotate(0deg); }
-            25% { filter: brightness(2) saturate(2.5) hue-rotate(90deg); }
-            50% { filter: brightness(1.8) saturate(2.2) hue-rotate(180deg); }
-            75% { filter: brightness(2.2) saturate(2.8) hue-rotate(270deg); }
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 5px #ffd700); }
+            to { filter: drop-shadow(0 0 15px #ffd700); }
         }
 
         @keyframes rainbow {
@@ -374,602 +276,707 @@ Creating an interesting game only for my love, Ashley. Hope her happy everyday!
             50% { transform: scale(1.1); }
         }
 
-        @keyframes megaRotate {
-            0% { transform: rotate(0deg) scale(1); }
-            25% { transform: rotate(90deg) scale(1.1); }
-            50% { transform: rotate(180deg) scale(1); }
-            75% { transform: rotate(270deg) scale(1.1); }
-            100% { transform: rotate(360deg) scale(1); }
+        @keyframes legendary {
+            0%, 100% { filter: drop-shadow(0 0 10px #ff1493) brightness(1.2); }
+            50% { filter: drop-shadow(0 0 20px #00ffff) brightness(1.5); }
         }
 
-        @keyframes megaPulse {
-            0%, 100% { transform: scale(1); }
-            33% { transform: scale(1.15); }
-            66% { transform: scale(0.95); }
-        }
-
-        @keyframes legendaryRotate {
-            0% { transform: rotate(0deg) scale(1) skew(0deg); }
-            50% { transform: rotate(180deg) scale(1.2) skew(5deg); }
-            100% { transform: rotate(360deg) scale(1) skew(0deg); }
-        }
-
-        @keyframes legendaryPulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.25); opacity: 0.8; }
-        }
-
-        /* 超级道具区域增强 */
+        /* 道具区域优化 */
         .power-ups-container {
-            width: 100%;
-            padding: 8px 0;
+            margin: 10px 0;
         }
 
         .power-ups {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
             gap: 8px;
-            justify-content: center;
-            flex-wrap: wrap;
-            width: 100%;
-            padding: 0 5px;
+            background: rgba(0,0,0,0.3);
+            padding: 12px;
+            border-radius: 15px;
+            max-height: 200px;
+            overflow-y: auto;
         }
 
         .power-up {
-            width: clamp(45px, 8vw, 60px);
-            height: clamp(45px, 8vw, 60px);
-            border-radius: 50%;
-            border: 3px solid #fff;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 8px;
+            font-size: 20px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            min-height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            color: white;
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-            font-size: clamp(16px, 3.5vw, 20px);
             touch-action: manipulation;
-            position: relative;
-            overflow: hidden;
         }
 
-        .power-up:active {
-            transform: scale(0.9);
+        .power-up:hover, .power-up:active {
+            background: rgba(255,255,255,0.4);
+            transform: scale(1.05);
         }
 
         .power-up.active {
-            animation: activePowerUp 0.6s infinite alternate;
-            box-shadow: 0 0 0 4px #ffff00, 0 6px 18px rgba(0,0,0,0.25);
-            border-color: #ffff00;
-        }
-
-        @keyframes activePowerUp {
-            from { transform: scale(1) rotate(-3deg); }
-            to { transform: scale(1.15) rotate(3deg); }
+            border-color: #feca57;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            box-shadow: 0 0 15px rgba(255,107,107,0.5);
         }
 
         .power-up.disabled {
-            opacity: 0.4;
-            pointer-events: none;
-            filter: grayscale(0.8);
+            opacity: 0.3;
+            cursor: not-allowed;
         }
 
         .power-up-count {
             position: absolute;
-            top: -8px;
-            right: -8px;
-            background: linear-gradient(45deg, #ff4444, #cc0000);
+            top: -5px;
+            right: -5px;
+            background: #ff6b6b;
             color: white;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
+            border-radius: 10px;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 11px;
             font-weight: bold;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            border: 2px solid white;
         }
 
-        /* 12种超级道具样式 */
-        .bomb { background: linear-gradient(45deg, #ff5722, #d84315); }
-        .rainbow { background: linear-gradient(45deg, #e91e63, #9c27b0, #3f51b5, #4caf50, #ffeb3b, #ff9800); animation: rainbow 2s infinite; }
-        .hammer { background: linear-gradient(45deg, #795548, #5d4037); }
-        .swap { background: linear-gradient(45deg, #607d8b, #455a64); }
-        .lightning { background: linear-gradient(45deg, #ffeb3b, #ffc107); }
-        .freeze { background: linear-gradient(45deg, #03a9f4, #0277bd); }
-        .multiplier { background: linear-gradient(45deg, #9c27b0, #673ab7); }
-        .shuffle { background: linear-gradient(45deg, #4caf50, #388e3c); }
-        .meteor { background: linear-gradient(45deg, #ff6b35, #f7931e); }
-        .tornado { background: linear-gradient(45deg, #00c9ff, #92fe9d); }
-        .magic { background: linear-gradient(45deg, #a8edea, #fed6e3); }
-        .time { background: linear-gradient(45deg, #ffecd2, #fcb69f); }
-
-        /* 控制按钮区域 */
+        /* 控制按钮优化 */
         .game-controls {
             display: flex;
+            justify-content: space-between;
             gap: 8px;
-            flex-wrap: wrap;
-            justify-content: center;
-            width: 100%;
-            padding: 5px 10px;
+            margin-top: 10px;
         }
 
         .control-btn {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            flex: 1;
+            background: rgba(255,255,255,0.2);
             color: white;
             border: none;
-            padding: 10px 15px;
-            border-radius: 20px;
-            font-size: clamp(12px, 3vw, 16px);
+            padding: 12px 8px;
+            border-radius: 15px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
+            font-size: 12px;
             font-weight: bold;
-            flex: 1;
-            min-width: 80px;
-            max-width: 120px;
+            transition: all 0.3s ease;
             touch-action: manipulation;
-            min-height: 40px;
+            min-height: 45px;
         }
 
-        .control-btn:active {
-            transform: scale(0.95);
+        .control-btn:hover, .control-btn:active {
+            background: rgba(255,255,255,0.4);
+            transform: translateY(-2px);
         }
 
-        /* 各种特效增强 */
+        /* 特效动画 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes particleFloat {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-50px) scale(1.5); }
+        }
+
+        @keyframes scorePopup {
+            0% { opacity: 0; transform: translateY(0) scale(0.5); }
+            50% { opacity: 1; transform: translateY(-20px) scale(1.2); }
+            100% { opacity: 0; transform: translateY(-40px) scale(1); }
+        }
+
+        @keyframes screenEffectFade {
+            0% { opacity: 0; transform: scale(0.5) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1) rotate(180deg); }
+            100% { opacity: 0; transform: scale(1.5) rotate(360deg); }
+        }
+
+        @keyframes achievementShow {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            20% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+            80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            20%, 80% { opacity: 1; }
+        }
+
         .combo-text {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: clamp(24px, 8vw, 48px);
+            font-size: 20px;
             font-weight: bold;
-            color: #ff6b6b;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
-            animation: comboShow 1.5s ease-out forwards;
-            pointer-events: none;
             z-index: 1000;
-            white-space: nowrap;
+            pointer-events: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            animation: scorePopup 1.5s ease-out forwards;
         }
 
-        @keyframes comboShow {
-            0% {
-                transform: translate(-50%, -50%) scale(0) rotate(-180deg);
-                opacity: 0;
-            }
-            15% {
-                opacity: 1;
-            }
-            30% {
-                transform: translate(-50%, -50%) scale(1.4) rotate(0deg);
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(1) translateY(-120px) rotate(10deg);
-                opacity: 0;
-            }
+        /* 成就样式 */
+        .achievement {
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 10px 0;
+            transition: all 0.3s ease;
         }
 
-        /* 响应式适配增强 */
-        @media screen and (max-height: 600px) {
-            .game-header { gap: 5px; }
-            .game-info { padding: 6px 8px; min-height: 35px; }
-            .power-ups { gap: 6px; }
-            .power-up { width: clamp(40px, 7vw, 50px); height: clamp(40px, 7vw, 50px); }
+        .achievement.unlocked {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
         }
 
-        @media screen and (max-height: 500px) and (orientation: landscape) {
-            .game-wrapper { gap: 5px; }
-            .title { font-size: clamp(1.5rem, 6vw, 2.5rem); margin-bottom: 10px; }
-            .btn { padding: 10px 20px; margin: 5px; min-height: 40px; }
+        .achievement.locked {
+            opacity: 0.5;
         }
 
-        /* iOS安全区域适配 */
-        @supports (padding: max(0px)) {
-            .game-wrapper {
-                padding-top: max(env(safe-area-inset-top), 10px);
-                padding-bottom: max(env(safe-area-inset-bottom), 10px);
-            }
+        .achievement-icon {
+            font-size: 32px;
+            margin-right: 15px;
         }
 
-        /* 防止iOS缩放 */
-        input, select, textarea, button {
+        .achievement-info {
+            flex: 1;
+        }
+
+        .achievement-name {
+            font-weight: bold;
             font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .achievement-desc {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .achievement-status {
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        /* 暂停覆盖层 */
+        .pause-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            flex-direction: column;
+        }
+
+        .pause-content {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* 移动端优化 */
+        @media (max-width: 480px) {
+            .container {
+                padding: 5px;
+            }
+            
+            .game-header {
+                padding: 8px;
+                font-size: 12px;
+            }
+            
+            .game-board-container {
+                padding: 10px;
+            }
+            
+            .power-ups {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 6px;
+                padding: 8px;
+            }
+            
+            .power-up {
+                min-height: 45px;
+                font-size: 18px;
+                padding: 6px;
+            }
+            
+            .control-btn {
+                font-size: 11px;
+                padding: 10px 6px;
+                min-height: 40px;
+            }
+            
+            .cell {
+                min-height: 30px;
+            }
+            
+            .fruit {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-height: 700px) {
+            .love-message {
+                padding: 15px;
+                margin: 10px 0;
+            }
+            
+            .power-ups {
+                max-height: 120px;
+            }
+            
+            .level-grid {
+                max-height: 50vh;
+            }
+        }
+
+        /* 横屏优化 */
+        @media (orientation: landscape) and (max-height: 500px) {
+            .container {
+                max-width: 600px;
+            }
+            
+            .game-wrapper {
+                display: flex;
+                flex-direction: row;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .game-board-container {
+                flex: 1;
+                margin-bottom: 0;
+            }
+            
+            .game-side {
+                width: 200px;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .power-ups {
+                grid-template-columns: repeat(2, 1fr);
+                max-height: none;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
+    <div class="container">
         <!-- 主菜单 -->
         <div id="mainMenu" class="screen active">
-            <div class="love-message">
-                ❤️ 为我最爱的Ashley定制的专属游戏 ❤️<br>
-                希望每一天都充满快乐和甜蜜！
+            <div class="header">
+                <h1 class="title">🍎 Apple Match</h1>
+                <div class="love-message">
+                    <p>❤️ 为我最爱的Ashley定制的专属游戏 ❤️</p>
+                    <p>希望每一天都充满快乐和甜蜜！</p>
+                </div>
             </div>
-            <h1 class="title">🍎 苹果消消乐</h1>
-            <button class="btn" onclick="showLevelSelect()">🎮 开始冒险</button>
-            <button class="btn" onclick="showPractice()">🏃‍♀️ 练习场</button>
-            <button class="btn" onclick="showInstructions()">📚 游戏说明</button>
-            <button class="btn" onclick="showAchievements()">🏆 成就系统</button>
+            <div style="text-align: center;">
+                <button class="btn" onclick="showLevelSelect()">🎮 开始冒险</button>
+                <button class="btn" onclick="showPractice()">🏃‍♀️ 练习场</button>
+                <button class="btn" onclick="showAchievements()">🏆 成就系统</button>
+                <button class="btn" onclick="showInstructions()">📚 游戏说明</button>
+            </div>
         </div>
 
-        <!-- 关卡选择（增加到15个关卡） -->
+        <!-- 关卡选择 -->
         <div id="levelSelect" class="screen">
             <h2 class="title">选择关卡</h2>
-            <div class="level-grid" id="levelGrid">
+            <div class="love-message">
+                <p>每一关都是我对你爱的表达 💕</p>
+                <p>所有关卡都为你开放，随心选择吧！</p>
+            </div>
+            <div id="levelGrid" class="level-grid">
                 <!-- 关卡将通过JavaScript生成 -->
             </div>
-            <button class="btn" onclick="showMainMenu()">返回主菜单</button>
+            <div style="text-align: center; margin-top: 15px;">
+                <button class="btn" onclick="showMainMenu()">🏠 返回主菜单</button>
+            </div>
         </div>
 
-        <!-- 其他界面保持不变，继续在第二部分提供JavaScript... -->
         <!-- 关卡确认 -->
         <div id="levelConfirm" class="screen">
-            <h2 class="title" id="levelTitle">关卡 1 - 新手村</h2>
+            <h2 class="title" id="levelTitle">关卡 1 - 爱的起点</h2>
             <div class="love-message">
                 <p id="levelDescription">这是一个适合新手的简单关卡，来熟悉游戏操作吧！</p>
                 <div style="margin-top: 20px;">
                     <button class="btn" onclick="startGame()">🚀 开始游戏</button>
                     <button class="btn" onclick="showLevelSelect()">🔙 返回选择</button>
+                    <button class="btn" onclick="showInstructions()">❓ 查看说明</button>
                 </div>
             </div>
         </div>
-
-        <!-- 练习场 -->
-        <div id="practice" class="screen">
-            <div class="game-wrapper">
-                <div class="game-header">
-                    <div class="game-info">❤️ <span id="practiceLives">∞</span></div>
-                    <div class="game-info">⭐ <span id="practiceScore">0</span></div>
-                    <div class="game-info">🎯 练习模式</div>
-                </div>
-                <div class="game-board-container">
-                    <div class="game-board">
-                        <div id="practiceGrid" class="grid"></div>
-                    </div>
-                </div>
-                <div class="power-ups-container">
-                    <div class="power-ups" id="practicePowerUps">
-                        <!-- 道具将通过JavaScript生成 -->
-                    </div>
-                </div>
-                <div class="game-controls">
-                    <button class="control-btn" onclick="pauseGame()">⏸️ 暂停</button>
-                    <button class="control-btn" onclick="resetPractice()">🔄 重置</button>
-                    <button class="control-btn" onclick="showMainMenu()">🏠 返回</button>
-                </div>
-            </div>
-        </div>
-
         <!-- 游戏界面 -->
         <div id="gameScreen" class="screen">
             <div class="game-wrapper">
-                <div class="game-header">
-                    <div class="game-info">❤️ <span id="lives">30</span></div>
-                    <div class="game-info">⭐ <span id="score">0</span></div>
-                    <div class="game-info">🎯 <span id="target">1000</span></div>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-bar">
-                        <div id="progressFill" class="progress-fill" style="width: 0%"></div>
+                <div class="game-main">
+                    <!-- 游戏状态信息 -->
+                    <div class="game-header">
+                        <div class="game-info">❤️ <span id="lives">30</span></div>
+                        <div class="game-info">🎯 <span id="score">0</span></div>
+                        <div class="game-info">⭐ <span id="target">10000</span></div>
+                    </div>
+                    
+                    <!-- 进度条 -->
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div id="progressFill" class="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- 游戏棋盘 -->
+                    <div class="game-board-container">
+                        <div class="game-board">
+                            <div id="gameGrid" class="grid">
+                                <!-- 棋盘格子将通过JavaScript生成 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 道具区域 -->
+                    <div class="power-ups-container">
+                        <div id="gamePowerUps" class="power-ups">
+                            <!-- 道具将通过JavaScript生成 -->
+                        </div>
+                    </div>
+
+                    <!-- 控制按钮 -->
+                    <div class="game-controls">
+                        <button class="control-btn" onclick="pauseGame()">⏸️ 暂停</button>
+                        <button class="control-btn" onclick="showLevelSelect()">🏠 返回</button>
+                        <button class="control-btn" onclick="startGame()">🔄 重新开始</button>
                     </div>
                 </div>
-                <div class="game-board-container">
-                    <div class="game-board">
-                        <div id="gameGrid" class="grid"></div>
+            </div>
+        </div>
+
+        <!-- 练习模式 -->
+        <div id="practice" class="screen">
+            <div class="game-wrapper">
+                <div class="game-main">
+                    <div class="game-header">
+                        <div class="game-info">💕 <span id="practiceLives">∞</span></div>
+                        <div class="game-info">🎯 <span id="practiceScore">0</span></div>
+                        <div class="love-message" style="margin: 10px 0; padding: 10px; font-size: 14px;">
+                            Ashley专属练习场 - 无限步数，尽情享受！
+                        </div>
                     </div>
-                </div>
-                <div class="power-ups-container">
-                    <div class="power-ups" id="gamePowerUps">
-                        <!-- 道具将通过JavaScript生成 -->
+
+                    <div class="game-board-container">
+                        <div class="game-board">
+                            <div id="practiceGrid" class="grid">
+                                <!-- 练习棋盘 -->
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="game-controls">
-                    <button class="control-btn" onclick="pauseGame()">⏸️ 暂停</button>
-                    <button class="control-btn" onclick="showLevelSelect()">📋 关卡</button>
-                    <button class="control-btn" onclick="showMainMenu()">🏠 返回</button>
+
+                    <div class="power-ups-container">
+                        <div id="practicePowerUps" class="power-ups">
+                            <!-- 练习道具 -->
+                        </div>
+                    </div>
+
+                    <div class="game-controls">
+                        <button class="control-btn" onclick="resetPractice()">🔄 重置</button>
+                        <button class="control-btn" onclick="showMainMenu()">🏠 返回</button>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- 成就系统 -->
         <div id="achievements" class="screen">
-            <h2 class="title">🏆 成就系统</h2>
-            <div id="achievementList" class="love-message" style="max-height: 60vh; overflow-y: auto;">
+            <h2 class="title">🏆 Ashley的成就殿堂</h2>
+            <div class="love-message">
+                <p>记录着我们一起游戏的美好时光 ❤️</p>
+            </div>
+            <div id="achievementList" style="max-height: 60vh; overflow-y: auto; margin: 20px 0;">
                 <!-- 成就列表将通过JavaScript生成 -->
             </div>
-            <button class="btn" onclick="showMainMenu()">返回主菜单</button>
+            <div style="text-align: center;">
+                <button class="btn" onclick="showMainMenu()">🏠 返回主菜单</button>
+            </div>
         </div>
 
         <!-- 游戏说明 -->
         <div id="instructionsModal" class="screen">
             <h2 class="title">📚 游戏说明</h2>
-            <div class="love-message" style="text-align: left; max-height: 70vh; overflow-y: auto;">
-                <p><strong>🎮 基本玩法：</strong></p>
-                <p>• 点击相邻的两个水果交换位置</p>
-                <p>• 形成3个或更多相同水果的连线即可消除</p>
-                <p>• 消除水果获得分数，达到目标分数即可过关</p>
-                <br>
-                <p><strong>✨ 特殊水果：</strong></p>
-                <p>🌟 特殊水果：发光效果，消除得分翻倍</p>
-                <p>🌈 超级水果：彩虹效果，消除得分x3</p>
-                <p>💎 传说水果：终极效果，消除得分x5</p>
-                <br>
-                <p><strong>🔥 超级道具：</strong></p>
-                <p>💣 炸弹：消除3x3区域</p>
-                <p>🌈 彩虹球：消除所有同色水果</p>
-                <p>🔨 锤子：直接消除单个水果</p>
-                <p>🔄 交换：强制交换任意两个水果</p>
-                <p>⚡ 闪电：消除整行和整列</p>
-                <p>❄️ 冰冻：暂停时间，额外10步</p>
-                <p>✨ 倍数：接下来得分x5</p>
-                <p>🔀 洗牌：重新排列所有水果</p>
-                <p>☄️ 流星：对角线消除</p>
-                <p>🌪️ 龙卷风：随机消除15个水果</p>
-                <p>🎭 魔法：变换所有水果类型</p>
-                <p>⏰ 时光：回到上一步状态</p>
-                <br>
-                <p><strong>🔥 连击系统：</strong></p>
-                <p>连续消除会获得连击奖励，最高可达50连击！</p>
+            <div class="love-message" style="text-align: left; max-height: 60vh; overflow-y: auto;">
+                <h3>🎯 游戏目标</h3>
+                <p>• 交换相邻水果形成3个或更多相同水果的连线</p>
+                <p>• 达到目标分数即可过关</p>
+                <p>• 每次交换消耗1步，用完步数游戏结束</p>
+                
+                <h3>🍎 水果类型</h3>
+                <p>• 🍎🍊🍌🍇🥝🍓🥭🍑 - 普通水果</p>
+                <p>• ✨ - 特殊水果（2倍分数）</p>
+                <p>• 🌟 - 超级水果（3倍分数）</p>
+                <p>• 💎 - 巨型水果（5倍分数）</p>
+                <p>• 👑 - 传说水果（8倍分数）</p>
+
+                <h3>🔥 12种超级道具</h3>
+                <p>• 💣 炸弹 - 3×3区域爆炸消除</p>
+                <p>• 🌈 彩虹球 - 消除所有同色水果</p>
+                <p>• 🔨 锤子 - 精准消除指定水果</p>
+                <p>• 🔄 交换 - 强制交换任意两个水果</p>
+                <p>• ⚡ 闪电 - 十字形消除</p>
+                <p>• ❄️ 冰冻 - 时间暂停+10步</p>
+                <p>• ✨ 倍数 - 接下来5次得分×5</p>
+                <p>• 🔀 洗牌 - 重新打乱所有水果</p>
+                <p>• ☄️ 流星 - 对角线攻击</p>
+                <p>• 🌪️ 龙卷风 - 随机消除15个水果</p>
+                <p>• 🎭 魔法 - 随机变换水果类型</p>
+                <p>• ⏰ 时光 - 回到上一步状态</p>
+
+                <h3>🎮 操作方法</h3>
+                <p>• 点击选择水果，再点击相邻水果进行交换</p>
+                <p>• 点击道具图标激活，然后点击棋盘使用</p>
+                <p>• 连续消除可获得连击奖励</p>
+                
+                <h3>⌨️ 键盘快捷键</h3>
+                <p>• ESC - 暂停/恢复游戏</p>
+                <p>• R - 重置练习模式</p>
+                <p>• 1-9 - 快速选择道具</p>
             </div>
-            <button class="btn" onclick="showMainMenu()">开始游戏</button>
+            <div style="text-align: center; margin-top: 15px;">
+                <button class="btn" onclick="showMainMenu()">🏠 返回主菜单</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // 全局游戏变量
+        // 游戏全局变量
         let game = null;
-        let currentLevel = 1;
         let gameMode = 'normal';
-        let achievements = [];
-        let gameHistory = [];
+        let currentLevel = 1;
 
-        // 15个关卡配置
+        // 关卡配置（所有关卡默认解锁）
         const levelConfig = {
-            1: { target: 800, moves: 30, description: "Ashley的第一步冒险！熟悉游戏操作的温馨关卡 ❤️", name: "爱的起点", difficulty: 1 },
-            2: { target: 1200, moves: 25, description: "果园里的第一次挑战，相信你可以的！", name: "甜蜜果园", difficulty: 1 },
-            3: { target: 1800, moves: 20, description: "香蕉天堂在等你，加油我的宝贝！", name: "香蕉天堂", difficulty: 2 },
-            4: { target: 2500, moves: 25, description: "紫色迷境充满神秘，但你最聪明！", name: "紫色迷境", difficulty: 2 },
-            5: { target: 3200, moves: 20, description: "草莓乐园的甜蜜挑战，就像我们的爱情", name: "草莓乐园", difficulty: 2 },
-            6: { target: 4000, moves: 18, description: "柠檬挑战有点酸，但爱让一切变甜", name: "柠檬挑战", difficulty: 3 },
-            7: { target: 5000, moves: 22, description: "樱桃小镇欢迎我们的公主！", name: "樱桃小镇", difficulty: 3 },
-            8: { target: 6500, moves: 20, description: "猕猴桃森林的绿色奇迹等你发现", name: "奇异森林", difficulty: 3 },
-            9: { target: 8000, moves: 18, description: "彩虹桥连接着我们的心", name: "彩虹桥", difficulty: 4 },
-            10: { target: 10000, moves: 25, description: "水晶宫里的终极考验，我永远支持你", name: "水晶宫", difficulty: 4 },
-            11: { target: 12500, moves: 20, description: "星空花园，像你眼中的星星一样美丽", name: "星空花园", difficulty: 4 },
-            12: { target: 15000, moves: 22, description: "魔法城堡需要真正的公主来拯救", name: "魔法城堡", difficulty: 5 },
-            13: { target: 18000, moves: 18, description: "天空之城，我们爱情的最高殿堂", name: "天空之城", difficulty: 5 },
-            14: { target: 22000, moves: 20, description: "无尽深渊也阻止不了我的爱", name: "无尽深渊", difficulty: 5 },
-            15: { target: 30000, moves: 25, description: "永恒国度，就像我们的爱情一样永恒 💖", name: "永恒国度", difficulty: 6 }
+            1: { name: "爱的起点", target: 8000, moves: 25, difficulty: 1, description: "就像我们初次相遇，简单而美好。让我们从这里开始我们的甜蜜冒险吧！🌸" },
+            2: { name: "心动时刻", target: 12000, moves: 25, difficulty: 1, description: "每一次心跳都是为了你。感受这份悸动，让爱意在指尖绽放！💓" },
+            3: { name: "甜蜜邂逅", target: 15000, moves: 25, difficulty: 2, description: "就像蜂蜜一样甜蜜的相遇，让每一个瞬间都充满幸福的味道。🍯" },
+            4: { name: "浪漫花园", target: 18000, moves: 25, difficulty: 2, description: "在这个充满鲜花的花园里，我想和你一起漫步到永远。🌹" },
+            5: { name: "星空下的誓言", target: 22000, moves: 25, difficulty: 2, description: "在满天繁星的见证下，我向你许下永恒的诺言。✨" },
+            6: { name: "月光小夜曲", target: 28000, moves: 25, difficulty: 3, description: "月光如水，爱意如诗。让我为你弹奏一首专属的小夜曲。🌙" },
+            7: { name: "彩虹桥约定", target: 35000, moves: 25, difficulty: 3, description: "风雨过后见彩虹，就像我们的爱情，历经考验更加美丽。🌈" },
+            8: { name: "海滩漫步", target: 42000, moves: 25, difficulty: 3, description: "在这片美丽的海滩上，让我们留下专属于我们的足迹。🏖️" },
+            9: { name: "魔法城堡", target: 50000, moves: 25, difficulty: 4, description: "在这座充满魔法的城堡里，你就是我唯一的公主。👸" },
+            10: { name: "时光隧道", target: 60000, moves: 25, difficulty: 4, description: "愿时光慢一些，让我能更久地凝视你美丽的笑容。⏰" },
+            11: { name: "梦想天空", target: 70000, moves: 25, difficulty: 4, description: "在这片梦想的天空下，让我们一起飞向更广阔的未来。☁️" },
+            12: { name: "极光之舞", target: 80000, moves: 25, difficulty: 5, description: "就像北极光一样绚烂多彩，我们的爱情照亮整个世界。🌌" },
+            13: { name: "钻石之心", target: 90000, moves: 25, difficulty: 5, description: "你就像最珍贵的钻石，在我心中闪闪发光，永远无可替代。💎" },
+            14: { name: "天使之翼", target: 100000, moves: 25, difficulty: 5, description: "你是降临在我生命中的天使，带给我无尽的快乐和温暖。👼" },
+            15: { name: "永恒国度", target: 120000, moves: 25, difficulty: 6, description: "在爱的永恒国度里，我们将永远幸福地生活在一起。Ashley，我爱你！❤️" }
         };
 
-        // 成就系统
+        // 成就配置
         const achievementConfig = {
-            firstWin: { name: "初次胜利", desc: "完成第一个关卡", icon: "🏆", unlocked: false },
+            firstWin: { name: "初次胜利", desc: "完成第一个关卡", icon: "🎉", unlocked: false },
+            speedRunner: { name: "闪电通关", desc: "15秒内完成任意关卡", icon: "⚡", unlocked: false },
             comboMaster: { name: "连击大师", desc: "达到10连击", icon: "🔥", unlocked: false },
-            powerUpLover: { name: "道具爱好者", desc: "使用50个道具", icon: "✨", unlocked: false },
-            speedRunner: { name: "速度之王", desc: "在15秒内完成一个关卡", icon: "⚡", unlocked: false },
-            perfectScore: { name: "完美分数", desc: "单局得分超过50000", icon: "💯", unlocked: false },
+            perfectScore: { name: "完美分数", desc: "单局得分超过50000", icon: "⭐", unlocked: false },
+            powerUpLover: { name: "道具达人", desc: "累计使用50次道具", icon: "🎯", unlocked: false },
             legendary: { name: "传说玩家", desc: "完成所有关卡", icon: "👑", unlocked: false },
-            lovelyAshley: { name: "最爱的Ashley", desc: "专属成就 - 你就是我的全世界", icon: "💕", unlocked: true }
+            ashley: { name: "最爱的Ashley", desc: "专属于Ashley的特殊成就", icon: "💖", unlocked: true }
         };
 
-        // 超强音效系统
-        function playEnhancedSound(type = 'match', intensity = 1, pitch = 1) {
+        // 音效系统
+        function playEnhancedSound(type, pitch = 1) {
             try {
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 const oscillator = audioContext.createOscillator();
                 const gainNode = audioContext.createGain();
-                const filterNode = audioContext.createBiquadFilter();
                 
-                oscillator.connect(filterNode);
-                filterNode.connect(gainNode);
+                oscillator.connect(gainNode);
                 gainNode.connect(audioContext.destination);
                 
-                let frequency, duration, volume, filterFreq;
+                let frequency = 440;
+                let duration = 0.3;
                 
                 switch(type) {
                     case 'match':
-                        frequency = 440 + (pitch * 100);
-                        duration = 0.15;
-                        volume = 0.1 * intensity;
-                        filterFreq = 1000;
+                        frequency = 523 * pitch;
+                        duration = 0.2;
                         break;
                     case 'combo':
-                        frequency = 523 + (intensity * 50);
-                        duration = 0.25;
-                        volume = 0.15 * intensity;
-                        filterFreq = 2000;
+                        frequency = 659 * pitch;
+                        duration = 0.4;
                         break;
                     case 'super_combo':
-                        frequency = 659 + (intensity * 80);
-                        duration = 0.4;
-                        volume = 0.2 * intensity;
-                        filterFreq = 3000;
+                        frequency = 784 * pitch;
+                        duration = 0.6;
                         break;
                     case 'legendary_combo':
-                        frequency = 880 + (intensity * 100);
-                        duration = 0.6;
-                        volume = 0.25 * intensity;
-                        filterFreq = 4000;
+                        frequency = 880 * pitch;
+                        duration = 0.8;
                         break;
                     case 'powerup':
-                        frequency = 1047;
-                        duration = 0.3;
-                        volume = 0.2;
-                        filterFreq = 2500;
+                        frequency = 698 * pitch;
+                        duration = 0.5;
                         break;
                     case 'victory':
-                        frequency = 1319;
+                        frequency = 523;
                         duration = 1.0;
-                        volume = 0.3;
-                        filterFreq = 5000;
+                        break;
+                    case 'invalid':
+                        frequency = 200;
+                        duration = 0.1;
                         break;
                 }
                 
                 oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
-                filterNode.frequency.setValueAtTime(filterFreq, audioContext.currentTime);
-                filterNode.Q.setValueAtTime(10, audioContext.currentTime);
-                gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+                oscillator.type = type === 'victory' ? 'square' : 'sine';
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
                 
                 oscillator.start(audioContext.currentTime);
                 oscillator.stop(audioContext.currentTime + duration);
-            } catch (e) {
-                console.log('音频播放失败');
+            } catch (error) {
+                // 静默处理音效错误
             }
         }
 
-        // 超级增强游戏类
+        // 超级水果消除游戏主类
         class SuperAppleMatchGame {
             constructor() {
                 this.gridSize = 8;
+                this.fruits = ['🍎', '🍊', '🍌', '🍇', '🥝', '🍓', '🥭', '🍑'];
                 this.grid = [];
+                this.selectedCell = null;
                 this.score = 0;
                 this.lives = 30;
-                this.target = 1000;
-                this.selectedCell = null;
-                this.fruits = ['apple', 'orange', 'banana', 'grape', 'strawberry', 'lemon', 'cherry', 'kiwi'];
-                this.fruitEmojis = {
-                    'apple': '🍎', 'orange': '🍊', 'banana': '🍌', 'grape': '🍇',
-                    'strawberry': '🍓', 'lemon': '🍋', 'cherry': '🍒', 'kiwi': '🥝'
-                };
+                this.target = 10000;
+                this.currentGridId = 'gameGrid';
+                this.isAnimating = false;
                 this.isPaused = false;
-                this.activePowerUp = null;
+                this.gameStartTime = Date.now();
+                
+                // 连击系统
                 this.combo = 0;
                 this.maxCombo = 0;
-                this.isAnimating = false;
-                this.currentGridId = 'gameGrid';
+                this.totalMatches = 0;
+                
+                // 道具系统
+                this.powerUps = {
+                    bomb: 3, rainbow: 2, hammer: 5, swap: 3,
+                    lightning: 3, freeze: 2, multiplier: 2, shuffle: 2,
+                    meteor: 1, tornado: 1, magic: 2, time: 2
+                };
+                this.activePowerUp = null;
+                this.powerUpUsageCount = 0;
+                
+                // 特殊水果概率
+                this.specialFruitChance = 0.15;
+                this.legendaryFruitChance = 0.03;
+                
+                // 倍数系统
                 this.multiplier = 1;
                 this.multiplierTimeLeft = 0;
                 this.frozenTime = 0;
-                this.powerUpUsageCount = 0;
-                this.gameStartTime = Date.now();
-                this.totalMatches = 0;
                 
-                // 特殊水果概率（大幅提升）
-                this.specialFruitChance = 0.12;
-                this.ultraFruitChance = 0.06;
-                this.megaFruitChance = 0.03;
-                this.legendaryFruitChance = 0.01;
-                
-                // 12种超级道具
-                this.powerUps = {
-                    bomb: 5, rainbow: 3, hammer: 8, swap: 5,
-                    lightning: 3, freeze: 3, multiplier: 2, shuffle: 3,
-                    meteor: 2, tornado: 2, magic: 1, time: 2
-                };
-                
-                // 20种连击效果
-                this.comboEffects = {
-                    3: { text: "太棒了！", color: "#4caf50", shake: false, sound: 'combo' },
-                    5: { text: "连击开始！", color: "#ff9800", shake: false, sound: 'combo' },
-                    7: { text: "Amazing！", color: "#f44336", shake: true, sound: 'combo' },
-                    10: { text: "Perfect！", color: "#9c27b0", shake: true, sound: 'super_combo' },
-                    12: { text: "Fantastic！", color: "#3f51b5", shake: true, sound: 'super_combo' },
-                    15: { text: "Incredible！", color: "#ff6b6b", shake: true, sound: 'super_combo' },
-                    18: { text: "Marvelous！", color: "#00bcd4", shake: true, sound: 'super_combo' },
-                    20: { text: "Legendary！", color: "#ffd700", shake: true, sound: 'legendary_combo' },
-                    25: { text: "Godlike！", color: "#ff4081", shake: true, sound: 'legendary_combo' },
-                    30: { text: "Unstoppable！", color: "#7c4dff", shake: true, sound: 'legendary_combo' },
-                    35: { text: "Phenomenal！", color: "#ff5722", shake: true, sound: 'legendary_combo' },
-                    40: { text: "Otherworldly！", color: "#4caf50", shake: true, sound: 'legendary_combo' },
-                    45: { text: "Divine！", color: "#ff9800", shake: true, sound: 'legendary_combo' },
-                    50: { text: "ASHLEY'S LOVE！💖", color: "#e91e63", shake: true, sound: 'legendary_combo' }
-                };
-                
+                // 历史状态（用于时光机器）
                 this.previousGameState = null;
+                
+                // 连击效果配置
+                this.comboEffects = {
+                    3: { text: "不错！", color: "#4ecdc4", shake: false },
+                    5: { text: "很棒！", color: "#45b7d1", shake: false },
+                    8: { text: "出色！", color: "#f39c12", shake: true },
+                    10: { text: "完美！", color: "#e74c3c", shake: true },
+                    15: { text: "不可思议！", color: "#9b59b6", shake: true },
+                    20: { text: "传说级！", color: "#ff1493", shake: true }
+                };
             }
 
-            // 初始化游戏
             init() {
-                this.saveGameState();
                 this.initGrid();
-                this.generateNewFruits();
+                this.generateInitialFruits();
                 this.render();
                 this.updateUI();
                 this.updatePowerUpDisplay();
+                this.addEventListeners();
             }
 
-            // 保存游戏状态（用于时光道具）
-            saveGameState() {
-                this.previousGameState = {
-                    grid: JSON.parse(JSON.stringify(this.grid)),
-                    score: this.score,
-                    lives: this.lives,
-                    combo: this.combo
-                };
-            }
-
-            // 初始化网格
             initGrid() {
                 this.grid = [];
                 for (let i = 0; i < this.gridSize; i++) {
                     this.grid[i] = [];
                     for (let j = 0; j < this.gridSize; j++) {
-                        this.grid[i][j] = {
-                            fruit: null,
-                            special: 0 // 0=普通，1=特殊，2=超级，3=传说，4=神话
-                        };
+                        this.grid[i][j] = { fruit: null, special: 0 };
                     }
                 }
             }
 
-            // 生成新水果（增强版）
+            generateInitialFruits() {
+                let attempts = 0;
+                const maxAttempts = 100;
+                
+                do {
+                    this.initGrid();
+                    for (let i = 0; i < this.gridSize; i++) {
+                        for (let j = 0; j < this.gridSize; j++) {
+                            this.grid[i][j] = this.generateRandomFruit();
+                        }
+                    }
+                    attempts++;
+                } while (this.findMatches().length > 0 && attempts < maxAttempts);
+                
+                // 如果仍有匹配，强制清除
+                if (attempts >= maxAttempts) {
+                    const matches = this.findMatches();
+                    matches.forEach(match => {
+                        this.grid[match.row][match.col] = this.generateRandomFruit();
+                    });
+                }
+            }
+
+            generateRandomFruit() {
+                const fruit = this.fruits[Math.floor(Math.random() * this.fruits.length)];
+                let special = 0;
+                const rand = Math.random();
+                
+                if (rand < this.legendaryFruitChance) {
+                    special = 4; // 传说级（👑效果）
+                } else if (rand < this.specialFruitChance) {
+                    if (rand < 0.05) special = 3; // 巨型水果（💎效果）
+                    else if (rand < 0.10) special = 2; // 超级水果（🌟效果）
+                    else special = 1; // 特殊水果（✨效果）
+                }
+                
+                return { fruit, special };
+            }
+
             generateNewFruits() {
-                for (let i = 0; i < this.gridSize; i++) {
-                    for (let j = 0; j < this.gridSize; j++) {
-                        if (!this.grid[i][j].fruit) {
-                            let newFruit;
-                            let attempts = 0;
-                            do {
-                                newFruit = this.fruits[Math.floor(Math.random() * this.fruits.length)];
-                                attempts++;
-                            } while (this.wouldCreateMatch(i, j, newFruit) && attempts < 20);
-                            
-                            this.grid[i][j].fruit = newFruit;
-                            
-                            // 增强特殊水果生成
-                            const random = Math.random();
-                            if (random < this.legendaryFruitChance) {
-                                this.grid[i][j].special = 4; // 神话
-                            } else if (random < this.megaFruitChance) {
-                                this.grid[i][j].special = 3; // 传说
-                            } else if (random < this.ultraFruitChance) {
-                                this.grid[i][j].special = 2; // 超级
-                            } else if (random < this.specialFruitChance) {
-                                this.grid[i][j].special = 1; // 特殊
-                            } else {
-                                this.grid[i][j].special = 0; // 普通
-                            }
+                for (let col = 0; col < this.gridSize; col++) {
+                    for (let row = 0; row < this.gridSize; row++) {
+                        if (!this.grid[row][col].fruit) {
+                            this.grid[row][col] = this.generateRandomFruit();
                         }
                     }
                 }
             }
 
-            // 智能匹配检测
-            wouldCreateMatch(row, col, fruit) {
-                let horizontalCount = 1;
-                for (let i = col - 1; i >= 0 && this.grid[row] && this.grid[row][i] && this.grid[row][i].fruit === fruit; i--) {
-                    horizontalCount++;
-                }
-                for (let i = col + 1; i < this.gridSize && this.grid[row] && this.grid[row][i] && this.grid[row][i].fruit === fruit; i++) {
-                    horizontalCount++;
-                }
-                
-                let verticalCount = 1;
-                for (let i = row - 1; i >= 0 && this.grid[i] && this.grid[i][col] && this.grid[i][col].fruit === fruit; i--) {
-                    verticalCount++;
-                }
-                for (let i = row + 1; i < this.gridSize && this.grid[i] && this.grid[i][col] && this.grid[i][col].fruit === fruit; i++) {
-                    verticalCount++;
-                }
-                
-                return horizontalCount >= 3 || verticalCount >= 3;
-            }
-
-            // 增强渲染系统
             render() {
                 const gridElement = document.getElementById(this.currentGridId);
                 if (!gridElement) return;
@@ -985,54 +992,64 @@ Creating an interesting game only for my love, Ashley. Hope her happy everyday!
                         
                         if (this.grid[i][j].fruit) {
                             const fruit = document.createElement('div');
-                            fruit.className = `fruit ${this.grid[i][j].fruit}`;
+                            fruit.className = 'fruit';
+                            fruit.textContent = this.grid[i][j].fruit;
                             
-                            // 根据特殊等级添加效果
+                            // 添加特殊效果类
                             switch(this.grid[i][j].special) {
-                                case 1: fruit.classList.add('special-fruit'); break;
-                                case 2: fruit.classList.add('ultra-fruit'); break;
-                                case 3: fruit.classList.add('mega-fruit'); break;
-                                case 4: fruit.classList.add('legendary-fruit'); break;
+                                case 1: 
+                                    fruit.classList.add('special-fruit');
+                                    fruit.title = '特殊水果 - 2倍分数';
+                                    break;
+                                case 2: 
+                                    fruit.classList.add('ultra-fruit');
+                                    fruit.title = '超级水果 - 3倍分数';
+                                    break;
+                                case 3: 
+                                    fruit.classList.add('mega-fruit');
+                                    fruit.title = '巨型水果 - 5倍分数';
+                                    break;
+                                case 4: 
+                                    fruit.classList.add('legendary-fruit');
+                                    fruit.title = '传说水果 - 8倍分数';
+                                    break;
                             }
                             
-                            fruit.textContent = this.fruitEmojis[this.grid[i][j].fruit];
                             cell.appendChild(fruit);
                         }
                         
-                        cell.addEventListener('click', (e) => this.handleCellClick(e));
+                        cell.addEventListener('click', (e) => this.handleCellClick(i, j, e));
                         cell.addEventListener('touchstart', (e) => {
                             e.preventDefault();
-                            this.handleCellClick(e);
+                            this.handleCellClick(i, j, e);
                         }, { passive: false });
                         
                         gridElement.appendChild(cell);
                     }
                 }
-                this.updateCellDisplay();
             }
-
-            // 处理点击事件
-            handleCellClick(e) {
-                if (this.isPaused || this.isAnimating) return;
+        </script>
+            handleCellClick(row, col, event) {
+                if (this.isAnimating || this.isPaused || this.lives <= 0) return;
+                if (event) event.preventDefault();
                 
-                const cell = e.currentTarget;
-                const row = parseInt(cell.dataset.row);
-                const col = parseInt(cell.dataset.col);
-                
+                // 如果激活了道具
                 if (this.activePowerUp) {
-                    this.handlePowerUpClick(row, col);
+                    this.usePowerUp(row, col);
                     return;
                 }
                 
+                // 正常的水果交换逻辑
                 if (this.selectedCell) {
                     if (this.selectedCell.row === row && this.selectedCell.col === col) {
+                        // 取消选择
                         this.clearSelection();
-                    } else if (this.isAdjacent(this.selectedCell, {row, col})) {
-                        this.swapFruits(this.selectedCell, {row, col});
-                        if (this.lives > 0) this.lives--;
-                        this.updateUI();
+                    } else if (this.isAdjacent(this.selectedCell.row, this.selectedCell.col, row, col)) {
+                        // 执行交换
+                        this.swapAndCheck(this.selectedCell.row, this.selectedCell.col, row, col);
+                        this.clearSelection();
                     } else {
-                        this.clearSelection();
+                        // 选择新的格子
                         this.selectCell(row, col);
                     }
                 } else {
@@ -1040,1283 +1057,1135 @@ Creating an interesting game only for my love, Ashley. Hope her happy everyday!
                 }
             }
 
-            // 处理道具点击
-            handlePowerUpClick(row, col) {
-                if (this.powerUps[this.activePowerUp] <= 0) {
-                    this.activePowerUp = null;
-                    this.updatePowerUpDisplay();
-                    return;
-                }
-
-                this.saveGameState();
-                
-                switch(this.activePowerUp) {
-                    case 'bomb': this.useBomb(row, col); break;
-                    case 'rainbow': this.useRainbow(row, col); break;
-                    case 'hammer': this.useHammer(row, col); break;
-                    case 'swap':
-                        if (!this.selectedCell) {
-                            this.selectCell(row, col);
-                        } else {
-                            this.forceSwap(this.selectedCell, {row, col});
-                        }
-                        return;
-                    case 'lightning': this.useLightning(row, col); break;
-                    case 'freeze': this.useFreeze(); break;
-                    case 'multiplier': this.useMultiplier(); break;
-                    case 'shuffle': this.useShuffle(); break;
-                    case 'meteor': this.useMeteor(row, col); break;
-                    case 'tornado': this.useTornado(); break;
-                    case 'magic': this.useMagic(); break;
-                    case 'time': this.useTimeMachine(); break;
-                }
-                
-                this.powerUps[this.activePowerUp]--;
-                this.powerUpUsageCount++;
-                this.activePowerUp = null;
-                this.updatePowerUpDisplay();
-                this.processAfterAction();
-            }
-
-            // 12种超级道具效果
-
-            // 1. 增强炸弹
-            useBomb(row, col) {
-                playEnhancedSound('powerup');
-                this.createExplosionEffect(row, col);
-                let destroyed = 0;
-                
-                for (let i = Math.max(0, row - 1); i <= Math.min(this.gridSize - 1, row + 1); i++) {
-                    for (let j = Math.max(0, col - 1); j <= Math.min(this.gridSize - 1, col + 1); j++) {
-                        if (this.grid[i][j].fruit) {
-                            destroyed++;
-                            const specialBonus = (this.grid[i][j].special + 1) * 50;
-                            this.grid[i][j].fruit = null;
-                            this.grid[i][j].special = 0;
-                            this.createParticleEffect(i, j, '💥');
-                        }
-                    }
-                }
-                
-                const points = destroyed * 80 * this.multiplier;
-                this.addScore(points);
-                this.showScorePopup(row, col, `+${points}`);
-                this.shakeBoard();
-            }
-
-            // 2. 增强彩虹球
-            useRainbow(row, col) {
-                if (this.grid[row][col].fruit) {
-                    const targetFruit = this.grid[row][col].fruit;
-                    let count = 0;
-                    const positions = [];
-                    
-                    for (let i = 0; i < this.gridSize; i++) {
-                        for (let j = 0; j < this.gridSize; j++) {
-                            if (this.grid[i][j].fruit === targetFruit) {
-                                this.grid[i][j].fruit = null;
-                                this.grid[i][j].special = 0;
-                                count++;
-                                positions.push({i, j});
-                            }
-                        }
-                    }
-                    
-                    // 彩虹特效
-                    positions.forEach(pos => {
-                        setTimeout(() => {
-                            this.createParticleEffect(pos.i, pos.j, '🌈');
-                        }, Math.random() * 300);
-                    });
-                    
-                    const points = count * 120 * this.multiplier;
-                    this.addScore(points);
-                    this.showScorePopup(row, col, `+${points}`);
-                    playEnhancedSound('powerup', 1.5);
-                }
-            }
-
-            // 3. 增强锤子
-            useHammer(row, col) {
-                if (this.grid[row][col].fruit) {
-                    const specialMultiplier = (this.grid[row][col].special + 1);
-                    const points = specialMultiplier * 100 * this.multiplier;
-                    this.grid[row][col].fruit = null;
-                    this.grid[row][col].special = 0;
-                    this.addScore(points);
-                    this.showScorePopup(row, col, `+${points}`);
-                    playEnhancedSound('powerup');
-                    this.createParticleEffect(row, col, '🔨');
-                }
-            }
-
-            // 4. 增强闪电
-            useLightning(row, col) {
-                let destroyed = 0;
-                const positions = [];
-                
-                // 消除整行
-                for (let j = 0; j < this.gridSize; j++) {
-                    if (this.grid[row][j].fruit) {
-                        destroyed++;
-                        this.grid[row][j].fruit = null;
-                        this.grid[row][j].special = 0;
-                        positions.push({i: row, j});
-                    }
-                }
-                
-                // 消除整列
-                for (let i = 0; i < this.gridSize; i++) {
-                    if (this.grid[i][col].fruit) {
-                        destroyed++;
-                        this.grid[i][col].fruit = null;
-                        this.grid[i][col].special = 0;
-                        positions.push({i, j: col});
-                    }
-                }
-                
-                // 闪电特效
-                positions.forEach(pos => {
-                    setTimeout(() => {
-                        this.createParticleEffect(pos.i, pos.j, '⚡');
-                    }, Math.random() * 200);
-                });
-                
-                const points = destroyed * 90 * this.multiplier;
-                this.addScore(points);
-                this.showScorePopup(row, col, `+${points}`);
-                playEnhancedSound('powerup', 2);
-                this.shakeBoard();
-            }
-
-            // 5. 冰冻时间
-            useFreeze() {
-                this.frozenTime = 10; // 暂停时间，额外10步
-                this.lives += 10;
-                this.updateUI();
-                this.showScorePopup(4, 4, "时间冰冻！+10步");
-                playEnhancedSound('powerup', 1.2);
-                this.createScreenEffect('❄️');
-            }
-
-            // 6. 分数倍数
-            useMultiplier() {
-                this.multiplier = 5;
-                this.multiplierTimeLeft = 5; // 5次操作内得分x5
-                this.showScorePopup(4, 4, "得分x5！");
-                playEnhancedSound('powerup', 1.8);
-                this.createScreenEffect('✨');
-            }
-
-            // 7. 洗牌
-            useShuffle() {
-                const fruits = [];
-                const specials = [];
-                
-                // 收集所有水果和特殊属性
-                for (let i = 0; i < this.gridSize; i++) {
-                    for (let j = 0; j < this.gridSize; j++) {
-                        if (this.grid[i][j].fruit) {
-                            fruits.push(this.grid[i][j].fruit);
-                            specials.push(this.grid[i][j].special);
-                        }
-                    }
-                }
-                
-                // 清空网格
-                this.initGrid();
-                
-                // 重新随机分配
-                for (let k = 0; k < fruits.length; k++) {
-                    let placed = false;
-                    while (!placed) {
-                        const i = Math.floor(Math.random() * this.gridSize);
-                        const j = Math.floor(Math.random() * this.gridSize);
-                        if (!this.grid[i][j].fruit) {
-                            this.grid[i][j].fruit = fruits[k];
-                            this.grid[i][j].special = specials[k];
-                            placed = true;
-                        }
-                    }
-                }
-                
-                this.render();
-                this.showScorePopup(4, 4, "重新洗牌！");
-                playEnhancedSound('powerup');
-                this.createScreenEffect('🔀');
-            }
-
-            // 8. 流星攻击
-            useMeteor(row, col) {
-                let destroyed = 0;
-                const positions = [];
-                
-                // 对角线消除
-                const directions = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
-                directions.forEach(dir => {
-                    for (let step = 0; step < this.gridSize; step++) {
-                        const newRow = row + dir[0] * step;
-                        const newCol = col + dir[1] * step;
-                        if (newRow >= 0 && newRow < this.gridSize && newCol >= 0 && newCol < this.gridSize) {
-                            if (this.grid[newRow][newCol].fruit) {
-                                destroyed++;
-                                this.grid[newRow][newCol].fruit = null;
-                                this.grid[newRow][newCol].special = 0;
-                                positions.push({i: newRow, j: newCol});
-                            }
-                        }
-                    }
-                });
-                
-                // 流星特效
-                positions.forEach((pos, index) => {
-                    setTimeout(() => {
-                        this.createParticleEffect(pos.i, pos.j, '☄️');
-                    }, index * 50);
-                });
-                
-                const points = destroyed * 110 * this.multiplier;
-                this.addScore(points);
-                this.showScorePopup(row, col, `+${points}`);
-                playEnhancedSound('powerup', 2.2);
-                this.shakeBoard();
-            }
-
-            // 9. 龙卷风
-            useTornado() {
-                const positions = [];
-                let destroyed = 0;
-                
-                // 随机选择15个有水果的位置
-                const availablePositions = [];
-                for (let i = 0; i < this.gridSize; i++) {
-                    for (let j = 0; j < this.gridSize; j++) {
-                        if (this.grid[i][j].fruit) {
-                            availablePositions.push({i, j});
-                        }
-                    }
-                }
-                
-                const targets = availablePositions
-                    .sort(() => Math.random() - 0.5)
-                    .slice(0, Math.min(15, availablePositions.length));
-                
-                targets.forEach(pos => {
-                    if (this.grid[pos.i][pos.j].fruit) {
-                        destroyed++;
-                        this.grid[pos.i][pos.j].fruit = null;
-                        this.grid[pos.i][pos.j].special = 0;
-                        positions.push(pos);
-                    }
-                });
-                
-                // 龙卷风螺旋特效
-                positions.forEach((pos, index) => {
-                    setTimeout(() => {
-                        this.createParticleEffect(pos.i, pos.j, '🌪️');
-                    }, index * 80);
-                });
-                
-                const points = destroyed * 95 * this.multiplier;
-                this.addScore(points);
-                this.showScorePopup(4, 4, `+${points}`);
-                playEnhancedSound('powerup', 2.5);
-                this.createScreenEffect('🌪️');
-            }
-
-            // 10. 魔法变换
-            useMagic() {
-                const newFruitType = this.fruits[Math.floor(Math.random() * this.fruits.length)];
-                let transformed = 0;
-                
-                for (let i = 0; i < this.gridSize; i++) {
-                    for (let j = 0; j < this.gridSize; j++) {
-                        if (this.grid[i][j].fruit && Math.random() < 0.6) {
-                            this.grid[i][j].fruit = newFruitType;
-                            transformed++;
-                            setTimeout(() => {
-                                this.createParticleEffect(i, j, '🎭');
-                            }, Math.random() * 500);
-                        }
-                    }
-                }
-                
-                this.render();
-                const points = transformed * 60 * this.multiplier;
-                this.addScore(points);
-                this.showScorePopup(4, 4, `魔法变换！+${points}`);
-                playEnhancedSound('powerup', 1.5);
-                this.createScreenEffect('✨');
-            }
-
-            // 11. 时光机器
-            useTimeMachine() {
-                if (this.previousGameState) {
-                    this.grid = JSON.parse(JSON.stringify(this.previousGameState.grid));
-                    this.score = this.previousGameState.score;
-                    this.lives = this.previousGameState.lives;
-                    this.combo = this.previousGameState.combo;
-                    
-                    this.render();
-                    this.updateUI();
-                    this.showScorePopup(4, 4, "时光倒流！");
-                    playEnhancedSound('powerup', 1.3);
-                    this.createScreenEffect('⏰');
-                }
-            }
-
-            // 强制交换
-            forceSwap(pos1, pos2) {
-                const temp = { ...this.grid[pos1.row][pos1.col] };
-                this.grid[pos1.row][pos1.col] = { ...this.grid[pos2.row][pos2.col] };
-                this.grid[pos2.row][pos2.col] = temp;
-                
-                this.render();
-                this.clearSelection();
-                this.showScorePopup(pos1.row, pos1.col, "强制交换！");
-                playEnhancedSound('powerup');
-            }
-
-            // 创建各种特效
-            createExplosionEffect(row, col) {
-                const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-                if (cell) {
-                    cell.style.background = 'radial-gradient(circle, #ff6b6b 0%, #ff8e53 100%)';
-                    setTimeout(() => {
-                        cell.style.background = '';
-                    }, 300);
-                }
-            }
-
-            createParticleEffect(row, col, emoji) {
-                const gameBoard = document.querySelector('.game-board');
-                if (!gameBoard) return;
-                
-                const particle = document.createElement('div');
-                particle.textContent = emoji;
-                particle.style.cssText = `
-                    position: absolute;
-                    font-size: 24px;
-                    pointer-events: none;
-                    z-index: 1000;
-                    animation: particleFloat 1s ease-out forwards;
-                `;
-                
-                const rect = gameBoard.getBoundingClientRect();
-                const cellSize = rect.width / 8;
-                particle.style.left = `${col * cellSize + cellSize/2}px`;
-                particle.style.top = `${row * cellSize + cellSize/2}px`;
-                
-                gameBoard.appendChild(particle);
-                
-                setTimeout(() => {
-                    if (particle.parentNode) {
-                        particle.parentNode.removeChild(particle);
-                    }
-                }, 1000);
-            }
-
-            createScreenEffect(emoji) {
-                const gameBoard = document.querySelector('.game-board');
-                if (!gameBoard) return;
-                
-                for (let i = 0; i < 20; i++) {
-                    setTimeout(() => {
-                        const effect = document.createElement('div');
-                        effect.textContent = emoji;
-                        effect.style.cssText = `
-                            position: absolute;
-                            font-size: ${16 + Math.random() * 16}px;
-                            pointer-events: none;
-                            z-index: 1000;
-                            left: ${Math.random() * 100}%;
-                            top: ${Math.random() * 100}%;
-                            animation: screenEffectFade 2s ease-out forwards;
-                        `;
-                        gameBoard.appendChild(effect);
-                        
-                        setTimeout(() => {
-                            if (effect.parentNode) {
-                                effect.parentNode.removeChild(effect);
-                            }
-                        }, 2000);
-                    }, i * 100);
-                }
-            }
-
-            // 震动效果
-            shakeBoard() {
-                const gameBoard = document.querySelector('.game-board');
-                if (gameBoard) {
-                    gameBoard.style.animation = 'shake 0.5s ease-in-out';
-                    setTimeout(() => {
-                        gameBoard.style.animation = '';
-                    }, 500);
-                }
-            }
-
-            // 显示分数弹出
-            showScorePopup(row, col, text) {
-                const gameBoard = document.querySelector('.game-board');
-                if (!gameBoard) return;
-                
-                const popup = document.createElement('div');
-                popup.textContent = text;
-                popup.style.cssText = `
-                    position: absolute;
-                    color: #ff6b6b;
-                    font-weight: bold;
-                    font-size: 20px;
-                    pointer-events: none;
-                    z-index: 1000;
-                    animation: scorePopup 1s ease-out forwards;
-                    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-                `;
-                
-                const rect = gameBoard.getBoundingClientRect();
-                const cellSize = rect.width / 8;
-                popup.style.left = `${col * cellSize + cellSize/2}px`;
-                popup.style.top = `${row * cellSize + cellSize/2}px`;
-                
-                gameBoard.appendChild(popup);
-                
-                setTimeout(() => {
-                    if (popup.parentNode) {
-                        popup.parentNode.removeChild(popup);
-                    }
-                }, 1000);
-            }
-
-            // 选择和交换逻辑
             selectCell(row, col) {
-                if (this.grid[row][col].fruit) {
-                    this.clearSelection();
-                    this.selectedCell = {row, col};
-                    this.updateCellDisplay();
-                }
+                if (!this.grid[row][col].fruit) return;
+                
+                this.selectedCell = { row, col };
+                this.updateCellSelection();
+                playEnhancedSound('select', 1.2);
             }
 
             clearSelection() {
                 this.selectedCell = null;
-                this.updateCellDisplay();
+                this.updateCellSelection();
             }
 
-            isAdjacent(pos1, pos2) {
-                const rowDiff = Math.abs(pos1.row - pos2.row);
-                const colDiff = Math.abs(pos1.col - pos2.col);
+            updateCellSelection() {
+                const cells = document.querySelectorAll(`#${this.currentGridId} .cell`);
+                cells.forEach(cell => cell.classList.remove('selected'));
+                
+                if (this.selectedCell) {
+                    const selectedElement = document.querySelector(
+                        `#${this.currentGridId} .cell[data-row="${this.selectedCell.row}"][data-col="${this.selectedCell.col}"]`
+                    );
+                    if (selectedElement) {
+                        selectedElement.classList.add('selected');
+                    }
+                }
+            }
+
+            isAdjacent(row1, col1, row2, col2) {
+                const rowDiff = Math.abs(row1 - row2);
+                const colDiff = Math.abs(col1 - col2);
                 return (rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1);
             }
 
-            updateCellDisplay() {
-                const cells = document.querySelectorAll(`#${this.currentGridId} .cell`);
-                cells.forEach(cell => {
-                    cell.classList.remove('selected');
-                    if (this.selectedCell && 
-                        cell.dataset.row == this.selectedCell.row && 
-                        cell.dataset.col == this.selectedCell.col) {
-                        cell.classList.add('selected');
-                    }
-                });
-            }
-
-            // 水果交换和匹配检测
-            swapFruits(pos1, pos2) {
-                const temp = { ...this.grid[pos1.row][pos1.col] };
-                this.grid[pos1.row][pos1.col] = { ...this.grid[pos2.row][pos2.col] };
-                this.grid[pos2.row][pos2.col] = temp;
+            swapAndCheck(row1, col1, row2, col2) {
+                // 保存游戏状态用于时光机器
+                this.saveGameState();
                 
+                // 执行交换
+                const temp = this.grid[row1][col1];
+                this.grid[row1][col1] = this.grid[row2][col2];
+                this.grid[row2][col2] = temp;
+                
+                // 检查是否有匹配
                 const matches = this.findMatches();
                 if (matches.length > 0) {
-                    this.render();
-                    this.clearSelection();
-                    this.processMatches(matches);
+                    this.lives--;
+                    this.processMatches();
                 } else {
-                    // 交换回来
-                    const temp = { ...this.grid[pos1.row][pos1.col] };
-                    this.grid[pos1.row][pos1.col] = { ...this.grid[pos2.row][pos2.col] };
-                    this.grid[pos2.row][pos2.col] = temp;
-                    this.lives++; // 恢复生命
+                    // 无匹配，交换回来
+                    this.grid[row2][col2] = this.grid[row1][col1];
+                    this.grid[row1][col1] = temp;
+                    playEnhancedSound('invalid');
+                    this.shakeGrid();
                 }
                 
                 this.render();
-                this.clearSelection();
+                this.updateUI();
             }
 
-            // 寻找匹配
             findMatches() {
                 const matches = [];
-                const visited = new Set();
                 
-                // 检查水平匹配
+                // 水平匹配
                 for (let row = 0; row < this.gridSize; row++) {
                     let count = 1;
                     let currentFruit = this.grid[row][0].fruit;
                     
                     for (let col = 1; col < this.gridSize; col++) {
-                        if (this.grid[row][col].fruit === currentFruit && currentFruit !== null) {
+                        if (this.grid[row][col].fruit === currentFruit && currentFruit) {
                             count++;
                         } else {
-                            if (count >= 3) {
+                            if (count >= 3 && currentFruit) {
                                 for (let i = col - count; i < col; i++) {
-                                    matches.push({row, col: i});
+                                    matches.push({ row, col: i });
                                 }
                             }
                             count = 1;
                             currentFruit = this.grid[row][col].fruit;
                         }
                     }
-                    if (count >= 3) {
+                    
+                    if (count >= 3 && currentFruit) {
                         for (let i = this.gridSize - count; i < this.gridSize; i++) {
-                            matches.push({row, col: i});
+                            matches.push({ row, col: i });
                         }
                     }
                 }
                 
-                // 检查垂直匹配
+                // 垂直匹配
                 for (let col = 0; col < this.gridSize; col++) {
                     let count = 1;
                     let currentFruit = this.grid[0][col].fruit;
                     
                     for (let row = 1; row < this.gridSize; row++) {
-                        if (this.grid[row][col].fruit === currentFruit && currentFruit !== null) {
+                        if (this.grid[row][col].fruit === currentFruit && currentFruit) {
                             count++;
                         } else {
-                            if (count >= 3) {
+                            if (count >= 3 && currentFruit) {
                                 for (let i = row - count; i < row; i++) {
-                                    matches.push({row: i, col});
+                                    matches.push({ row: i, col });
                                 }
                             }
                             count = 1;
                             currentFruit = this.grid[row][col].fruit;
                         }
                     }
-                    if (count >= 3) {
+                    
+                    if (count >= 3 && currentFruit) {
                         for (let i = this.gridSize - count; i < this.gridSize; i++) {
-                            matches.push({row: i, col});
+                            matches.push({ row: i, col });
                         }
                     }
                 }
                 
-                return matches.filter((match, index, self) => 
-                    self.findIndex(m => m.row === match.row && m.col === match.col) === index
-                );
+                return matches;
             }
 
-            // 处理匹配
-            processMatches(matches) {
-                if (matches.length === 0) return;
-                
+            async processMatches() {
                 this.isAnimating = true;
-                this.combo++;
-                this.maxCombo = Math.max(this.maxCombo, this.combo);
+                let matches = this.findMatches();
+                let totalMatches = 0;
                 
-                let totalScore = 0;
-                let specialBonusTotal = 0;
-                
-                // 计算得分
-                matches.forEach(match => {
-                    const cell = this.grid[match.row][match.col];
-                    let baseScore = 100;
-                    let specialMultiplier = 1;
+                while (matches.length > 0) {
+                    totalMatches += matches.length;
+                    this.combo++;
                     
-                    switch(cell.special) {
-                        case 1: specialMultiplier = 2; break;
-                        case 2: specialMultiplier = 3; break;
-                        case 3: specialMultiplier = 5; break;
-                        case 4: specialMultiplier = 8; break;
-                    }
+                    // 计算分数
+                    let matchScore = this.calculateScore(matches);
+                    this.score += matchScore;
                     
-                    const comboMultiplier = 1 + (this.combo * 0.1);
-                    const score = baseScore * specialMultiplier * comboMultiplier * this.multiplier;
-                    totalScore += score;
-                    specialBonusTotal += (specialMultiplier - 1) * baseScore;
+                    // 显示分数动画
+                    this.showScoreAnimation(matches, matchScore);
                     
-                    // 清除水果
-                    cell.fruit = null;
-                    cell.special = 0;
+                    // 播放音效
+                    this.playComboSound();
                     
-                    // 粒子效果
-                    setTimeout(() => {
-                        this.createParticleEffect(match.row, match.col, '✨');
-                    }, Math.random() * 200);
-                });
-                
-                this.addScore(Math.floor(totalScore));
-                
-                // 播放连击音效
-                if (this.combo >= 20) {
-                    playEnhancedSound('legendary_combo', this.combo / 10);
-                } else if (this.combo >= 10) {
-                    playEnhancedSound('super_combo', this.combo / 5);
-                } else {
-                    playEnhancedSound('combo', Math.min(this.combo / 3, 3));
-                }
-                
-                // 显示连击效果
-                this.showComboEffect();
-                
-                // 倍数递减
-                if (this.multiplierTimeLeft > 0) {
-                    this.multiplierTimeLeft--;
-                    if (this.multiplierTimeLeft === 0) {
-                        this.multiplier = 1;
-                    }
-                }
-                
-                // 延迟处理重力和新匹配
-                setTimeout(() => {
-                    this.applyGravity();
+                    // 消除匹配的水果
+                    matches.forEach(match => {
+                        this.grid[match.row][match.col] = { fruit: null, special: 0 };
+                    });
+                    
+                    await this.animateMatchRemoval(matches);
+                    
+                    // 下落动画
+                    await this.dropFruits();
+                    
+                    // 生成新水果
                     this.generateNewFruits();
                     this.render();
                     
-                    setTimeout(() => {
-                        const newMatches = this.findMatches();
-                        if (newMatches.length > 0) {
-                            this.processMatches(newMatches);
-                        } else {
-                            this.combo = 0;
-                            this.isAnimating = false;
-                            this.checkGameStatus();
-                        }
-                    }, 300);
-                }, 200);
-            }
-
-            // 显示连击效果
-            showComboEffect() {
-                if (this.combo < 3) return;
-                
-                const effect = this.comboEffects[this.combo] || 
-                    this.comboEffects[Object.keys(this.comboEffects).reverse().find(key => key <= this.combo)];
-                
-                if (!effect) return;
-                
-                const gameBoard = document.querySelector('.game-board');
-                if (!gameBoard) return;
-                
-                const comboText = document.createElement('div');
-                comboText.className = 'combo-text';
-                comboText.textContent = `${this.combo} 连击！${effect.text}`;
-                comboText.style.color = effect.color;
-                
-                gameBoard.appendChild(comboText);
-                
-                if (effect.shake) {
-                    this.shakeBoard();
+                    // 检查新匹配
+                    matches = this.findMatches();
+                    
+                    await new Promise(resolve => setTimeout(resolve, 300));
                 }
                 
-                setTimeout(() => {
-                    if (comboText.parentNode) {
-                        comboText.parentNode.removeChild(comboText);
-                    }
-                }, 1500);
+                // 连击结束，重置连击计数
+                if (this.combo > this.maxCombo) {
+                    this.maxCombo = this.combo;
+                }
+                
+                this.totalMatches += totalMatches;
+                this.combo = 0;
+                this.multiplierTimeLeft = Math.max(0, this.multiplierTimeLeft - 1);
+                
+                this.updateUI();
+                this.checkGameEnd();
+                this.isAnimating = false;
+                
+                // 检查成就
+                this.checkAchievements();
             }
 
-            // 重力效果
-            applyGravity() {
-                let moved = false;
+            calculateScore(matches) {
+                let baseScore = matches.length * 100;
+                let specialBonus = 0;
                 
-                do {
+                // 计算特殊水果奖励
+                matches.forEach(match => {
+                    const special = this.grid[match.row][match.col].special;
+                    switch (special) {
+                        case 1: specialBonus += 100; break;  // 特殊水果 2倍
+                        case 2: specialBonus += 200; break;  // 超级水果 3倍
+                        case 3: specialBonus += 400; break;  // 巨型水果 5倍
+                        case 4: specialBonus += 700; break;  // 传说水果 8倍
+                    }
+                });
+                
+                let totalScore = (baseScore + specialBonus) * this.multiplier;
+                
+                // 连击奖励
+                if (this.combo > 1) {
+                    totalScore *= (1 + (this.combo - 1) * 0.2);
+                }
+                
+                return Math.floor(totalScore);
+            }
+
+            playComboSound() {
+                if (this.combo <= 3) {
+                    playEnhancedSound('match', 1 + (this.combo * 0.2));
+                } else if (this.combo <= 7) {
+                    playEnhancedSound('combo', 1 + (this.combo * 0.1));
+                } else if (this.combo <= 12) {
+                    playEnhancedSound('super_combo', 1 + (this.combo * 0.05));
+                } else {
+                    playEnhancedSound('legendary_combo', 1.5);
+                }
+            }
+
+            showScoreAnimation(matches, score) {
+                if (matches.length === 0) return;
+                
+                const gridElement = document.getElementById(this.currentGridId);
+                if (!gridElement) return;
+                
+                // 在第一个匹配位置显示分数
+                const firstMatch = matches[0];
+                const cellElement = gridElement.querySelector(
+                    `.cell[data-row="${firstMatch.row}"][data-col="${firstMatch.col}"]`
+                );
+                
+                if (cellElement) {
+                    const scoreElement = document.createElement('div');
+                    scoreElement.className = 'combo-text';
+                    scoreElement.textContent = `+${score.toLocaleString()}`;
+                    
+                    // 连击特效
+                    const comboEffect = this.getComboEffect(this.combo);
+                    if (comboEffect) {
+                        scoreElement.style.color = comboEffect.color;
+                        if (comboEffect.shake) {
+                            gridElement.style.animation = 'shake 0.5s ease-in-out';
+                            setTimeout(() => {
+                                gridElement.style.animation = '';
+                            }, 500);
+                        }
+                        
+                        // 显示连击文字
+                        if (this.combo > 2) {
+                            const comboText = document.createElement('div');
+                            comboText.className = 'combo-text';
+                            comboText.textContent = comboEffect.text;
+                            comboText.style.top = '30%';
+                            comboText.style.fontSize = '16px';
+                            comboText.style.color = comboEffect.color;
+                            cellElement.appendChild(comboText);
+                        }
+                    }
+                    
+                    cellElement.appendChild(scoreElement);
+                }
+            }
+
+            getComboEffect(combo) {
+                for (let threshold of Object.keys(this.comboEffects).sort((a, b) => b - a)) {
+                    if (combo >= parseInt(threshold)) {
+                        return this.comboEffects[threshold];
+                    }
+                }
+                return null;
+            }
+
+            async animateMatchRemoval(matches) {
+                const cells = matches.map(match => {
+                    return document.querySelector(
+                        `#${this.currentGridId} .cell[data-row="${match.row}"][data-col="${match.col}"]`
+                    );
+                }).filter(cell => cell);
+                
+                // 粒子特效
+                cells.forEach(cell => {
+                    this.createParticleEffect(cell);
+                    cell.style.animation = 'fadeOut 0.3s ease-out forwards';
+                });
+                
+                return new Promise(resolve => setTimeout(resolve, 400));
+            }
+
+            createParticleEffect(element) {
+                const rect = element.getBoundingClientRect();
+                const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#feca57', '#ff9ff3'];
+                
+                for (let i = 0; i < 8; i++) {
+                    const particle = document.createElement('div');
+                    particle.style.cssText = `
+                        position: fixed;
+                        width: 6px;
+                        height: 6px;
+                        background: ${colors[Math.floor(Math.random() * colors.length)]};
+                        border-radius: 50%;
+                        left: ${rect.left + rect.width / 2}px;
+                        top: ${rect.top + rect.height / 2}px;
+                        pointer-events: none;
+                        z-index: 1000;
+                        animation: particleFloat 1s ease-out forwards;
+                        transform: rotate(${i * 45}deg) translateX(30px);
+                    `;
+                    
+                    document.body.appendChild(particle);
+                    setTimeout(() => particle.remove(), 1000);
+                }
+            }
+
+            async dropFruits() {
+                let moved = true;
+                
+                while (moved) {
                     moved = false;
+                    
                     for (let col = 0; col < this.gridSize; col++) {
-                        for (let row = this.gridSize - 2; row >= 0; row--) {
-                            if (this.grid[row][col].fruit && !this.grid[row + 1][col].fruit) {
-                                this.grid[row + 1][col] = { ...this.grid[row][col] };
-                                this.grid[row][col] = { fruit: null, special: 0 };
+                        for (let row = this.gridSize - 1; row > 0; row--) {
+                            if (!this.grid[row][col].fruit && this.grid[row - 1][col].fruit) {
+                                this.grid[row][col] = this.grid[row - 1][col];
+                                this.grid[row - 1][col] = { fruit: null, special: 0 };
                                 moved = true;
                             }
                         }
                     }
-                } while (moved);
-            }
-
-            // 其他辅助方法
-            addScore(points) {
-                this.score += points;
-                this.totalMatches++;
-                this.updateUI();
-                this.checkAchievements();
-            }
-
-            processAfterAction() {
-                this.applyGravity();
-                this.generateNewFruits();
-                this.render();
-                
-                setTimeout(() => {
-                    const matches = this.findMatches();
-                    if (matches.length > 0) {
-                        this.processMatches(matches);
+                    
+                    if (moved) {
+                        this.render();
+                        await new Promise(resolve => setTimeout(resolve, 150));
                     }
-                }, 200);
-            }
-
-            updateUI() {
-                const elements = {
-                    lives: document.getElementById('lives'),
-                    score: document.getElementById('score'),
-                    target: document.getElementById('target'),
-                    progressFill: document.getElementById('progressFill'),
-                    practiceLives: document.getElementById('practiceLives'),
-                    practiceScore: document.getElementById('practiceScore')
-                };
-                
-                if (elements.lives) elements.lives.textContent = this.lives;
-                if (elements.score) elements.score.textContent = this.score.toLocaleString();
-                if (elements.target) elements.target.textContent = this.target.toLocaleString();
-                if (elements.progressFill) {
-                    const progress = Math.min((this.score / this.target) * 100, 100);
-                    elements.progressFill.style.width = `${progress}%`;
                 }
-                if (elements.practiceLives) elements.practiceLives.textContent = '∞';
-                if (elements.practiceScore) elements.practiceScore.textContent = this.score.toLocaleString();
             }
 
-            updatePowerUpDisplay() {
-                const containers = ['gamePowerUps', 'practicePowerUps'];
-                
-                containers.forEach(containerId => {
-                    const container = document.getElementById(containerId);
-                    if (!container) return;
-                    
-                    container.innerHTML = '';
-                    
-                    Object.keys(this.powerUps).forEach(powerUp => {
-                        const button = document.createElement('button');
-                        button.className = `power-up ${powerUp}`;
-                        button.textContent = this.getPowerUpEmoji(powerUp);
-                        
-                        if (this.powerUps[powerUp] > 0) {
-                            const count = document.createElement('span');
-                            count.className = 'power-up-count';
-                            count.textContent = this.powerUps[powerUp];
-                            button.appendChild(count);
-                        } else {
-                            button.classList.add('disabled');
-                        }
-                        
-                        if (this.activePowerUp === powerUp) {
-                            button.classList.add('active');
-                        }
-                        
-                        button.addEventListener('click', () => this.selectPowerUp(powerUp));
-                        container.appendChild(button);
-                    });
-                });
-            }
-
-            getPowerUpEmoji(powerUp) {
-                const emojis = {
-                    bomb: '💣', rainbow: '🌈', hammer: '🔨', swap: '🔄',
-                    lightning: '⚡', freeze: '❄️', multiplier: '✨', shuffle: '🔀',
-                    meteor: '☄️', tornado: '🌪️', magic: '🎭', time: '⏰'
-                };
-                return emojis[powerUp] || '❓';
-            }
-
-            selectPowerUp(powerUp) {
-                if (this.powerUps[powerUp] <= 0) return;
-                
-                if (this.activePowerUp === powerUp) {
-                    this.activePowerUp = null;
-                } else {
-                    this.activePowerUp = powerUp;
+            shakeGrid() {
+                const gridElement = document.getElementById(this.currentGridId);
+                if (gridElement) {
+                    gridElement.style.animation = 'shake 0.3s ease-in-out';
+                    setTimeout(() => {
+                        gridElement.style.animation = '';
+                    }, 300);
                 }
+            }
+
+            // 道具系统
+            selectPowerUp(powerUpType) {
+                if (this.powerUps[powerUpType] <= 0 || this.isAnimating) return;
                 
+                this.activePowerUp = this.activePowerUp === powerUpType ? null : powerUpType;
                 this.updatePowerUpDisplay();
+                playEnhancedSound('powerup');
                 
-                // 特殊道具立即生效
-                if (['freeze', 'multiplier', 'shuffle', 'tornado', 'magic', 'time'].includes(powerUp) && this.activePowerUp === powerUp) {
-                    setTimeout(() => this.handlePowerUpClick(0, 0), 100);
-                }
+                // 显示使用提示
+                this.showPowerUpHint(powerUpType);
             }
 
-            checkGameStatus() {
-                if (this.score >= this.target) {
-                    this.winGame();
-                } else if (this.lives <= 0) {
-                    this.gameOver();
-                }
+            showPowerUpHint(powerUpType) {
+                const hints = {
+                    bomb: "点击任意位置引爆💣",
+                    rainbow: "消除所有同色水果🌈",
+                    hammer: "精准消除指定水果🔨",
+                    swap: "强制交换两个水果🔄",
+                    lightning: "十字形消除⚡",
+                    freeze: "时间暂停+10步❄️",
+                    multiplier: "5倍得分奖励✨",
+                    shuffle: "重新洗牌🔀",
+                    meteor: "对角线攻击☄️",
+                    tornado: "随机消除15个🌪️",
+                    magic: "变换水果类型🎭",
+                    time: "回到上一步状态⏰"
+                };
+                
+                this.showTemporaryMessage(hints[powerUpType] || "点击棋盘使用道具", 2000);
             }
 
-            winGame() {
-                playEnhancedSound('victory');
-                const gameTime = (Date.now() - this.gameStartTime) / 1000;
-                
-                // 解锁成就
-                if (currentLevel === 1 && !achievementConfig.firstWin.unlocked) {
-                    achievementConfig.firstWin.unlocked = true;
-                    this.showAchievement('firstWin');
-                }
-                
-                if (gameTime < 15 && !achievementConfig.speedRunner.unlocked) {
-                    achievementConfig.speedRunner.unlocked = true;
-                    this.showAchievement('speedRunner');
-                }
-                
-                if (this.score > 50000 && !achievementConfig.perfectScore.unlocked) {
-                    achievementConfig.perfectScore.unlocked = true;
-                    this.showAchievement('perfectScore');
-                }
-                
-                if (this.maxCombo >= 10 && !achievementConfig.comboMaster.unlocked) {
-                    achievementConfig.comboMaster.unlocked = true;
-                    this.showAchievement('comboMaster');
-                }
-                
-                if (this.powerUpUsageCount >= 50 && !achievementConfig.powerUpLover.unlocked) {
-                    achievementConfig.powerUpLover.unlocked = true;
-                    this.showAchievement('powerUpLover');
-                }
-                
-                // 解锁下一关
-                if (currentLevel < 15) {
-                    localStorage.setItem(`level_${currentLevel + 1}_unlocked`, 'true');
-                }
-                
-                if (currentLevel === 15 && !achievementConfig.legendary.unlocked) {
-                    achievementConfig.legendary.unlocked = true;
-                    this.showAchievement('legendary');
-                }
-                
-                localStorage.setItem(`level_${currentLevel}_completed`, 'true');
-                localStorage.setItem('achievements', JSON.stringify(achievementConfig));
-                
-                setTimeout(() => {
-                    alert(`🎉 恭喜Ashley过关！\n得分: ${this.score.toLocaleString()}\n最高连击: ${this.maxCombo}\n用时: ${Math.floor(gameTime)}秒`);
-                    showLevelSelect();
-                }, 1000);
-            }
-
-            gameOver() {
-                setTimeout(() => {
-                    alert(`游戏结束！\n得分: ${this.score.toLocaleString()}\n最高连击: ${this.maxCombo}`);
-                    showLevelSelect();
-                }, 500);
-            }
-
-            showAchievement(achievementId) {
-                const achievement = achievementConfig[achievementId];
-                if (!achievement) return;
-                
-                const popup = document.createElement('div');
-                popup.innerHTML = `
+            showTemporaryMessage(message, duration = 2000) {
+                const messageDiv = document.createElement('div');
+                messageDiv.innerHTML = `
                     <div style="
                         position: fixed;
                         top: 50%;
                         left: 50%;
                         transform: translate(-50%, -50%);
-                        background: linear-gradient(45deg, #ffd700, #ffed4e);
-                        color: #333;
-                        padding: 20px;
-                        border-radius: 20px;
-                        text-align: center;
+                        background: rgba(0,0,0,0.8);
+                        color: white;
+                        padding: 15px 20px;
+                        border-radius: 15px;
+                        font-size: 16px;
                         z-index: 10000;
-                        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-                        animation: achievementShow 3s ease-out forwards;
+                        text-align: center;
+                        animation: fadeInOut ${duration/1000}s ease-in-out;
                     ">
-                        <div style="font-size: 48px; margin-bottom: 10px;">${achievement.icon}</div>
-                        <div style="font-weight: bold; font-size: 18px; margin-bottom: 5px;">成就解锁！</div>
-                        <div style="font-size: 16px; margin-bottom: 5px;">${achievement.name}</div>
-                        <div style="font-size: 14px; opacity: 0.8;">${achievement.desc}</div>
+                        ${message}
                     </div>
                 `;
+                document.body.appendChild(messageDiv);
+                setTimeout(() => messageDiv.remove(), duration);
+            }
+
+            usePowerUp(row, col) {
+                if (!this.activePowerUp || this.powerUps[this.activePowerUp] <= 0) return;
                 
-                document.body.appendChild(popup);
+                this.saveGameState(); // 保存状态
+                this.powerUps[this.activePowerUp]--;
+                this.powerUpUsageCount++;
                 
-                setTimeout(() => {
-                    if (popup.parentNode) {
-                        popup.parentNode.removeChild(popup);
+                switch (this.activePowerUp) {
+                    case 'bomb':
+                        this.useBomb(row, col);
+                        break;
+                    case 'rainbow':
+                        this.useRainbow(row, col);
+                        break;
+                    case 'hammer':
+                        this.useHammer(row, col);
+                        break;
+                    case 'swap':
+                        this.useSwap(row, col);
+                        break;
+                    case 'lightning':
+                        this.useLightning(row, col);
+                        break;
+                    case 'freeze':
+                        this.useFreeze();
+                        break;
+                    case 'multiplier':
+                        this.useMultiplier();
+                        break;
+                    case 'shuffle':
+                        this.useShuffle();
+                        break;
+                    case 'meteor':
+                        this.useMeteor(row, col);
+                        break;
+                    case 'tornado':
+                        this.useTornado();
+                        break;
+                    case 'magic':
+                        this.useMagic(row, col);
+                        break;
+                    case 'time':
+                        this.useTime();
+                        break;
+                }
+                
+                this.activePowerUp = null;
+                this.updatePowerUpDisplay();
+                this.render();
+                this.updateUI();
+                
+                setTimeout(() => this.processMatches(), 300);
+            }
+
+            useBomb(centerRow, centerCol) {
+                const affected = [];
+                for (let dr = -1; dr <= 1; dr++) {
+                    for (let dc = -1; dc <= 1; dc++) {
+                        const r = centerRow + dr;
+                        const c = centerCol + dc;
+                        if (r >= 0 && r < this.gridSize && c >= 0 && c < this.gridSize) {
+                            if (this.grid[r][c].fruit) {
+                                affected.push({row: r, col: c});
+                                this.grid[r][c] = { fruit: null, special: 0 };
+                            }
+                        }
                     }
-                }, 3000);
+                }
+                this.showExplosionEffect(centerRow, centerCol);
+                playEnhancedSound('powerup', 0.8);
             }
 
-            checkAchievements() {
-                // 检查各种成就条件
-                if (this.maxCombo >= 10 && !achievementConfig.comboMaster.unlocked) {
-                    achievementConfig.comboMaster.unlocked = true;
-                    this.showAchievement('comboMaster');
+            useRainbow(row, col) {
+                const targetFruit = this.grid[row][col].fruit;
+                if (!targetFruit) return;
+                
+                let removed = 0;
+                for (let r = 0; r < this.gridSize; r++) {
+                    for (let c = 0; c < this.gridSize; c++) {
+                        if (this.grid[r][c].fruit === targetFruit) {
+                            this.grid[r][c] = { fruit: null, special: 0 };
+                            removed++;
+                        }
+                    }
                 }
                 
-                if (this.powerUpUsageCount >= 50 && !achievementConfig.powerUpLover.unlocked) {
-                    achievementConfig.powerUpLover.unlocked = true;
-                    this.showAchievement('powerUpLover');
-                }
-                
-                if (this.score > 50000 && !achievementConfig.perfectScore.unlocked) {
-                    achievementConfig.perfectScore.unlocked = true;
-                    this.showAchievement('perfectScore');
+                this.score += removed * 200;
+                this.showRainbowEffect();
+                playEnhancedSound('powerup', 1.2);
+            }
+
+            useHammer(row, col) {
+                if (this.grid[row][col].fruit) {
+                    this.grid[row][col] = { fruit: null, special: 0 };
+                    this.score += 150;
+                    this.showHammerEffect(row, col);
+                    playEnhancedSound('powerup', 1.0);
                 }
             }
-        }
 
-        // 全局函数
-        function showMainMenu() {
-            hideAllScreens();
-            document.getElementById('mainMenu').classList.add('active');
-        }
-
-        function showLevelSelect() {
-            hideAllScreens();
-            document.getElementById('levelSelect').classList.add('active');
-            generateLevelGrid();
-        }
-
-        function showPractice() {
-            hideAllScreens();
-            document.getElementById('practice').classList.add('active');
-            gameMode = 'practice';
-            game = new SuperAppleMatchGame();
-            game.currentGridId = 'practiceGrid';
-            game.lives = 9999;
-            game.target = 999999;
-            game.init();
-        }
-
-        function showInstructions() {
-            hideAllScreens();
-            document.getElementById('instructionsModal').classList.add('active');
-        }
-
-        function showAchievements() {
-            hideAllScreens();
-            document.getElementById('achievements').classList.add('active');
-            generateAchievementList();
-        }
-
-        function hideAllScreens() {
-            const screens = document.querySelectorAll('.screen');
-            screens.forEach(screen => screen.classList.remove('active'));
-        }
-
-        function generateLevelGrid() {
-            const container = document.getElementById('levelGrid');
-            if (!container) return;
-            
-            container.innerHTML = '';
-            
-            for (let level = 1; level <= 15; level++) {
-                const config = levelConfig[level];
-                const isUnlocked = level === 1 || localStorage.getItem(`level_${level}_unlocked`) === 'true';
-                const isCompleted = localStorage.getItem(`level_${level}_completed`) === 'true';
-                
-                const levelCard = document.createElement('div');
-                levelCard.className = `level-card ${isUnlocked ? 'unlocked' : 'locked'}`;
-                
-                if (isCompleted) {
-                    levelCard.classList.add('completed');
-                }
-                
-                const difficultyStars = '⭐'.repeat(config.difficulty);
-                const difficultyText = ['', '新手', '简单', '普通', '困难', '专家', '传说'][config.difficulty];
-                
-                levelCard.innerHTML = `
-                    <div class="level-number">${level}</div>
-                    <div class="level-name">${config.name}</div>
-                    <div class="level-difficulty">${difficultyStars}</div>
-                    <div class="level-difficulty-text">${difficultyText}</div>
-                    <div class="level-target">目标: ${config.target.toLocaleString()}</div>
-                    <div class="level-moves">步数: ${config.moves}</div>
-                    ${isCompleted ? '<div class="level-completed">✅ 已完成</div>' : ''}
-                    ${!isUnlocked ? '<div class="level-locked">🔒 未解锁</div>' : ''}
-                `;
-                
-                if (isUnlocked) {
-                    levelCard.addEventListener('click', () => selectLevel(level));
-                    levelCard.addEventListener('touchstart', () => selectLevel(level), { passive: true });
-                }
-                
-                container.appendChild(levelCard);
-            }
-        }
-
-        function selectLevel(level) {
-            currentLevel = level;
-            const config = levelConfig[level];
-            
-            document.getElementById('levelTitle').textContent = `关卡 ${level} - ${config.name}`;
-            document.getElementById('levelDescription').innerHTML = `
-                <p>${config.description}</p>
-                <div style="margin-top: 15px; font-size: 14px; color: #666;">
-                    <div>🎯 目标得分: ${config.target.toLocaleString()}</div>
-                    <div>👆 可用步数: ${config.moves}</div>
-                    <div>⭐ 难度等级: ${'⭐'.repeat(config.difficulty)}</div>
-                </div>
-            `;
-            
-            hideAllScreens();
-            document.getElementById('levelConfirm').classList.add('active');
-        }
-
-        function startGame() {
-            hideAllScreens();
-            document.getElementById('gameScreen').classList.add('active');
-            
-            gameMode = 'normal';
-            game = new SuperAppleMatchGame();
-            game.currentGridId = 'gameGrid';
-            game.target = levelConfig[currentLevel].target;
-            game.lives = levelConfig[currentLevel].moves;
-            game.gameStartTime = Date.now();
-            
-            // 根据关卡调整道具数量
-            const levelMultiplier = Math.floor((currentLevel - 1) / 3) + 1;
-            Object.keys(game.powerUps).forEach(powerUp => {
-                game.powerUps[powerUp] *= levelMultiplier;
-            });
-            
-            game.init();
-        }
-
-        function resetPractice() {
-            if (game && gameMode === 'practice') {
-                game = new SuperAppleMatchGame();
-                game.currentGridId = 'practiceGrid';
-                game.lives = 9999;
-                game.target = 999999;
-                game.init();
-            }
-        }
-
-        function pauseGame() {
-            if (game) {
-                game.isPaused = !game.isPaused;
-                const pauseBtn = document.querySelector('.control-btn');
-                if (pauseBtn) {
-                    pauseBtn.textContent = game.isPaused ? '▶️ 继续' : '⏸️ 暂停';
-                }
-                
-                if (game.isPaused) {
-                    const overlay = document.createElement('div');
-                    overlay.id = 'pauseOverlay';
-                    overlay.innerHTML = `
-                        <div style="
-                            position: fixed;
-                            top: 50%;
-                            left: 50%;
-                            transform: translate(-50%, -50%);
-                            background: rgba(0,0,0,0.8);
-                            color: white;
-                            padding: 30px;
-                            border-radius: 20px;
-                            text-align: center;
-                            z-index: 10000;
-                            font-size: 24px;
-                        ">
-                            ⏸️ 游戏已暂停<br>
-                            <small style="font-size: 16px; opacity: 0.8;">点击继续按钮恢复游戏</small>
-                        </div>
-                    `;
-                    document.body.appendChild(overlay);
+            useSwap(row, col) {
+                if (this.selectedCell && this.selectedCell.row !== row && this.selectedCell.col !== col) {
+                    // 交换选中的和目标格子
+                    const temp = this.grid[this.selectedCell.row][this.selectedCell.col];
+                    this.grid[this.selectedCell.row][this.selectedCell.col] = this.grid[row][col];
+                    this.grid[row][col] = temp;
+                    this.clearSelection();
+                    playEnhancedSound('powerup', 1.1);
                 } else {
-                    const overlay = document.getElementById('pauseOverlay');
-                    if (overlay) {
-                        overlay.remove();
-                    }
+                    this.selectCell(row, col);
+                    this.showTemporaryMessage("再选择一个位置进行交换", 1500);
                 }
             }
-        }
 
-        function generateAchievementList() {
-            const container = document.getElementById('achievementList');
-            if (!container) return;
-            
-            container.innerHTML = '<h3 style="margin-top: 0;">🏆 成就列表</h3>';
-            
-            Object.entries(achievementConfig).forEach(([key, achievement]) => {
-                const achievementDiv = document.createElement('div');
-                achievementDiv.className = `achievement ${achievement.unlocked ? 'unlocked' : 'locked'}`;
-                achievementDiv.innerHTML = `
-                    <div class="achievement-icon">${achievement.icon}</div>
-                    <div class="achievement-info">
+            useLightning(row, col) {
+                // 十字形消除
+                let removed = 0;
+                
+                // 水平消除
+                for (let c = 0; c < this.gridSize; c++) {
+                    if (this.grid[row][c].fruit) {
+                        this.grid[row][c] = { fruit: null, special: 0 };
+                        removed++;
+                    }
+                }
+                
+                // 垂直消除
+                for (let r = 0; r < this.gridSize; r++) {
+                    if (this.grid[r][col].fruit) {
+                        this.grid[r][col] = { fruit: null, special: 0 };
+                        removed++;
+                    }
+                }
+                
+                this.score += removed * 120;
+                this.showLightningEffect(row, col);
+                playEnhancedSound('powerup', 1.3);
+            }
+
+            useFreeze() {
+                this.lives += 10;
+                this.frozenTime = 3;
+                this.showTemporaryMessage("❄️ 时间暂停！获得10步奖励！", 2000);
+                playEnhancedSound('powerup', 0.9);
+            }
+
+            useMultiplier() {
+                this.multiplier = 5;
+                this.multiplierTimeLeft = 5;
+                this.showTemporaryMessage("✨ 接下来5次得分×5！", 2000);
+                playEnhancedSound('powerup', 1.4);
+            }
+
+            useShuffle() {
+                // 收集所有水果
+                const allFruits = [];
+                for (let r = 0; r < this.gridSize; r++) {
+                    for (let c = 0; c < this.gridSize; c++) {
+                        if (this.grid[r][c].fruit) {
+                            allFruits.push(this.grid[r][c]);
+                        }
+                    }
+                }
+                
+                // 洗牌
+                for (let i = allFruits.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [allFruits[i], allFruits[j]] = [allFruits[j], allFruits[i]];
+                }
+                
+                // 重新分布
+                let fruitIndex = 0;
+                for (let r = 0; r < this.gridSize; r++) {
+                    for (let c = 0; c < this.gridSize; c++) {
+                        if (fruitIndex < allFruits.length) {
+                            this.grid[r][c] = allFruits[fruitIndex++];
+                        } else {
+                            this.grid[r][c] = { fruit: null, special: 0 };
+                        }
+                    }
+                }
+                
+                this.showShuffleEffect();
+                playEnhancedSound('powerup', 1.2);
+            }
+
+            useMeteor(row, col) {
+                // 对角线攻击
+                let removed = 0;
+                const directions = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
+                
+                directions.forEach(([dr, dc]) => {
+                    for (let i = 1; i < this.gridSize; i++) {
+                        const r = row + dr * i;
+                        const c = col + dc * i;
+                        if (r >= 0 && r < this.gridSize && c >= 0 && c < this.gridSize) {
+                            if (this.grid[r][c].fruit) {
+                                this.grid[r][c] = { fruit: null, special: 0 };
+                                removed++;
+                            }
+                        } else break;
+                    }
+                });
+                
+                this.score += removed * 150;
+                this.showMeteorEffect(row, col);
+                playEnhancedSound('powerup', 1.1);
+            }
+
+            useTornado() {
+                const positions = [];
+                for (let r = 0; r < this.gridSize; r++) {
+                    for (let c = 0; c < this.gridSize; c++) {
+                        if (this.grid[r][c].fruit) {
+                            positions.push({row: r, col: c});
+                        }
+                    }
+                }
+                
+                // 随机选择15个位置
+                const toRemove = positions.sort(() => 0.5 - Math.random()).slice(0, 15);
+                toRemove.forEach(pos => {
+                    this.grid[pos.row][pos.col] = { fruit: null, special: 0 };
+                });
+                
+                this.score += toRemove.length * 180;
+                this.showTornadoEffect();
+                playEnhancedSound('powerup', 1.5);
+            }
+
+            useMagic(row, col) {
+                if (this.grid[row][col].fruit) {
+                    const newFruit = this.fruits[Math.floor(Math.random() * this.fruits.length)];
+                    this.grid[row][col] = { 
+                        fruit: newFruit, 
+                        special: Math.random() < 0.3 ? Math.floor(Math.random() * 4) + 1 : 0 
+                    };
+                    this.showMagicEffect(row, col);
+                    playEnhancedSound('powerup', 1.2);
+                }
+            }
+
+            useTime() {
+                if (this.previousGameState) {
+                    // 恢复到之前的状态
+                    this.grid = JSON.parse(JSON.stringify(this.previousGameState.grid));
+                    this.score = this.previousGameState.score;
+                    this.lives = this.previousGameState.lives;
+                    this.showTemporaryMessage("⏰ 时光倒流！回到上一步！", 2000);
+                    playEnhancedSound('powerup', 0.8);
+                }
+            }
+
+            saveGameState() {
+                this.previousGameState = {
+                    grid: JSON.parse(JSON.stringify(this.grid)),
+                    score: this.score,
+                    lives: this.lives
+                };
+            }
+
+            // 特效方法
+            showExplosionEffect(row, col) {
+                const element = document.querySelector(`#${this.currentGridId} .cell[data-row="${row}"][data-col="${col}"]`);
+                if (element) {
+                    element.innerHTML = '<div style="font-size: 30px; animation: screenEffectFade 1s ease-out;">💥</div>';
+                }
+            }
+
+            showRainbowEffect() {
+                const gridElement = document.getElementById(this.currentGridId);
+                if (gridElement) {
+                    gridElement.style.animation = 'rainbow 1s linear';
+                    setTimeout(() => gridElement.style.animation = '', 1000);
+                }
+            }
+
+            showHammerEffect(row, col) {
+                const element = document.querySelector(`#${this.currentGridId} .cell[data-row="${row}"][data-col="${col}"]`);
+                if (element) {
+                    element.innerHTML = '<div style="font-size: 25px; animation: screenEffectFade 0.8s ease-out;">🔨</div>';
+                }
+            }
+
+            showLightningEffect(row, col) {
+                const gridElement = document.getElementById(this.currentGridId);
+                if (gridElement) {
+                    const lightning = document.createElement('div');
+                    lightning.innerHTML = '⚡';
+                    lightning.style.cssText = `
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        font-size: 60px;
+                        z-index: 100;
+                        animation: screenEffectFade 1s ease-out;
+                        pointer-events: none;
+                    `;
+                    gridElement.appendChild(lightning);
+                    setTimeout(() => lightning.remove(), 1000);
+                }
+            }
+
+            showShuffleEffect() {
+                const gridElement = document.getElementById(this.currentGridId);
+                if (gridElement) {
+                    gridElement.style.animation = 'shake 0.8s ease-in-out';
+                    setTimeout(() => gridElement.style.animation = '', 800);
+                }
+            }
+
+            showMeteorEffect(row, col) {
+                const element = document.querySelector(`#${this.currentGridId} .cell[data-row="${row}"][data-col="${col}"]`);
+                if (element) {
+                    element.innerHTML = '<div style="font-size: 30px; animation: screenEffectFade 1.2s ease-out;">☄️</div>';
+                }
+            }
+
+            showTornadoEffect() {
+                const gridElement = document.getElementById(this.currentGridId);
+                if (gridElement) {
+                    const tornado = document.createElement('div');
+                    tornado.innerHTML = '🌪️';
+                    tornado.style.cssText = `
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        font-size: 50px;
+                        z-index: 100;
+                        animation: screenEffectFade 1.5s ease-out;
+                        pointer-events: none;
+                    `;
+                    gridElement.appendChild(tornado);
+                    setTimeout(() => tornado.remove(), 1500);
+                }
+            }
+
+            showMagicEffect(row, col) {
+                const element = document.querySelector(`#${this.currentGridId} .cell[data-row="${row}"][data-col="${col}"]`);
+                if (element) {
+                    element.innerHTML = '<div style="font-size: 25px; animation: screenEffectFade 1s ease-out;">✨</div>';
+                }
+            }
+
+            updatePowerUpDisplay() {
+                const container = document.getElementById(this.currentGridId === 'gameGrid' ? 'gamePowerUps' : 'practicePowerUps');
+                if (!container) return;
+                
+                container.innerHTML = '';
+                
+                const powerUpList = [
+                    { type: 'bomb', icon: '💣', name: '炸弹' },
+                    { type: 'rainbow', icon: '🌈', name: '彩虹' },
+                    { type: 'hammer', icon: '🔨', name: '锤子' },
+                    { type: 'swap', icon: '🔄', name: '交换' },
+                    { type: 'lightning', icon: '⚡', name: '闪电' },
+                    { type: 'freeze', icon: '❄️', name: '冰冻' },
+                    { type: 'multiplier', icon: '✨', name: '倍数' },
+                    { type: 'shuffle', icon: '🔀', name: '洗牌' },
+                    { type: 'meteor', icon: '☄️', name: '流星' },
+                    { type: 'tornado', icon: '🌪️', name: '龙卷风' },
+                    { type: 'magic', icon: '🎭', name: '魔法' },
+                    { type: 'time', icon: '⏰', name: '时光' }
+                ];
+                
+                powerUpList.forEach(powerUp => {
+                    const count = this.powerUps[powerUp.type] || 0;
+                    const button = document.createElement('button');
+                    button.className = `powerup-btn ${this.activePowerUp === powerUp.type ? 'active' : ''} ${count <= 0 ? 'disabled' : ''}`;
+                    button.innerHTML = `
+                        <div class="powerup-icon">${powerUp.icon}</div>
+                        <div class="powerup-name">${powerUp.name}</div>
+                        <div class="powerup-count">${count}</div>
+                    `;
+                    button.onclick = () => this.selectPowerUp(powerUp.type);
+                    container.appendChild(button);
+                });
+            }
+
+            // 成就系统
+            checkAchievements() {
+                const newAchievements = [];
+                
+                // 检查分数成就
+                if (this.score >= 1000000 && !this.achievements.millionaire) {
+                    this.achievements.millionaire = true;
+                    newAchievements.push({ id: 'millionaire', name: '百万富翁', desc: '获得1,000,000分' });
+                }
+                
+                if (this.score >= 500000 && !this.achievements.richman) {
+                    this.achievements.richman = true;
+                    newAchievements.push({ id: 'richman', name: '富豪', desc: '获得500,000分' });
+                }
+                
+                // 检查连击成就
+                if (this.maxCombo >= 20 && !this.achievements.combomaster) {
+                    this.achievements.combomaster = true;
+                    newAchievements.push({ id: 'combomaster', name: '连击大师', desc: '达成20连击' });
+                }
+                
+                if (this.maxCombo >= 10 && !this.achievements.combokiller) {
+                    this.achievements.combokiller = true;
+                    newAchievements.push({ id: 'combokiller', name: '连击杀手', desc: '达成10连击' });
+                }
+                
+                // 检查生存成就
+                if (this.totalMatches >= 1000 && !this.achievements.survivor) {
+                    this.achievements.survivor = true;
+                    newAchievements.push({ id: 'survivor', name: '生存专家', desc: '累计消除1000个匹配' });
+                }
+                
+                // 检查道具使用成就
+                if (this.powerUpUsageCount >= 100 && !this.achievements.poweruser) {
+                    this.achievements.poweruser = true;
+                    newAchievements.push({ id: 'poweruser', name: '道具专家', desc: '使用100个道具' });
+                }
+                
+                // 检查特殊成就
+                if (this.score > 0 && this.lives === this.maxLives && !this.achievements.perfect) {
+                    this.achievements.perfect = true;
+                    newAchievements.push({ id: 'perfect', name: '完美主义者', desc: '在满血状态下获得分数' });
+                }
+                
+                // 显示新成就
+                newAchievements.forEach(achievement => {
+                    this.showAchievementNotification(achievement);
+                });
+                
+                // 保存成就
+                this.saveAchievements();
+            }
+
+            showAchievementNotification(achievement) {
+                const notification = document.createElement('div');
+                notification.className = 'achievement-notification';
+                notification.innerHTML = `
+                    <div class="achievement-content">
+                        <div class="achievement-title">🏆 成就解锁！</div>
                         <div class="achievement-name">${achievement.name}</div>
                         <div class="achievement-desc">${achievement.desc}</div>
-                        <div class="achievement-status">
-                            ${achievement.unlocked ? '✅ 已解锁' : '🔒 未解锁'}
+                    </div>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                // 动画效果
+                setTimeout(() => notification.classList.add('show'), 100);
+                setTimeout(() => notification.classList.remove('show'), 4000);
+                setTimeout(() => notification.remove(), 4500);
+                
+                playEnhancedSound('achievement', 1.0);
+            }
+
+            saveAchievements() {
+                localStorage.setItem('fruitMatchAchievements', JSON.stringify(this.achievements));
+            }
+
+            loadAchievements() {
+                const saved = localStorage.getItem('fruitMatchAchievements');
+                if (saved) {
+                    this.achievements = { ...this.achievements, ...JSON.parse(saved) };
+                }
+            }
+
+            // 游戏结束检查
+            checkGameEnd() {
+                if (this.lives <= 0) {
+                    this.gameOver();
+                }
+            }
+
+            gameOver() {
+                this.isGameOver = true;
+                this.saveHighScore();
+                
+                // 显示游戏结束界面
+                const gameOverDiv = document.createElement('div');
+                gameOverDiv.className = 'game-over-overlay';
+                gameOverDiv.innerHTML = `
+                    <div class="game-over-content">
+                        <h2>🎮 游戏结束</h2>
+                        <div class="final-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">最终分数:</span>
+                                <span class="stat-value">${this.score.toLocaleString()}</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">最高连击:</span>
+                                <span class="stat-value">${this.maxCombo}</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">总消除数:</span>
+                                <span class="stat-value">${this.totalMatches}</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">道具使用:</span>
+                                <span class="stat-value">${this.powerUpUsageCount}</span>
+                            </div>
+                            ${this.score > this.highScore ? '<div class="new-record">🎉 新纪录！</div>' : ''}
+                        </div>
+                        <div class="game-over-buttons">
+                            <button onclick="game.restart()" class="restart-btn">重新开始</button>
+                            <button onclick="game.goHome()" class="home-btn">返回主页</button>
                         </div>
                     </div>
                 `;
-                container.appendChild(achievementDiv);
-            });
+                
+                document.body.appendChild(gameOverDiv);
+                playEnhancedSound('gameover', 1.0);
+            }
+
+            restart() {
+                document.querySelector('.game-over-overlay')?.remove();
+                this.init(this.difficulty);
+                this.render();
+                this.updateUI();
+            }
+
+            goHome() {
+                document.querySelector('.game-over-overlay')?.remove();
+                this.showScreen('menu');
+            }
+
+            // 暂停/恢复游戏
+            pauseGame() {
+                if (this.isGameOver) return;
+                
+                this.isPaused = !this.isPaused;
+                this.updateUI();
+                
+                if (this.isPaused) {
+                    this.showTemporaryMessage("⏸️ 游戏已暂停", 1000);
+                } else {
+                    this.showTemporaryMessage("▶️ 游戏继续", 1000);
+                }
+            }
+
+            // 获取帮助提示
+            getHint() {
+                if (this.isAnimating || this.isPaused || this.lives <= 0) return;
+                
+                // 寻找可能的匹配
+                const possibleMoves = [];
+                
+                for (let row = 0; row < this.gridSize; row++) {
+                    for (let col = 0; col < this.gridSize; col++) {
+                        if (!this.grid[row][col].fruit) continue;
+                        
+                        // 检查相邻位置
+                        const directions = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+                        
+                        directions.forEach(([dr, dc]) => {
+                            const newRow = row + dr;
+                            const newCol = col + dc;
+                            
+                            if (newRow >= 0 && newRow < this.gridSize && 
+                                newCol >= 0 && newCol < this.gridSize) {
+                                
+                                // 模拟交换
+                                const temp = this.grid[row][col];
+                                this.grid[row][col] = this.grid[newRow][newCol];
+                                this.grid[newRow][newCol] = temp;
+                                
+                                // 检查是否产生匹配
+                                const matches = this.findMatches();
+                                if (matches.length > 0) {
+                                    possibleMoves.push({
+                                        from: { row, col },
+                                        to: { row: newRow, col: newCol },
+                                        matches: matches.length
+                                    });
+                                }
+                                
+                                // 恢复原状
+                                this.grid[newRow][newCol] = this.grid[row][col];
+                                this.grid[row][col] = temp;
+                            }
+                        });
+                    }
+                }
+                
+                if (possibleMoves.length > 0) {
+                    // 选择最佳移动
+                    const bestMove = possibleMoves.sort((a, b) => b.matches - a.matches)[0];
+                    this.highlightHint(bestMove.from, bestMove.to);
+                } else {
+                    this.showTemporaryMessage("💡 没有发现可行的移动，试试使用道具！", 2000);
+                }
+            }
+
+            highlightHint(from, to) {
+                // 高亮提示的两个格子
+                const fromElement = document.querySelector(
+                    `#${this.currentGridId} .cell[data-row="${from.row}"][data-col="${from.col}"]`
+                );
+                const toElement = document.querySelector(
+                    `#${this.currentGridId} .cell[data-row="${to.row}"][data-col="${to.col}"]`
+                );
+                
+                [fromElement, toElement].forEach(element => {
+                    if (element) {
+                        element.classList.add('hint');
+                        setTimeout(() => element.classList.remove('hint'), 3000);
+                    }
+                });
+                
+                this.showTemporaryMessage("💡 建议交换高亮的两个水果！", 2000);
+                playEnhancedSound('hint', 1.0);
+            }
+
+            // 保存和加载高分
+            saveHighScore() {
+                if (this.score > this.highScore) {
+                    this.highScore = this.score;
+                    localStorage.setItem('fruitMatchHighScore', this.highScore.toString());
+                }
+            }
+
+            loadHighScore() {
+                const saved = localStorage.getItem('fruitMatchHighScore');
+                this.highScore = saved ? parseInt(saved) : 0;
+            }
+
+            // 更新UI显示
+            updateUI() {
+                // 更新分数和生命值
+                const scoreElement = document.getElementById(this.currentGridId === 'gameGrid' ? 'score' : 'practiceScore');
+                const livesElement = document.getElementById(this.currentGridId === 'gameGrid' ? 'lives' : 'practiceLives');
+                const comboElement = document.getElementById(this.currentGridId === 'gameGrid' ? 'combo' : 'practiceCombo');
+                const multiplierElement = document.getElementById(this.currentGridId === 'gameGrid' ? 'multiplier' : 'practiceMultiplier');
+                
+                if (scoreElement) scoreElement.textContent = `分数: ${this.score.toLocaleString()}`;
+                if (livesElement) {
+                    livesElement.textContent = `生命: ${this.lives}`;
+                    livesElement.className = this.lives <= 3 ? 'low-lives' : '';
+                }
+                if (comboElement) {
+                    comboElement.textContent = `连击: ${this.combo}`;
+                    comboElement.className = this.combo > 5 ? 'high-combo' : '';
+                }
+                if (multiplierElement) {
+                    if (this.multiplier > 1) {
+                        multiplierElement.textContent = `倍数: ${this.multiplier}x (剩余${this.multiplierTimeLeft}次)`;
+                        multiplierElement.style.display = 'block';
+                        multiplierElement.className = 'active-multiplier';
+                    } else {
+                        multiplierElement.style.display = 'none';
+                    }
+                }
+                
+                // 更新道具显示
+                this.updatePowerUpDisplay();
+                
+                // 更新暂停按钮
+                const pauseBtn = document.getElementById(this.currentGridId === 'gameGrid' ? 'pauseBtn' : 'practicePauseBtn');
+                if (pauseBtn) {
+                    pauseBtn.textContent = this.isPaused ? '▶️ 继续' : '⏸️ 暂停';
+                    pauseBtn.disabled = this.isGameOver;
+                }
+            }
+
+            // 屏幕管理
+            showScreen(screenName) {
+                // 隐藏所有屏幕
+                document.querySelectorAll('.screen').forEach(screen => {
+                    screen.classList.remove('active');
+                });
+                
+                // 显示目标屏幕
+                const targetScreen = document.getElementById(screenName);
+                if (targetScreen) {
+                    targetScreen.classList.add('active');
+                }
+                
+                // 根据屏幕执行特定操作
+                if (screenName === 'menu') {
+                    this.loadHighScore();
+                    document.getElementById('highScoreDisplay').textContent = this.highScore.toLocaleString();
+                } else if (screenName === 'achievements') {
+                    this.displayAchievements();
+                }
+            }
+
+            displayAchievements() {
+                const container = document.getElementById('achievementsList');
+                if (!container) return;
+                
+                container.innerHTML = '';
+                
+                const allAchievements = [
+                    { id: 'richman', name: '富豪', desc: '获得500,000分', icon: '💰' },
+                    { id: 'millionaire', name: '百万富翁', desc: '获得1,000,000分', icon: '🏆' },
+                    { id: 'combokiller', name: '连击杀手', desc: '达成10连击', icon: '⚔️' },
+                    { id: 'combomaster', name: '连击大师', desc: '达成20连击', icon: '🎯' },
+                    { id: 'survivor', name: '生存专家', desc: '累计消除1000个匹配', icon: '🛡️' },
+                    { id: 'poweruser', name: '道具专家', desc: '使用100个道具', icon: '🔧' },
+                    { id: 'perfect', name: '完美主义者', desc: '在满血状态下获得分数', icon: '✨' }
+                ];
+                
+                allAchievements.forEach(achievement => {
+                    const achieved = this.achievements[achievement.id];
+                    const div = document.createElement('div');
+                    div.className = `achievement-item ${achieved ? 'achieved' : 'locked'}`;
+                    div.innerHTML = `
+                        <div class="achievement-icon">${achievement.icon}</div>
+                        <div class="achievement-info">
+                            <div class="achievement-name">${achievement.name}</div>
+                            <div class="achievement-desc">${achievement.desc}</div>
+                        </div>
+                        <div class="achievement-status">${achieved ? '✅' : '🔒'}</div>
+                    `;
+                    container.appendChild(div);
+                });
+            }
+
+            // 游戏初始化完成
+            initComplete() {
+                console.log('🎮 水果匹配游戏初始化完成');
+                console.log('🎯 支持的功能:');
+                console.log('   • 多种游戏模式（简单、普通、困难、专家）');
+                console.log('   • 12种强力道具系统');
+                console.log('   • 特殊水果和连击系统');
+                console.log('   • 成就和排行榜系统');
+                console.log('   • 练习模式');
+                console.log('   • 音效和动画效果');
+                console.log('🚀 游戏已准备就绪！');
+            }
         }
+
+        // 创建游戏实例
+        const game = new FruitMatchGame();
 
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', function() {
-            // 加载保存的成就数据
-            const savedAchievements = localStorage.getItem('achievements');
-            if (savedAchievements) {
-                try {
-                    const parsed = JSON.parse(savedAchievements);
-                    Object.assign(achievementConfig, parsed);
-                } catch (e) {
-                    console.log('加载成就数据失败');
-                }
-            }
-            
-            // 显示主菜单
-            showMainMenu();
-            
-            // 添加键盘支持
-            document.addEventListener('keydown', function(e) {
-                if (!game || game.isPaused || game.isAnimating) return;
-                
-                switch(e.key) {
-                    case 'Escape':
-                        pauseGame();
-                        break;
-                    case 'r':
-                    case 'R':
-                        if (gameMode === 'practice') {
-                            resetPractice();
-                        }
-                        break;
-                    case '1':
-                    case '2':
-                    case '3':
-                    case '4':
-                    case '5':
-                    case '6':
-                    case '7':
-                    case '8':
-                    case '9':
-                        const powerUpIndex = parseInt(e.key) - 1;
-                        const powerUpKeys = Object.keys(game.powerUps);
-                        if (powerUpKeys[powerUpIndex]) {
-                            game.selectPowerUp(powerUpKeys[powerUpIndex]);
-                        }
-                        break;
-                }
-            });
-            
-            // 防止页面滚动
-            document.addEventListener('touchmove', function(e) {
-                if (e.target.closest('.game-board')) {
-                    e.preventDefault();
-                }
-            }, { passive: false });
-            
-            // 添加音效提示
-            setTimeout(() => {
-                const audioTip = document.createElement('div');
-                audioTip.innerHTML = `
-                    <div style="
-                        position: fixed;
-                        bottom: 20px;
-                        right: 20px;
-                        background: rgba(0,0,0,0.7);
-                        color: white;
-                        padding: 10px 15px;
-                        border-radius: 10px;
-                        font-size: 12px;
-                        z-index: 1000;
-                        animation: fadeInOut 4s ease-in-out forwards;
-                    ">
-                        🔊 点击任意位置启用音效
-                    </div>
-                `;
-                document.body.appendChild(audioTip);
-                
-                const enableAudio = () => {
-                    try {
-                        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                        audioContext.resume();
-                        audioTip.remove();
-                        document.removeEventListener('click', enableAudio);
-                        document.removeEventListener('touchstart', enableAudio);
-                    } catch (e) {
-                        console.log('音频初始化失败');
-                    }
-                };
-                
-                document.addEventListener('click', enableAudio);
-                document.addEventListener('touchstart', enableAudio);
-                
-                setTimeout(() => {
-                    if (audioTip.parentNode) {
-                        audioTip.remove();
-                    }
-                }, 4000);
-            }, 2000);
+            game.loadHighScore();
+            game.loadAchievements();
+            game.initComplete();
         });
-
-        // 添加特殊日期彩蛋
-        function checkSpecialDates() {
-            const now = new Date();
-            const month = now.getMonth() + 1;
-            const day = now.getDate();
-            
-            // 情人节彩蛋
-            if (month === 2 && day === 14) {
-                document.body.style.background = 'linear-gradient(45deg, #ff69b4, #ff1493)';
-                setTimeout(() => {
-                    alert("💕 情人节快乐，我的Ashley！今天所有道具翻倍！");
-                    if (game) {
-                        Object.keys(game.powerUps).forEach(key => {
-                            game.powerUps[key] *= 2;
-                        });
-                        game.updatePowerUpDisplay();
-                    }
-                }, 3000);
-            }
-            
-            // 生日彩蛋（可以设置Ashley的生日）
-            if (month === 8 && day === 15) { // 假设8月15日是生日
-                document.body.style.background = 'linear-gradient(45deg, #ffd700, #ff69b4)';
-                setTimeout(() => {
-                    alert("🎂 生日快乐Ashley！专属传说水果概率大增！");
-                    if (game) {
-                        game.legendaryFruitChance = 0.1;
-                        game.specialFruitChance = 0.3;
-                    }
-                }, 3000);
-            }
-        }
-
-        // 页面可见性变化处理
-        document.addEventListener('visibilitychange', function() {
-            if (document.hidden && game && !game.isPaused) {
-                pauseGame(); // 页面隐藏时自动暂停
-            }
-        });
-
-        // 移动端优化
-        function optimizeForMobile() {
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            if (isMobile) {
-                document.body.classList.add('mobile');
-                
-                // 禁用长按菜单
-                document.addEventListener('contextmenu', e => e.preventDefault());
-                
-                // 优化触摸响应
-                let touchStartTime = 0;
-                document.addEventListener('touchstart', () => {
-                    touchStartTime = Date.now();
-                });
-                
-                document.addEventListener('touchend', (e) => {
-                    const touchDuration = Date.now() - touchStartTime;
-                    if (touchDuration > 500) { // 长按
-                        e.preventDefault();
-                        return false;
-                    }
-                });
-            }
-        }
-
-        // 检查特殊日期
-        checkSpecialDates();
-        
-        // 移动端优化
-        optimizeForMobile();
-
-        // 全局错误处理
-        window.addEventListener('error', function(e) {
-            console.log('游戏运行出现错误，但不影响游戏体验');
-        });
-
-    </script>
-</body>
-</html>
-
-
