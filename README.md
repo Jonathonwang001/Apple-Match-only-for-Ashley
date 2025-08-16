@@ -1513,71 +1513,12 @@ function dropCells() {
 }
 
 // 补充空单元格
-// 填充空单元格 - 优化版
 function fillEmptyCells() {
-    // 记录每列需要填充的空格数量
-    const emptyCellsPerCol = Array(8).fill(0);
-    
-    // 第一遍：计算每列需要填充的空格数量
     for (let col = 0; col < 8; col++) {
         for (let row = 0; row < 8; row++) {
             if (gameState.grid[row][col] === null) {
-                emptyCellsPerCol[col]++;
-            }
-        }
-    }
-    
-    // 第二遍：填充空格
-    for (let col = 0; col < 8; col++) {
-        let fillCount = 0;
-        for (let row = 0; row < 8; row++) {
-            if (gameState.grid[row][col] === null) {
-                // 获取相邻单元格的类型（左侧和上方）
-                const adjacentTypes = [];
-                
-                // 左侧单元格（如果存在）
-                if (col > 0 && gameState.grid[row][col-1]) {
-                    adjacentTypes.push(gameState.grid[row][col-1].type);
-                }
-                
-                // 上方单元格（如果存在）
-                if (row > 0 && gameState.grid[row-1][col]) {
-                    adjacentTypes.push(gameState.grid[row-1][col].type);
-                }
-                
-                // 尝试创建匹配机会
-                if (adjacentTypes.length > 0 && Math.random() < 0.6) { // 60%概率创建匹配
-                    // 选择最常出现的相邻类型
-                    const typeCounts = {};
-                    adjacentTypes.forEach(type => {
-                        typeCounts[type] = (typeCounts[type] || 0) + 1;
-                    });
-                    
-                    const mostCommonType = Object.keys(typeCounts).reduce((a, b) => 
-                        typeCounts[a] > typeCounts[b] ? a : b
-                    );
-                    
-                    gameState.grid[row][col] = APPLE_TYPES.find(t => t.type === mostCommonType);
-                } else {
-                    // 随机生成苹果
-                    gameState.grid[row][col] = createRandomApple();
-                }
-                
-                // 更新显示
+                gameState.grid[row][col] = createRandomApple();
                 updateCellDisplay(row, col);
-                
-                // 恢复背景色
-                const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-                if (cell) {
-                    cell.style.background = '';
-                }
-                
-                fillCount++;
-                if (fillCount >= emptyCellsPerCol[col]) break;
-            }
-        }
-    }
-}
                 
                 // 恢复背景色
                 const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
