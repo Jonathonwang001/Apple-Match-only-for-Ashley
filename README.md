@@ -735,18 +735,18 @@ const gameState = new GameState();
 
 // 关卡数据和情话
 const LEVELS = [
-    { id: 1, name: "初遇", target: 1800, moves: 1000, quote: "就像第一次见到你，心跳不已 💕", special: false },
-    { id: 2, name: "怦然心动", target: 2300, moves: 840, quote: "每一个眼神交汇，都是命运的安排 ✨", special: false },
-    { id: 3, name: "甜蜜约会", target: 2500, moves: 830, quote: "和你在一起的每一秒都是甜蜜的 🍯", special: false },
-    { id: 4, name: "告白时刻", target: 2800, moves: 820, quote: "三个字，说给全世界听：我爱你 💖", special: true },
-    { id: 5, name: "牵手漫步", target: 3000, moves: 810, quote: "十指紧扣，走过春夏秋冬 🌸", special: false },
-    { id: 6, name: "浪漫晚餐", target: 3500, moves: 800, quote: "烛光晚餐，你是我唯一的风景 🕯️", special: false },
-    { id: 7, name: "星空许愿", target: 4000, moves: 890, quote: "对着流星许愿，愿与你白头偕老 🌟", special: false },
-    { id: 8, name: "生日惊喜", target: 4600, moves: 880, quote: "3月25日，为你准备最美的惊喜 🎂", special: true },
-    { id: 9, name: "情人节", target: 5300, moves: 870, quote: "玫瑰花海，不及你的笑颜 🌹", special: true },
-    { id: 10, name: "永恒承诺", target: 6600, moves: 860, quote: "此生此世，只想和你在一起 💍", special: true },
-    { id: 11, name: "梦中情人", target: 7000, moves: 850, quote: "梦里梦外，都是你的身影 💭", special: false },
-    { id: 12, name: "心有灵犀", target: 8000, moves: 840, quote: "不用言语，我们就能读懂彼此 💫", special: false }
+    { id: 1, name: "初遇", target: 1800, moves: 450, quote: "就像第一次见到你，心跳不已 💕", special: false },
+    { id: 2, name: "怦然心动", target: 2300, moves: 440, quote: "每一个眼神交汇，都是命运的安排 ✨", special: false },
+    { id: 3, name: "甜蜜约会", target: 2500, moves: 430, quote: "和你在一起的每一秒都是甜蜜的 🍯", special: false },
+    { id: 4, name: "告白时刻", target: 2800, moves: 420, quote: "三个字，说给全世界听：我爱你 💖", special: true },
+    { id: 5, name: "牵手漫步", target: 3000, moves: 410, quote: "十指紧扣，走过春夏秋冬 🌸", special: false },
+    { id: 6, name: "浪漫晚餐", target: 3500, moves: 400, quote: "烛光晚餐，你是我唯一的风景 🕯️", special: false },
+    { id: 7, name: "星空许愿", target: 4000, moves: 390, quote: "对着流星许愿，愿与你白头偕老 🌟", special: false },
+    { id: 8, name: "生日惊喜", target: 4500, moves: 380, quote: "3月25日，为你准备最美的惊喜 🎂", special: true },
+    { id: 9, name: "情人节", target: 5000, moves: 370, quote: "玫瑰花海，不及你的笑颜 🌹", special: true },
+    { id: 10, name: "永恒承诺", target: 5600, moves: 360, quote: "此生此世，只想和你在一起 💍", special: true },
+    { id: 11, name: "梦中情人", target: 6000, moves: 350, quote: "梦里梦外，都是你的身影 💭", special: false },
+    { id: 12, name: "心有灵犀", target: 6500, moves: 340, quote: "不用言语，我们就能读懂彼此 💫", special: false }
 ];
 
 // 苹果类型定义
@@ -762,7 +762,7 @@ const APPLE_TYPES = [
 // 成就系统
 const ACHIEVEMENTS = [
     { id: 'first_match', name: '初次消除', desc: '完成第一次消除', icon: '🎯' },
-    { id: 'combo_master', name: '连击高手', desc: '达成5连击', icon: '⚡' },
+    { id: 'combo_master', name: '连击高手', desc: '达成10连击', icon: '⚡' },
     { id: 'score_hunter', name: '分数猎人', desc: '单局得分超过5000', icon: '🏆' },
     { id: 'perfect_level', name: '完美通关', desc: '剩余步数≥10通关', icon: '💎' },
     { id: 'power_master', name: '道具大师', desc: '使用所有类型道具', icon: '🎮' },
@@ -863,7 +863,7 @@ function createSpecialEffect(type) {
         
         // 显示特殊祝福
         setTimeout(() => {
-            showMessage('🎂 生日快乐，我最爱的Ashley！🎂\n愿你往后每天都一样美丽动人！');
+            showMessage('🎂 生日快乐，我最爱的Ashley！🎂\n愿你每天都像今天一样美丽动人！');
         }, 1000);
         
         setTimeout(() => {
@@ -875,7 +875,7 @@ function createSpecialEffect(type) {
         for (let i = 0; i < 30; i++) {
             setTimeout(() => {
                 const petal = document.createElement('div');
-                petal.innerHTML = '🌹';
+                petal.innerHTML = '🌸';
                 petal.style.cssText = `
                     position: absolute;
                     left: ${Math.random() * 100}%;
@@ -2658,7 +2658,22 @@ function showLoveMessages() {
         "✨ 3月25日是你的生日，但对我来说，每一天都是因为有你而值得庆祝的日子",
         "💫 无论游戏有多少关卡，我的爱意永远不会有终点",
         "🌈 愿我们的爱情像彩虹一样，绚烂而永恒",
-        "👑 Ashley，你就是我心中的女王，这个游戏献给最美丽的你"
+        "👑 Ashley，你就是我心中的女王，这个游戏献给最美丽的你",
+        "👀 Ashley，你的一个眼神，就能让我的心跳像游戏连击一样加速跳动！",
+        "🌟 收集游戏里的每一颗星星，都不及你在我生命里闪耀的万分之一光芒",
+        "🏆 遇见你，就像找到了游戏里最稀有的隐藏道具，是我生命中最珍贵的幸运",
+        "⏳ 和你在一起的每一刻，都像是游戏通关时的完美动画，充满喜悦与满足",
+        "🎉 我的爱就像无限续命的道具，永远为你准备着，Ashley",
+        "🧱 无论生活抛出多少“障碍砖块”，我都会像最熟练的玩家一样，为你铺平道路，因为你就是我的终极目标",
+        "👸 Ashley，你不仅是我心中的女王，更是我生命这场游戏里唯一的、永恒的MVP",
+        "💗 我们的爱情故事，是我最引以为傲的“成就系统”，而每一天和你在一起，都在解锁新的甜蜜勋章",
+        "🎮 生活这场游戏或许有挑战，但牵着你的手，就像拥有了无敌模式，无所畏惧",
+        "🍀 亲爱的Ashley，你是我所有好运的来源，比任何游戏里的四叶草都要灵验",
+        "💖 想你的心情，就像等待游戏加载时的期待，每一次“进入游戏”（见到你）都让我怦然心动",
+        "🌌 Ashley，你的笑容是我每日签到必领的最佳奖励，点亮我的整个世界",
+        "🔮 我们的未来，就像精心设计的游戏关卡，充满未知的惊喜，而我迫不及待想和你一起探索每一关",
+        "🔋 对你的爱意，永远满格，电量充足，Ashley，你是我永不掉线的连接",
+        "💂 献给我最爱的Ashley：你让平凡的日子变成了史诗级的冒险，而我是你最忠诚的骑士"
     ];
     
     const randomMessage = loveMessages[Math.floor(Math.random() * loveMessages.length)];
