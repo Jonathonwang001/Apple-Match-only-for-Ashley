@@ -736,17 +736,17 @@ const gameState = new GameState();
 // 关卡数据和情话
 const LEVELS = [
     { id: 1, name: "初遇", target: 1800, moves: 1000, quote: "就像第一次见到你，心跳不已 💕", special: false },
-    { id: 2, name: "怦然心动", target: 2300, moves: 340, quote: "每一个眼神交汇，都是命运的安排 ✨", special: false },
-    { id: 3, name: "甜蜜约会", target: 2500, moves: 330, quote: "和你在一起的每一秒都是甜蜜的 🍯", special: false },
-    { id: 4, name: "告白时刻", target: 2800, moves: 320, quote: "三个字，说给全世界听：我爱你 💖", special: true },
-    { id: 5, name: "牵手漫步", target: 3000, moves: 310, quote: "十指紧扣，走过春夏秋冬 🌸", special: false },
-    { id: 6, name: "浪漫晚餐", target: 3500, moves: 300, quote: "烛光晚餐，你是我唯一的风景 🕯️", special: false },
-    { id: 7, name: "星空许愿", target: 4000, moves: 290, quote: "对着流星许愿，愿与你白头偕老 🌟", special: false },
-    { id: 8, name: "生日惊喜", target: 4600, moves: 280, quote: "3月25日，为你准备最美的惊喜 🎂", special: true },
-    { id: 9, name: "情人节", target: 5300, moves: 270, quote: "玫瑰花海，不及你的笑颜 🌹", special: true },
-    { id: 10, name: "永恒承诺", target: 6600, moves: 260, quote: "此生此世，只想和你在一起 💍", special: true },
-    { id: 11, name: "梦中情人", target: 7000, moves: 250, quote: "梦里梦外，都是你的身影 💭", special: false },
-    { id: 12, name: "心有灵犀", target: 8000, moves: 240, quote: "不用言语，我们就能读懂彼此 💫", special: false }
+    { id: 2, name: "怦然心动", target: 2300, moves: 840, quote: "每一个眼神交汇，都是命运的安排 ✨", special: false },
+    { id: 3, name: "甜蜜约会", target: 2500, moves: 830, quote: "和你在一起的每一秒都是甜蜜的 🍯", special: false },
+    { id: 4, name: "告白时刻", target: 2800, moves: 820, quote: "三个字，说给全世界听：我爱你 💖", special: true },
+    { id: 5, name: "牵手漫步", target: 3000, moves: 810, quote: "十指紧扣，走过春夏秋冬 🌸", special: false },
+    { id: 6, name: "浪漫晚餐", target: 3500, moves: 800, quote: "烛光晚餐，你是我唯一的风景 🕯️", special: false },
+    { id: 7, name: "星空许愿", target: 4000, moves: 890, quote: "对着流星许愿，愿与你白头偕老 🌟", special: false },
+    { id: 8, name: "生日惊喜", target: 4600, moves: 880, quote: "3月25日，为你准备最美的惊喜 🎂", special: true },
+    { id: 9, name: "情人节", target: 5300, moves: 870, quote: "玫瑰花海，不及你的笑颜 🌹", special: true },
+    { id: 10, name: "永恒承诺", target: 6600, moves: 860, quote: "此生此世，只想和你在一起 💍", special: true },
+    { id: 11, name: "梦中情人", target: 7000, moves: 850, quote: "梦里梦外，都是你的身影 💭", special: false },
+    { id: 12, name: "心有灵犀", target: 8000, moves: 840, quote: "不用言语，我们就能读懂彼此 💫", special: false }
 ];
 
 // 苹果类型定义
@@ -762,7 +762,7 @@ const APPLE_TYPES = [
 // 成就系统
 const ACHIEVEMENTS = [
     { id: 'first_match', name: '初次消除', desc: '完成第一次消除', icon: '🎯' },
-    { id: 'combo_master', name: '连击高手', desc: '达成10连击', icon: '⚡' },
+    { id: 'combo_master', name: '连击高手', desc: '达成5连击', icon: '⚡' },
     { id: 'score_hunter', name: '分数猎人', desc: '单局得分超过5000', icon: '🏆' },
     { id: 'perfect_level', name: '完美通关', desc: '剩余步数≥10通关', icon: '💎' },
     { id: 'power_master', name: '道具大师', desc: '使用所有类型道具', icon: '🎮' },
@@ -863,7 +863,7 @@ function createSpecialEffect(type) {
         
         // 显示特殊祝福
         setTimeout(() => {
-            showMessage('🎂 生日快乐，我最爱的Ashley！🎂\n愿你每天都像今天一样美丽动人！');
+            showMessage('🎂 生日快乐，我最爱的Ashley！🎂\n愿你往后每天都一样美丽动人！');
         }, 1000);
         
         setTimeout(() => {
@@ -1406,8 +1406,8 @@ function showComboEffect() {
     
     // 根据连击数显示不同的效果
     let comboText = `${gameState.combo}连击! `;
-    if (gameState.combo >= 10) comboText += '🔥🔥🔥';
-    else if (gameState.combo >= 5) comboText += '🔥🔥';
+    if (gameState.combo >= 3) comboText += '🔥🔥🔥';
+    else if (gameState.combo >= 2) comboText += '🔥🔥';
     else comboText += '🔥';
     
     comboElement.textContent = comboText;
@@ -2296,7 +2296,7 @@ function checkAchievements() {
         newAchievements.push('first_match');
     }
     
-    if (gameState.maxCombo >= 10 && !gameState.achievements.has('combo_master')) {
+    if (gameState.maxCombo >= 5 && !gameState.achievements.has('combo_master')) {
         newAchievements.push('combo_master');
     }
     
@@ -2658,7 +2658,7 @@ function showLoveMessages() {
         "✨ 3月25日是你的生日，但对我来说，每一天都是因为有你而值得庆祝的日子",
         "💫 无论游戏有多少关卡，我的爱意永远不会有终点",
         "🌈 愿我们的爱情像彩虹一样，绚烂而永恒",
-        "👑 Ashley，你就是我心中的女王，这个游戏献给最美丽的你"​
+        "👑 Ashley，你就是我心中的女王，这个游戏献给最美丽的你"
     ];
     
     const randomMessage = loveMessages[Math.floor(Math.random() * loveMessages.length)];
@@ -2872,123 +2872,6 @@ document.addEventListener('visibilitychange', function() {
     }
 });
 
-// ====== 添加以下代码到原始代码的末尾 ======
-
-// 优化连击机制
-function enhanceComboSystem() {
-    // 1. 增加连击持续时间
-    const originalProcessMatches = processMatches;
-    processMatches = function(matches) {
-        originalProcessMatches.apply(this, arguments);
-        
-        // 延长连击有效时间
-        if (gameState.combo > 0) {
-            // 延长下一次匹配的有效时间
-            setTimeout(() => {
-                if (gameState.combo > 0) {
-                    gameState.combo += 0.5; // 增加连击持续时间
-                }
-            }, 500);
-        }
-    };
-    
-    // 2. 增加特殊苹果生成概率
-    const originalFillEmptyCells = fillEmptyCells;
-    fillEmptyCells = function() {
-        originalFillEmptyCells.apply(this, arguments);
-        
-        // 在填充后检查是否有特殊苹果
-        for (let row = 0; row < 8; row++) {
-            for (let col = 0; col < 8; col++) {
-                // 10%概率生成特殊苹果（增加连击机会）
-                if (Math.random() < 0.9 && !gameState.grid[row][col].special) {
-                    gameState.grid[row][col] = {
-                        type: 'special',
-                        emoji: '✨',
-                        class: 'special-item',
-                        special: true
-                    };
-                    updateCellDisplay(row, col);
-                }
-            }
-        }
-    };
-    
-    // 3. 特殊苹果效果：增加连击点数
-    const originalHandleCellInteraction = handleCellInteraction;
-    handleCellInteraction = function(row, col) {
-        const apple = gameState.grid[row][col];
-        
-        // 如果是特殊苹果，增加连击点数
-        if (apple && apple.special) {
-            gameState.combo += 2; // 增加2点连击
-            showMessage("✨ 获得连击加成！");
-            
-            // 移除特殊苹果
-            gameState.grid[row][col] = createRandomApple();
-            updateCellDisplay(row, col);
-            
-            // 显示连击效果
-            showComboEffect();
-            return;
-        }
-        
-        originalHandleCellInteraction.apply(this, arguments);
-    };
-    
-    // 4. 连击成就辅助
-    const originalCheckAchievements = checkAchievements;
-    checkAchievements = function() {
-        originalCheckAchievements.apply(this, arguments);
-        
-        // 如果接近连击成就但未达成，给予提示
-        if (gameState.maxCombo >= 8 && !gameState.achievements.has('combo_master')) {
-            showMessage("🔥 再努力一点就能达成10连击成就了！");
-        }
-    };
-    
-    // 5. 连击视觉反馈增强
-    const originalShowComboEffect = showComboEffect;
-    showComboEffect = function() {
-        originalShowComboEffect.apply(this, arguments);
-        
-        // 高连击时增加特效
-        if (gameState.combo >= 5) {
-            // 添加粒子效果
-            for (let i = 0; i < gameState.combo * 2; i++) {
-                setTimeout(() => {
-                    createParticleEffect(
-                        Math.floor(Math.random() * 8),
-                        Math.floor(Math.random() * 8)
-                    );
-                }, i * 50);
-            }
-            
-            // 高连击时震动屏幕
-            if (gameState.combo >= 8) {
-                document.getElementById('gameGrid').style.animation = 'shake 0.5s';
-                setTimeout(() => {
-                    document.getElementById('gameGrid').style.animation = '';
-                }, 500);
-                
-                // 添加震动动画
-                const style = document.createElement('style');
-                style.textContent = `
-                    @keyframes shake {
-                        0%, 100% { transform: translateX(0); }
-                        25% { transform: translateX(-5px); }
-                        75% { transform: translateX(5px); }
-                    }
-                `;
-                document.head.appendChild(style);
-                setTimeout(() => style.remove(), 1000);
-            }
-        }
-    };
-}
-
-// 初始化时调用
-enhanceComboSystem();  
 </script>
 </body>
 </html>
