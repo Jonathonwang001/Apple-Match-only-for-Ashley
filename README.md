@@ -1406,8 +1406,9 @@ function showComboEffect() {
     
     // 根据连击数显示不同的效果
     let comboText = `${gameState.combo}连击! `;
-    if (gameState.combo >= 4) comboText += '💥💥💥💥💥';
-    else if (gameState.combo >= 3) comboText += '❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥';
+    if (gameState.combo >= 5) comboText += '💥💥💥💥';
+    else if (gameState.combo >= 4) comboText += '☄️☄️☄️';
+    else if (gameState.combo >= 3) comboText += '❤️‍🔥❤️‍🔥❤️‍🔥';
     else if (gameState.combo >= 2) comboText += '🌋🌋🌋';
     else comboText += '🔥🔥';
     
