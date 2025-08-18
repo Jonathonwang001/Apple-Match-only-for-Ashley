@@ -2872,6 +2872,123 @@ document.addEventListener('visibilitychange', function() {
     }
 });
 
+// ====== 添加以下代码到原始代码的末尾 ======
+
+// 优化连击机制
+function enhanceComboSystem() {
+    // 1. 增加连击持续时间
+    const originalProcessMatches = processMatches;
+    processMatches = function(matches) {
+        originalProcessMatches.apply(this, arguments);
+        
+        // 延长连击有效时间
+        if (gameState.combo > 0) {
+            // 延长下一次匹配的有效时间
+            setTimeout(() => {
+                if (gameState.combo > 0) {
+                    gameState.combo += 0.5; // 增加连击持续时间
+                }
+            }, 500);
+        }
+    };
+    
+    // 2. 增加特殊苹果生成概率
+    const originalFillEmptyCells = fillEmptyCells;
+    fillEmptyCells = function() {
+        originalFillEmptyCells.apply(this, arguments);
+        
+        // 在填充后检查是否有特殊苹果
+        for (let row = 0; row < 8; row++) {
+            for (let col = 0; col < 8; col++) {
+                // 10%概率生成特殊苹果（增加连击机会）
+                if (Math.random() < 0.1 && !gameState.grid[row][col].special) {
+                    gameState.grid[row][col] = {
+                        type: 'special',
+                        emoji: '✨',
+                        class: 'special-item',
+                        special: true
+                    };
+                    updateCellDisplay(row, col);
+                }
+            }
+        }
+    };
+    
+    // 3. 特殊苹果效果：增加连击点数
+    const originalHandleCellInteraction = handleCellInteraction;
+    handleCellInteraction = function(row, col) {
+        const apple = gameState.grid[row][col];
+        
+        // 如果是特殊苹果，增加连击点数
+        if (apple && apple.special) {
+            gameState.combo += 2; // 增加2点连击
+            showMessage("✨ 获得连击加成！");
+            
+            // 移除特殊苹果
+            gameState.grid[row][col] = createRandomApple();
+            updateCellDisplay(row, col);
+            
+            // 显示连击效果
+            showComboEffect();
+            return;
+        }
+        
+        originalHandleCellInteraction.apply(this, arguments);
+    };
+    
+    // 4. 连击成就辅助
+    const originalCheckAchievements = checkAchievements;
+    checkAchievements = function() {
+        originalCheckAchievements.apply(this, arguments);
+        
+        // 如果接近连击成就但未达成，给予提示
+        if (gameState.maxCombo >= 8 && !gameState.achievements.has('combo_master')) {
+            showMessage("🔥 再努力一点就能达成10连击成就了！");
+        }
+    };
+    
+    // 5. 连击视觉反馈增强
+    const originalShowComboEffect = showComboEffect;
+    showComboEffect = function() {
+        originalShowComboEffect.apply(this, arguments);
+        
+        // 高连击时增加特效
+        if (gameState.combo >= 5) {
+            // 添加粒子效果
+            for (let i = 0; i < gameState.combo * 2; i++) {
+                setTimeout(() => {
+                    createParticleEffect(
+                        Math.floor(Math.random() * 8),
+                        Math.floor(Math.random() * 8)
+                    );
+                }, i * 50);
+            }
+            
+            // 高连击时震动屏幕
+            if (gameState.combo >= 8) {
+                document.getElementById('gameGrid').style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    document.getElementById('gameGrid').style.animation = '';
+                }, 500);
+                
+                // 添加震动动画
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes shake {
+                        0%, 100% { transform: translateX(0); }
+                        25% { transform: translateX(-5px); }
+                        75% { transform: translateX(5px); }
+                    }
+                `;
+                document.head.appendChild(style);
+                setTimeout(() => style.remove(), 1000);
+            }
+        }
+    };
+}
+
+// 初始化时调用
+enhanceComboSystem();    
 </script>
 </body>
 </html>
