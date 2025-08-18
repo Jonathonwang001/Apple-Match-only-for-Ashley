@@ -762,7 +762,7 @@ const APPLE_TYPES = [
 // 成就系统
 const ACHIEVEMENTS = [
     { id: 'first_match', name: '初次消除', desc: '完成第一次消除', icon: '🎯' },
-    { id: 'combo_master', name: '连击高手', desc: '达成10连击', icon: '⚡' },
+    { id: 'combo_master', name: '连击高手', desc: '达成5连击', icon: '⚡' },
     { id: 'score_hunter', name: '分数猎人', desc: '单局得分超过5000', icon: '🏆' },
     { id: 'perfect_level', name: '完美通关', desc: '剩余步数≥10通关', icon: '💎' },
     { id: 'power_master', name: '道具大师', desc: '使用所有类型道具', icon: '🎮' },
@@ -1406,9 +1406,10 @@ function showComboEffect() {
     
     // 根据连击数显示不同的效果
     let comboText = `${gameState.combo}连击! `;
-    if (gameState.combo >= 3) comboText += '🔥🔥🔥';
-    else if (gameState.combo >= 2) comboText += '🔥🔥';
-    else comboText += '🔥';
+    if (gameState.combo >= 4) comboText += '💥💥💥💥💥';
+    else if (gameState.combo >= 3) comboText += '❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥';
+    else if (gameState.combo >= 2) comboText += '🌋🌋🌋';
+    else comboText += '🔥🔥';
     
     comboElement.textContent = comboText;
     
