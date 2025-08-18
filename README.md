@@ -3050,7 +3050,7 @@ enhanceComboSystem();
     
     // 帮助内容
     const helpContent = `
-        <div style="max-width: 600px; padding: 2rem;">
+        <div style="max-width: 300px; padding: 2rem;">
             <h2 style="text-align: center; color: #ff6b6b; margin-bottom: 1.5rem;">🍎 游戏帮助</h2>
             
             <div style="background: rgba(255, 255, 255, 0.9); border-radius: 15px; padding: 1.5rem; margin-bottom: 1.5rem;">
