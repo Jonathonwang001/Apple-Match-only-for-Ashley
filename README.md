@@ -2901,7 +2901,7 @@ function enhanceComboSystem() {
         for (let row = 0; row < 8; row++) {
             for (let col = 0; col < 8; col++) {
                 // 10%概率生成特殊苹果（增加连击机会）
-                if (Math.random() < 0.1 && !gameState.grid[row][col].special) {
+                if (Math.random() < 0.05 && !gameState.grid[row][col].special) {
                     gameState.grid[row][col] = {
                         type: 'special',
                         emoji: '✨',
