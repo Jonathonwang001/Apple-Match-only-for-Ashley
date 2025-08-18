@@ -1,6 +1,5 @@
 # Apple-Match-only-for-Ashley
 Creating an interesting game only for my love, Ashley. Hope her happy everyday!
-<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
