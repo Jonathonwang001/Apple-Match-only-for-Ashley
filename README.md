@@ -1798,8 +1798,30 @@ function createParticleEffect(row, col) {
 
 // 下落处理
 function dropCells() {
-    for (let col = 0; col < 8; col++) {
-        let writeIndex = 7; // 从底部开始写入
+    for (let row = 0; row <= writeIndex; row++) {
+    const newApple = generateSmartApple(row, col);
+    gameState.grid[row][col] = newApple;
+    updateCellDisplay(row, col);
+    hasEmptyCells = true;
+
+         // 后期关卡随机掉落特殊道具（闪电⚡和炸弹💥）
+    if (gameState.currentLevel >= 8 && Math.random() < 0.03) { // 8关以上，3%概率
+        const specialItems = [
+            { type: 'lightning', emoji: '⚡', class: 'special-lightning' },
+            { type: 'bomb', emoji: '💥', class: 'special-bomb' }
+        ];
+        
+        const randomItem = specialItems[Math.floor(Math.random() * specialItems.length)];
+        gameState.grid[row][col] = randomItem;
+        updateCellDisplay(row, col);
+        
+        // 添加特殊发光效果
+        const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+        if (cell) {
+            cell.classList.add('special-item');
+        }
+    }
+   
         
         // 从底部向上遍历
         for (let row = 7; row >= 0; row--) {
