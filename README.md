@@ -3330,7 +3330,7 @@ function closeGameInstructions() {
     }
 }
 
-// 智能生成苹果，增加combo概率
+// 智能生成苹果，增加combo概率 - 增强版
 function generateSmartApple(row, col) {
     // 根据关卡动态获取可用苹果类型
     let availableTypeCount;
@@ -3360,11 +3360,24 @@ function generateSmartApple(row, col) {
         typeToEmoji[apple.type] = apple.emoji;
     });
     
-    // 35%的概率进行智能生成，增加combo可能
-    if (Math.random() < 0.35) {
+    // 根据当前连击数动态调整智能生成概率
+    let smartGenerationChance = 0.35; // 基础概率35%
+    
+    if (gameState.combo >= 3) {
+        smartGenerationChance = 0.60; // 3连击后提升到60%
+    }
+    if (gameState.combo >= 5) {
+        smartGenerationChance = 0.75; // 5连击后提升到75%
+    }
+    if (gameState.combo >= 7) {
+        smartGenerationChance = 0.85; // 7连击后提升到85%
+    }
+    
+    // 智能生成逻辑 - 增强连击机会
+    if (Math.random() < smartGenerationChance) {
         const potentialMatches = [];
         
-        // 检查下方两个位置（垂直连击机会）
+        // 1. 检查垂直连击机会（下方两个相同）
         if (row < 6) {
             const apple1 = gameState.grid[row + 1] && gameState.grid[row + 1][col];
             const apple2 = gameState.grid[row + 2] && gameState.grid[row + 2][col];
@@ -3373,7 +3386,16 @@ function generateSmartApple(row, col) {
             }
         }
         
-        // 检查左右两边（水平连击机会）
+        // 2. 检查上方两个相同（更容易触发连锁）
+        if (row > 1) {
+            const apple1 = gameState.grid[row - 1] && gameState.grid[row - 1][col];
+            const apple2 = gameState.grid[row - 2] && gameState.grid[row - 2][col];
+            if (apple1 && apple2 && apple1.type === apple2.type && apple1.type !== 'special') {
+                potentialMatches.push(apple1.type);
+            }
+        }
+        
+        // 3. 检查水平连击机会（左侧两个相同）
         if (col > 1) {
             const leftApple1 = gameState.grid[row] && gameState.grid[row][col - 1];
             const leftApple2 = gameState.grid[row] && gameState.grid[row][col - 2];
@@ -3382,6 +3404,7 @@ function generateSmartApple(row, col) {
             }
         }
         
+        // 4. 检查水平连击机会（右侧两个相同）
         if (col < 6) {
             const rightApple1 = gameState.grid[row] && gameState.grid[row][col + 1];
             const rightApple2 = gameState.grid[row] && gameState.grid[row][col + 2];
@@ -3390,7 +3413,7 @@ function generateSmartApple(row, col) {
             }
         }
         
-        // 检查中间插入的可能性（左右各一个相同）
+        // 5. 检查中间插入的可能性（左右各一个相同）
         if (col > 0 && col < 7) {
             const leftApple = gameState.grid[row] && gameState.grid[row][col - 1];
             const rightApple = gameState.grid[row] && gameState.grid[row][col + 1];
@@ -3399,32 +3422,63 @@ function generateSmartApple(row, col) {
             }
         }
         
-        // 如果找到了潜在的连击机会，75%概率生成对应苹果
-        if (potentialMatches.length > 0 && Math.random() < 0.75) {
-            const chosenType = potentialMatches[Math.floor(Math.random() * potentialMatches.length)];
-            return {
-                type: chosenType,
-                emoji: typeToEmoji[chosenType],
-                class: `apple-${chosenType}`
-            };
+        // 6. 检查上下插入的可能性
+        if (row > 0 && row < 7) {
+            const topApple = gameState.grid[row - 1] && gameState.grid[row - 1][col];
+            const bottomApple = gameState.grid[row + 1] && gameState.grid[row + 1][col];
+            if (topApple && bottomApple && topApple.type === bottomApple.type && topApple.type !== 'special') {
+                potentialMatches.push(topApple.type);
+            }
+        }
+        
+        // 如果找到了潜在的连击机会，根据连击数调整成功率
+        if (potentialMatches.length > 0) {
+            let successChance = 0.75; // 基础75%
+            
+            if (gameState.combo >= 3) {
+                successChance = 0.85; // 连击时提升到85%
+            }
+            if (gameState.combo >= 5) {
+                successChance = 0.92; // 高连击时提升到92%
+            }
+            
+            if (Math.random() < successChance) {
+                const chosenType = potentialMatches[Math.floor(Math.random() * potentialMatches.length)];
+                return {
+                    type: chosenType,
+                    emoji: typeToEmoji[chosenType],
+                    class: `apple-${chosenType}`
+                };
+            }
         }
     }
     
-    // 增加附近相似苹果的概率（25%）
-    if (Math.random() < 0.25) {
+    // 增加附近相似苹果的概率 - 根据连击数动态调整
+    let nearbyChance = 0.25; // 基础25%
+    if (gameState.combo >= 3) nearbyChance = 0.40; // 连击时提升到40%
+    if (gameState.combo >= 5) nearbyChance = 0.55; // 高连击时提升到55%
+    
+    if (Math.random() < nearbyChance) {
         const nearbyTypes = [];
         
-        // 收集附近的苹果类型
+        // 收集附近的苹果类型，优先选择出现频率高的
+        const typeCount = {};
+        
         for (let r = Math.max(0, row - 1); r <= Math.min(7, row + 1); r++) {
             for (let c = Math.max(0, col - 1); c <= Math.min(7, col + 1); c++) {
                 if (gameState.grid[r] && gameState.grid[r][c] && gameState.grid[r][c].type !== 'special') {
-                    nearbyTypes.push(gameState.grid[r][c].type);
+                    const type = gameState.grid[r][c].type;
+                    typeCount[type] = (typeCount[type] || 0) + 1;
+                    nearbyTypes.push(type);
                 }
             }
         }
         
         if (nearbyTypes.length > 0) {
-            const chosenType = nearbyTypes[Math.floor(Math.random() * nearbyTypes.length)];
+            // 优先选择附近出现次数较多的类型
+            const sortedTypes = Object.keys(typeCount).sort((a, b) => typeCount[b] - typeCount[a]);
+            const chosenType = sortedTypes.length > 0 ? sortedTypes[0] : nearbyTypes[Math.floor(Math.random() * nearbyTypes.length)];
+            
             return {
                 type: chosenType,
                 emoji: typeToEmoji[chosenType],
@@ -3433,7 +3487,36 @@ function generateSmartApple(row, col) {
         }
     }
     
-    // 其他情况完全随机，但避免立即形成匹配
+    // 特殊情况：如果当前连击数≥8，给予额外的"连击续命"机会
+    if (gameState.combo >= 8 && Math.random() < 0.3) {
+        // 寻找全局最可能形成匹配的类型
+        const globalTypeCount = {};
+        
+        for (let r = 0; r < 8; r++) {
+            for (let c = 0; c < 8; c++) {
+                if (gameState.grid[r] && gameState.grid[r][c] && gameState.grid[r][c].type !== 'special') {
+                    const type = gameState.grid[r][c].type;
+                    globalTypeCount[type] = (globalTypeCount[type] || 0) + 1;
+                }
+            }
+        }
+        
+        // 选择出现次数最多的类型之一
+        const commonTypes = Object.keys(globalTypeCount)
+            .sort((a, b) => globalTypeCount[b] - globalTypeCount[a])
+            .slice(0, Math.min(3, Object.keys(globalTypeCount).length)); // 取前3种最常见的
+            
+        if (commonTypes.length > 0) {
+            const chosenType = commonTypes[Math.floor(Math.random() * commonTypes.length)];
+            return {
+                type: chosenType,
+                emoji: typeToEmoji[chosenType],
+                class: `apple-${chosenType}`
+            };
+        }
+    }
+    
+    // 其他情况随机生成，但避免立即形成匹配（保持挑战性）
     let attempts = 0;
     let randomType;
     
