@@ -773,7 +773,6 @@ const ACHIEVEMENTS = [
 // 初始化游戏
 function initializeGame() {
     createHeartBackground();
-    checkSpecialDate();
     generateLevelButtons();
     setupEventListeners();
     loadGameData();
@@ -3153,12 +3152,15 @@ function setupEventListeners() {
 document.addEventListener('DOMContentLoaded', function() {
     initializeGame();
     
-    // 显示欢迎消息
+    // 总是显示欢迎消息
     setTimeout(() => {
-        if (Math.random() > 0.7) {
-            showMessage('💕 欢迎来到Ashley的专属游戏世界！');
-        }
+        showMessage('💕 欢迎来到Ashley的专属游戏世界！');
     }, 500);
+    
+    // 检查并显示特殊日期效果（在欢迎消息后）
+    setTimeout(() => {
+        checkSpecialDate();
+    }, 2000);
     
     // Ashley专属成就检查
     if (!gameState.achievements.has('ashley_special')) {
@@ -3167,7 +3169,7 @@ document.addEventListener('DOMContentLoaded', function() {
             showAchievement(achievement);
             gameState.achievements.add('ashley_special');
             saveGameData();
-        }, 3000);
+        }, 5000);
     }
 });
 
