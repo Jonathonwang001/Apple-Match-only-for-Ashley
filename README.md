@@ -542,6 +542,37 @@ Creating an interesting game only for my love, Ashley. Hope her happy everyday!
                 padding: 0.5rem;
             }
         }
+
+            .special-lightning {
+    animation: lightningPulse 1.5s ease-in-out infinite alternate !important;
+}
+
+.special-bomb {
+    animation: bombGlow 1.8s ease-in-out infinite alternate !important;
+}
+
+@keyframes lightningPulse {
+    0% { 
+        filter: brightness(1) drop-shadow(0 0 8px rgba(255, 255, 0, 0.6));
+        transform: scale(1);
+    }
+    100% { 
+        filter: brightness(1.3) drop-shadow(0 0 15px rgba(255, 255, 0, 0.9));
+        transform: scale(1.1);
+    }
+}
+
+@keyframes bombGlow {
+    0% { 
+        filter: brightness(1) drop-shadow(0 0 8px rgba(255, 100, 100, 0.6));
+        transform: scale(1);
+    }
+    100% { 
+        filter: brightness(1.3) drop-shadow(0 0 15px rgba(255, 100, 100, 0.9));
+        transform: scale(1.1);
+    }
+}
+
     </style>
 </head>
 <body>
@@ -1824,6 +1855,25 @@ function fillEmptyCells() {
             gameState.grid[row][col] = newApple;
             updateCellDisplay(row, col);
             hasEmptyCells = true;
+
+                // 后期关卡随机掉落特殊道具（闪电⚡和炸弹💥）
+    if (gameState.currentLevel >= 8 && Math.random() < 0.03) { // 8关以上，3%概率
+        const specialItems = [
+            { type: 'lightning', emoji: '⚡', class: 'special-lightning' },
+            { type: 'bomb', emoji: '💥', class: 'special-bomb' }
+        ];
+        
+        const randomItem = specialItems[Math.floor(Math.random() * specialItems.length)];
+        gameState.grid[row][col] = randomItem;
+        updateCellDisplay(row, col);
+        
+        // 添加特殊发光效果
+        const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+        if (cell) {
+            cell.classList.add('special-item');
+        }
+    }
+
             
             // 恢复背景色
             const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
@@ -3516,30 +3566,7 @@ function generateSmartApple(row, col) {
         }
     }
     
-    // 在高关卡增加特殊道具掉落概率
-    if (gameState.currentLevel >= 8) {
-        let specialChance = 0.05; // 基础5%概率
-        
-        // 根据关卡和连击数动态调整
-        if (gameState.currentLevel >= 10) specialChance = 0.08; // 10关以上8%
-        if (gameState.currentLevel >= 12) specialChance = 0.12; // 12关以上12%
-        
-        // 连击奖励
-        if (gameState.combo >= 5) specialChance += 0.03;
-        if (gameState.combo >= 8) specialChance += 0.05;
-        
-        if (Math.random() < specialChance) {
-            const specialTypes = [
-                { type: 'lightning', emoji: '⚡', class: 'apple-special' },
-                { type: 'bomb', emoji: '💣', class: 'apple-special' }
-            ];
-            
-            const chosen = specialTypes[Math.floor(Math.random() * specialTypes.length)];
-            return chosen;
-        }
-    }
-    
-    // 其他情况随机生成
+    // 其他情况随机生成，但避免立即形成匹配（保持挑战性）
     let attempts = 0;
     let randomType;
     
@@ -3554,7 +3581,6 @@ function generateSmartApple(row, col) {
         class: `apple-${randomType}`
     };
 }
-
 
 // 检查是否会立即形成匹配（避免太容易）
 function wouldCreateImmediateMatch(row, col, type) {
