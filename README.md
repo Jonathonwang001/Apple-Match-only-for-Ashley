@@ -2768,7 +2768,7 @@ function showMessage(message) {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background: rgba(0, 0, 0, 0.9);
+        background: rgba(0, 0, 0, 0.6);
         color: white;
         padding: ${padding};
         border-radius: 20px;
