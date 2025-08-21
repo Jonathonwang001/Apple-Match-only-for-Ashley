@@ -2741,7 +2741,7 @@ function wouldCreateMatch(row1, col1, row2, col2) {
     return hasMatch;
 }
 
-// 显示消息 - 带关闭按钮版本
+// 显示消息 - 优化版本（原配色+响应式布局）
 function showMessage(message) {
     // 移除可能存在的旧消息框
     const existingMessage = document.getElementById('specialMessage');
@@ -2749,76 +2749,108 @@ function showMessage(message) {
         existingMessage.remove();
     }
     
+    // 检测屏幕尺寸
+    const isMobile = window.innerWidth <= 768;
+    const isSmallMobile = window.innerWidth <= 480;
+    
     // 创建消息框
     const messageBox = document.createElement('div');
     messageBox.id = 'specialMessage';
+    
+    // 根据屏幕大小设置样式
+    const boxWidth = isSmallMobile ? '90%' : (isMobile ? '85%' : '60%');
+    const maxWidth = isSmallMobile ? '320px' : (isMobile ? '400px' : '500px');
+    const fontSize = isSmallMobile ? '14px' : (isMobile ? '16px' : '18px');
+    const padding = isSmallMobile ? '20px' : (isMobile ? '25px' : '30px');
+    
     messageBox.style.cssText = `
         position: fixed;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+        background: rgba(0, 0, 0, 0.9);
         color: white;
-        padding: 30px;
+        padding: ${padding};
         border-radius: 20px;
-        font-size: 18px;
+        font-size: ${fontSize};
         text-align: center;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         z-index: 10000;
-        max-width: 80%;
-        max-height: 80%;
+        width: ${boxWidth};
+        max-width: ${maxWidth};
+        max-height: 70vh;
         overflow-y: auto;
         animation: messagePopIn 0.5s ease-out;
         line-height: 1.6;
         pointer-events: auto;
+        border: 2px solid rgba(255,255,255,0.1);
+        backdrop-filter: blur(10px);
     `;
     
     // 创建关闭按钮
     const closeButton = document.createElement('button');
-    closeButton.innerHTML = '❌';
+    closeButton.innerHTML = '✕';
+    const buttonSize = isSmallMobile ? '16px' : '18px';
+    const buttonTop = isSmallMobile ? '8px' : '10px';
+    const buttonRight = isSmallMobile ? '12px' : '15px';
+    
     closeButton.style.cssText = `
         position: absolute;
-        top: 10px;
-        right: 15px;
-        background: none;
+        top: ${buttonTop};
+        right: ${buttonRight};
+        background: rgba(255,255,255,0.1);
         border: none;
         color: white;
-        font-size: 20px;
+        font-size: ${buttonSize};
         cursor: pointer;
-        padding: 5px;
+        padding: 6px;
         border-radius: 50%;
-        transition: background-color 0.3s;
+        transition: all 0.3s;
         touch-action: manipulation;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
     `;
     
     // 关闭按钮悬停效果
     closeButton.onmouseover = () => {
         closeButton.style.backgroundColor = 'rgba(255,255,255,0.2)';
+        closeButton.style.transform = 'scale(1.1)';
     };
     closeButton.onmouseout = () => {
-        closeButton.style.backgroundColor = 'transparent';
+        closeButton.style.backgroundColor = 'rgba(255,255,255,0.1)';
+        closeButton.style.transform = 'scale(1)';
     };
     
     // 点击关闭
     closeButton.onclick = () => {
-        messageBox.remove();
+        messageBox.style.animation = 'messagePopOut 0.3s ease-in forwards';
+        setTimeout(() => messageBox.remove(), 300);
     };
     
     // 触摸关闭
     closeButton.ontouchend = (e) => {
         e.preventDefault();
-        messageBox.remove();
+        messageBox.style.animation = 'messagePopOut 0.3s ease-in forwards';
+        setTimeout(() => messageBox.remove(), 300);
     };
     
     // 添加消息文本
     const messageText = document.createElement('div');
     messageText.innerHTML = message.replace(/\n/g, '<br>');
-    messageText.style.paddingRight = '40px'; // 为关闭按钮留出空间
+    messageText.style.cssText = `
+        padding-right: ${isSmallMobile ? '35px' : '40px'};
+        word-wrap: break-word;
+        word-break: break-word;
+    `;
     
     messageBox.appendChild(messageText);
     messageBox.appendChild(closeButton);
     
-    // 添加弹入动画
+    // 添加动画样式
     const style = document.createElement('style');
     style.textContent = `
         @keyframes messagePopIn {
@@ -2831,20 +2863,32 @@ function showMessage(message) {
                 opacity: 1;
             }
         }
+        @keyframes messagePopOut {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+        }
     `;
     document.head.appendChild(style);
     
     document.body.appendChild(messageBox);
     
-    // 20秒后自动关闭（作为备用，用户也可以手动关闭）
+    // 20秒后自动关闭
     setTimeout(() => {
         if (messageBox.parentNode) {
-            messageBox.remove();
+            messageBox.style.animation = 'messagePopOut 0.3s ease-in forwards';
+            setTimeout(() => {
+                messageBox.remove();
+                style.remove();
+            }, 300);
         }
-        style.remove();
     }, 20000);
 }
-
 
 // 菜单功能
 function showAchievements() {
@@ -3160,7 +3204,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 检查并显示特殊日期效果（在欢迎消息后）
     setTimeout(() => {
         checkSpecialDate();
-    }, 2000);
+    }, 800);
     
     // Ashley专属成就检查
     if (!gameState.achievements.has('ashley_special')) {
