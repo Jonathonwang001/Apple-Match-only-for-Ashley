@@ -3361,7 +3361,7 @@ function generateSmartApple(row, col) {
     });
     
     // 根据当前连击数动态调整智能生成概率
-    let smartGenerationChance = 0.35; // 基础概率35%
+    let smartGenerationChance = 0.45; // 基础概率45%
     
     if (gameState.combo >= 3) {
         smartGenerationChance = 0.60; // 3连击后提升到60%
