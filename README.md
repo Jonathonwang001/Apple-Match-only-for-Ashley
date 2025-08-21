@@ -2742,53 +2742,110 @@ function wouldCreateMatch(row1, col1, row2, col2) {
     return hasMatch;
 }
 
-// 显示消息
+// 显示消息 - 带关闭按钮版本
 function showMessage(message) {
-    // 移除已存在的消息
-    const existingMessage = document.querySelector('.game-message');
+    // 移除可能存在的旧消息框
+    const existingMessage = document.getElementById('specialMessage');
     if (existingMessage) {
         existingMessage.remove();
     }
     
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'game-message';
-    messageDiv.textContent = message;
-    messageDiv.style.cssText = `
+    // 创建消息框
+    const messageBox = document.createElement('div');
+    messageBox.id = 'specialMessage';
+    messageBox.style.cssText = `
         position: fixed;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background: rgba(0, 0, 0, 0.8);
+        background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
         color: white;
-        padding: 1rem 2rem;
+        padding: 30px;
         border-radius: 20px;
-        font-size: 1.1rem;
-        z-index: 999;
-        animation: messageAnim 2s ease-out forwards;
-        pointer-events: none;
+        font-size: 18px;
         text-align: center;
-        max-width: 80vw;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        z-index: 10000;
+        max-width: 80%;
+        max-height: 80%;
+        overflow-y: auto;
+        animation: messagePopIn 0.5s ease-out;
+        line-height: 1.6;
+        pointer-events: auto;
     `;
     
-    document.body.appendChild(messageDiv);
+    // 创建关闭按钮
+    const closeButton = document.createElement('button');
+    closeButton.innerHTML = '❌';
+    closeButton.style.cssText = `
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 50%;
+        transition: background-color 0.3s;
+        touch-action: manipulation;
+    `;
     
-    // 添加动画
+    // 关闭按钮悬停效果
+    closeButton.onmouseover = () => {
+        closeButton.style.backgroundColor = 'rgba(255,255,255,0.2)';
+    };
+    closeButton.onmouseout = () => {
+        closeButton.style.backgroundColor = 'transparent';
+    };
+    
+    // 点击关闭
+    closeButton.onclick = () => {
+        messageBox.remove();
+    };
+    
+    // 触摸关闭
+    closeButton.ontouchend = (e) => {
+        e.preventDefault();
+        messageBox.remove();
+    };
+    
+    // 添加消息文本
+    const messageText = document.createElement('div');
+    messageText.innerHTML = message.replace(/\n/g, '<br>');
+    messageText.style.paddingRight = '40px'; // 为关闭按钮留出空间
+    
+    messageBox.appendChild(messageText);
+    messageBox.appendChild(closeButton);
+    
+    // 添加弹入动画
     const style = document.createElement('style');
     style.textContent = `
-        @keyframes messageAnim {
-            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-            10% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            90% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.1); }
+        @keyframes messagePopIn {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
         }
     `;
     document.head.appendChild(style);
     
+    document.body.appendChild(messageBox);
+    
+    // 20秒后自动关闭（作为备用，用户也可以手动关闭）
     setTimeout(() => {
-        messageDiv.remove();
+        if (messageBox.parentNode) {
+            messageBox.remove();
+        }
         style.remove();
-    }, 2000);
+    }, 20000);
 }
+
 
 // 菜单功能
 function showAchievements() {
