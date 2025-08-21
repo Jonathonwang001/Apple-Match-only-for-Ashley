@@ -980,7 +980,7 @@ function createSpecialEffect(type) {
         
         setTimeout(() => {
             style.remove();
-        }, 15000);
+        }, 35000);
         
     } else if (type === 'together') {
         // 确定关系爱心锁和玫瑰效果
@@ -1035,7 +1035,7 @@ function createSpecialEffect(type) {
         
         setTimeout(() => {
             style.remove();
-        }, 15000);
+        }, 35000);
         
     } else if (type === 'valentine') {
         // 情人节玫瑰花瓣效果
@@ -1088,7 +1088,7 @@ function createSpecialEffect(type) {
         
         setTimeout(() => {
             style.remove();
-        }, 15000);
+        }, 35000);
         
     } else if (type === 'birthday') {
         // 生日蛋糕和气球效果
@@ -1130,7 +1130,7 @@ function createSpecialEffect(type) {
         
         setTimeout(() => {
             style.remove();
-        }, 15000);
+        }, 35000);
         
     } else if (type === 'wedding') {
         // 婚礼日白玫瑰和教堂钟声效果
@@ -1183,7 +1183,7 @@ function createSpecialEffect(type) {
         
         setTimeout(() => {
             style.remove();
-        }, 15000);
+        }, 35000);
         
     } else if (type === 'certificate') {
         // 登记结婚纪念日钻戒效果
@@ -1225,7 +1225,7 @@ function createSpecialEffect(type) {
         
         setTimeout(() => {
             style.remove();
-        }, 15000);
+        }, 35000);
     }
 }
 
