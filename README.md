@@ -811,69 +811,131 @@ function checkSpecialDate() {
     const month = today.getMonth() + 1;
     const date = today.getDate();
     
-    // 3月25日 - Ashley的生日
-    if (month === 3 && date === 25) {
-        createSpecialEffect('birthday');
-        setTimeout(() => showAchievement(ACHIEVEMENTS.find(a => a.id === 'ashley_special')), 2000);
+    // 1月17日 - 初次见面纪念日
+    if (month === 1 && date === 17) {
+        createSpecialEffect('firstmeet');
     }
-    // 1月17日 - 第一次见面
-    else if (month === 1 && date === 17) {
-        createSpecialEffect('valentine');
+    // 1月21日 - 确定关系纪念日
+    else if (month === 1 && date === 21) {
+        createSpecialEffect('together');
     }
     // 2月14日 - 情人节
     else if (month === 2 && date === 14) {
         createSpecialEffect('valentine');
     }
-    // 10月22日 - 领证日
-    else if (month === 10 && date === 22) {
-        createSpecialEffect('certificate');
+    // 3月25日 - Ashley的生日
+    else if (month === 3 && date === 25) {
+        createSpecialEffect('birthday');
+        setTimeout(() => showAchievement(ACHIEVEMENTS.find(a => a.id === 'ashley_special')), 2000);
     }
     // 6月28日 - 婚礼日
     else if (month === 6 && date === 28) {
         createSpecialEffect('wedding');
     }
+    // 10月22日 - 登记结婚纪念日
+    else if (month === 10 && date === 22) {
+        createSpecialEffect('certificate');
+    }
 }
+
     
 // 创建特殊日期效果
 function createSpecialEffect(type) {
     const effectContainer = document.getElementById('specialDateEffect');
     
-    if (type === 'birthday') {
-        // 生日蛋糕和气球效果
+    if (type === 'firstmeet') {
+        // 初次见面星星和邂逅效果
         for (let i = 0; i < 30; i++) {
             setTimeout(() => {
-                const balloon = document.createElement('div');
-                balloon.innerHTML = ['🎂', '🎈', '🎉', '🎊', '🌟'][Math.floor(Math.random() * 5)];
-                balloon.style.cssText = `
+                const star = document.createElement('div');
+                star.innerHTML = ['✨', '⭐', '🌟', '💫', '🎆'][Math.floor(Math.random() * 5)];
+                star.style.cssText = `
                     position: absolute;
                     left: ${Math.random() * 100}%;
-                    top: 100vh;
-                    font-size: ${Math.random() * 30 + 20}px;
-                    animation: balloonFloat 6s ease-out forwards;
+                    top: ${Math.random() * 100}%;
+                    font-size: ${Math.random() * 25 + 15}px;
+                    animation: starTwinkle 4s ease-in-out forwards;
                     pointer-events: none;
                 `;
-                effectContainer.appendChild(balloon);
+                effectContainer.appendChild(star);
                 
                 setTimeout(() => {
-                    if (balloon.parentNode) balloon.remove();
-                }, 6000);
-            }, i * 100);
+                    if (star.parentNode) star.remove();
+                }, 4000);
+            }, i * 120);
         }
         
-        // 添加气球上升动画
+        // 添加星星闪烁动画
         const style = document.createElement('style');
         style.textContent = `
-            @keyframes balloonFloat {
-                0% { transform: translateY(0) scale(0); opacity: 0; }
-                20% { opacity: 1; transform: scale(1); }
-                100% { transform: translateY(-100vh) scale(1.2); opacity: 0; }
+            @keyframes starTwinkle {
+                0% { transform: scale(0) rotate(0deg); opacity: 0; }
+                25% { transform: scale(1.3) rotate(90deg); opacity: 1; }
+                50% { transform: scale(0.8) rotate(180deg); opacity: 0.7; }
+                75% { transform: scale(1.1) rotate(270deg); opacity: 1; }
+                100% { transform: scale(0) rotate(360deg); opacity: 0; }
             }
         `;
         document.head.appendChild(style);
         
         // 显示特殊祝福
         setTimeout(() => {
-            showMessage('🎂 最美丽的Ashley，生日快乐！🎂\n愿你永远像今天一样美丽动人，我爱你！');
+            showMessage('✨ 亲爱的Ashley，还记得1月17日吗？✨\n那是我们第一次见面的神奇日子，命运让我们相遇，从此改变了我的人生！\n感谢上天让我遇见了你，我的天使！');
+        }, 1000);
+        
+        setTimeout(() => {
+            style.remove();
+        }, 6000);
+        
+    } else if (type === 'together') {
+        // 确定关系爱心锁和玫瑰效果
+        for (let i = 0; i < 25; i++) {
+            setTimeout(() => {
+                const love = document.createElement('div');
+                love.innerHTML = ['💕', '💖', '🔒', '🌹', '💘'][Math.floor(Math.random() * 5)];
+                love.style.cssText = `
+                    position: absolute;
+                    left: ${Math.random() * 100}%;
+                    top: -50px;
+                    font-size: ${Math.random() * 30 + 20}px;
+                    animation: loveGrow 6s ease-out forwards;
+                    pointer-events: none;
+                `;
+                effectContainer.appendChild(love);
+                
+                setTimeout(() => {
+                    if (love.parentNode) love.remove();
+                }, 6000);
+            }, i * 180);
+        }
+        
+        // 添加爱心生长动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes loveGrow {
+                0% {
+                    transform: translateY(0) scale(0) rotate(0deg);
+                    opacity: 0;
+                }
+                30% {
+                    transform: translateY(200px) scale(1.2) rotate(120deg);
+                    opacity: 1;
+                }
+                70% {
+                    transform: translateY(400px) scale(0.9) rotate(240deg);
+                    opacity: 0.8;
+                }
+                100% {
+                    transform: translateY(calc(100vh + 50px)) scale(0.7) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // 显示特殊祝福
+        setTimeout(() => {
+            showMessage('💕 我最珍爱的Ashley，1月21日是我们确定关系的甜蜜日子 💕\n从那天起，你就是我的女朋友，我的心从此只为你跳动！\n谢谢你愿意成为我的女朋友，让我的世界充满了爱与希望！');
         }, 1000);
         
         setTimeout(() => {
@@ -924,56 +986,56 @@ function createSpecialEffect(type) {
         `;
         document.head.appendChild(style);
         
-        // 显示特殊祝福 - 新增情人节弹窗
+        // 显示特殊祝福
         setTimeout(() => {
-            showMessage('💖 我的挚爱Ashley，情人节快乐！💖\n每一天和你在一起都是情人节，你是我心中永远的女神！');
+            showMessage('💖 我的挚爱Ashley，情人节快乐！💖\n每一天和你在一起都是情人节，你是我心中永远的女神！\n我爱你不是因为你是谁，而是因为在你面前我是谁！');
         }, 1000);
         
         setTimeout(() => {
             style.remove();
         }, 7000);
         
-    } else if (type === 'certificate') {
-        // 领证日钻戒效果
-        for (let i = 0; i < 25; i++) {
+    } else if (type === 'birthday') {
+        // 生日蛋糕和气球效果
+        for (let i = 0; i < 30; i++) {
             setTimeout(() => {
-                const ring = document.createElement('div');
-                ring.innerHTML = '💍';
-                ring.style.cssText = `
+                const balloon = document.createElement('div');
+                balloon.innerHTML = ['🎂', '🎈', '🎉', '🎊', '🌟'][Math.floor(Math.random() * 5)];
+                balloon.style.cssText = `
                     position: absolute;
                     left: ${Math.random() * 100}%;
-                    top: ${Math.random() * 100}%;
+                    top: 100vh;
                     font-size: ${Math.random() * 30 + 20}px;
-                    animation: ringSparkle 3s ease-out forwards;
+                    animation: balloonFloat 6s ease-out forwards;
                     pointer-events: none;
                 `;
-                effectContainer.appendChild(ring);
+                effectContainer.appendChild(balloon);
                 
                 setTimeout(() => {
-                    if (ring.parentNode) ring.remove();
-                }, 3000);
-            }, i * 150);
+                    if (balloon.parentNode) balloon.remove();
+                }, 6000);
+            }, i * 100);
         }
         
-        // 添加钻戒闪烁动画
+        // 添加气球上升动画
         const style = document.createElement('style');
         style.textContent = `
-            @keyframes ringSparkle {
-                0% { transform: scale(0) rotate(0deg); opacity: 1; }
-                50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
-                100% { transform: scale(0.8) rotate(360deg); opacity: 0; }
+            @keyframes balloonFloat {
+                0% { transform: translateY(0) scale(0); opacity: 0; }
+                20% { opacity: 1; transform: scale(1); }
+                100% { transform: translateY(-100vh) scale(1.2); opacity: 0; }
             }
         `;
         document.head.appendChild(style);
         
         // 显示特殊祝福
         setTimeout(() => {
-            showMessage('💍 亲爱的Ashley，还记得10月22日这个特殊的日子吗？💍\n那一天我们领取了结婚证，从此你是我法定的妻子！');
+            showMessage('🎂 最美丽的Ashley，生日快乐！🎂\n愿你永远像今天一样美丽动人，我爱你！\n在这特殊的日子里，我想对你说：遇见你是我最大的幸运！');
         }, 1000);
         
         setTimeout(() => {
             style.remove();
-        }, 5000);
+        }, 8000);
         
     } else if (type === 'wedding') {
         // 婚礼日白玫瑰和教堂钟声效果
@@ -1021,12 +1083,54 @@ function createSpecialEffect(type) {
         
         // 显示特殊祝福
         setTimeout(() => {
-            showMessage('💒 最美的Ashley，6月28日是我们举办婚礼的神圣日子 💒\n在众人的祝福下，我们交换了誓言，你是我今生唯一的新娘！');
+            showMessage('💒 最美的Ashley，6月28日是我们举办婚礼的神圣日子 💒\n在众人的祝福下，我们交换了誓言，你是我今生唯一的新娘！\n那一天，我对全世界宣告：你是我最珍贵的宝贝！');
         }, 1000);
         
         setTimeout(() => {
             style.remove();
         }, 10000);
+        
+    } else if (type === 'certificate') {
+        // 登记结婚纪念日钻戒效果
+        for (let i = 0; i < 25; i++) {
+            setTimeout(() => {
+                const ring = document.createElement('div');
+                ring.innerHTML = '💍';
+                ring.style.cssText = `
+                    position: absolute;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    font-size: ${Math.random() * 30 + 20}px;
+                    animation: ringSparkle 3s ease-out forwards;
+                    pointer-events: none;
+                `;
+                effectContainer.appendChild(ring);
+                
+                setTimeout(() => {
+                    if (ring.parentNode) ring.remove();
+                }, 3000);
+            }, i * 150);
+        }
+        
+        // 添加钻戒闪烁动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ringSparkle {
+                0% { transform: scale(0) rotate(0deg); opacity: 1; }
+                50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+                100% { transform: scale(0.8) rotate(360deg); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // 显示特殊祝福
+        setTimeout(() => {
+            showMessage('💍 亲爱的Ashley，还记得10月22日这个特殊的日子吗？💍\n那一天我们领取了结婚证，从此你是我法定的妻子！\n从那一刻起，我们就是法律认可的夫妻，此生此世永不分离！');
+        }, 1000);
+        
+        setTimeout(() => {
+            style.remove();
+        }, 5000);
     }
 }
 
