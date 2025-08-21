@@ -542,37 +542,6 @@ Creating an interesting game only for my love, Ashley. Hope her happy everyday!
                 padding: 0.5rem;
             }
         }
-
-            .special-lightning {
-    animation: lightningPulse 1.5s ease-in-out infinite alternate !important;
-}
-
-.special-bomb {
-    animation: bombGlow 1.8s ease-in-out infinite alternate !important;
-}
-
-@keyframes lightningPulse {
-    0% { 
-        filter: brightness(1) drop-shadow(0 0 8px rgba(255, 255, 0, 0.6));
-        transform: scale(1);
-    }
-    100% { 
-        filter: brightness(1.3) drop-shadow(0 0 15px rgba(255, 255, 0, 0.9));
-        transform: scale(1.1);
-    }
-}
-
-@keyframes bombGlow {
-    0% { 
-        filter: brightness(1) drop-shadow(0 0 8px rgba(255, 100, 100, 0.6));
-        transform: scale(1);
-    }
-    100% { 
-        filter: brightness(1.3) drop-shadow(0 0 15px rgba(255, 100, 100, 0.9));
-        transform: scale(1.1);
-    }
-}
-
     </style>
 </head>
 <body>
@@ -1416,19 +1385,6 @@ function bindCellEvents(cell, row, col) {
 // 处理单元格交互
 function handleCellInteraction(row, col) {
     const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-    const clickedApple = gameState.grid[row][col];
-    
-    // 检查是否点击了特殊道具苹果
-    if (clickedApple && (clickedApple.type === 'lightning' || clickedApple.type === 'bomb')) {
-        if (clickedApple.type === 'lightning') {
-            useLightning(row, col);
-            showMessage('⚡ 获得闪电道具效果！');
-        } else if (clickedApple.type === 'bomb') {
-            useBomb(row, col);
-            showMessage('💥 获得炸弹道具效果！');
-        }
-        return; // 使用特殊道具后直接返回
-    }
     
     // 如果有激活的道具
     if (gameState.activePowerUp) {
@@ -1811,30 +1767,8 @@ function createParticleEffect(row, col) {
 
 // 下落处理
 function dropCells() {
-    for (let row = 0; row <= writeIndex; row++) {
-    const newApple = generateSmartApple(row, col);
-    gameState.grid[row][col] = newApple;
-    updateCellDisplay(row, col);
-    hasEmptyCells = true;
-
-         // 后期关卡随机掉落特殊道具（闪电⚡和炸弹💥）
-    if (gameState.currentLevel >= 8 && Math.random() < 0.03) { // 8关以上，3%概率
-        const specialItems = [
-            { type: 'lightning', emoji: '⚡', class: 'special-lightning' },
-            { type: 'bomb', emoji: '💥', class: 'special-bomb' }
-        ];
-        
-        const randomItem = specialItems[Math.floor(Math.random() * specialItems.length)];
-        gameState.grid[row][col] = randomItem;
-        updateCellDisplay(row, col);
-        
-        // 添加特殊发光效果
-        const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-        if (cell) {
-            cell.classList.add('special-item');
-        }
-    }
-   
+    for (let col = 0; col < 8; col++) {
+        let writeIndex = 7; // 从底部开始写入
         
         // 从底部向上遍历
         for (let row = 7; row >= 0; row--) {
@@ -1890,25 +1824,6 @@ function fillEmptyCells() {
             gameState.grid[row][col] = newApple;
             updateCellDisplay(row, col);
             hasEmptyCells = true;
-
-                // 后期关卡随机掉落特殊道具（闪电⚡和炸弹💥）
-    if (gameState.currentLevel >= 8 && Math.random() < 0.03) { // 8关以上，3%概率
-        const specialItems = [
-            { type: 'lightning', emoji: '⚡', class: 'special-lightning' },
-            { type: 'bomb', emoji: '💥', class: 'special-bomb' }
-        ];
-        
-        const randomItem = specialItems[Math.floor(Math.random() * specialItems.length)];
-        gameState.grid[row][col] = randomItem;
-        updateCellDisplay(row, col);
-        
-        // 添加特殊发光效果
-        const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-        if (cell) {
-            cell.classList.add('special-item');
-        }
-    }
-
             
             // 恢复背景色
             const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
