@@ -848,7 +848,7 @@ function createSpecialEffect(type) {
         for (let i = 0; i < 30; i++) {
             setTimeout(() => {
                 const star = document.createElement('div');
-                star.innerHTML = ['✨', '⭐', '🌟', '💫', '🎆'][Math.floor(Math.random() * 5)];
+                star.innerHTML = ['💕', '🤩', '💘', '🫶', '✨'][Math.floor(Math.random() * 5)];
                 star.style.cssText = `
                     position: absolute;
                     left: ${Math.random() * 100}%;
@@ -881,18 +881,18 @@ function createSpecialEffect(type) {
         // 显示特殊祝福
         setTimeout(() => {
             showMessage('✨ 亲爱的Ashley，还记得1月17日吗？✨\n那是我们第一次见面的神奇日子，命运让我们相遇，从此改变了我的人生！\n感谢上天让我遇见了你，我的天使！');
-        }, 15000);
+        }, 1000);
         
         setTimeout(() => {
             style.remove();
-        }, 10000);
+        }, 6000);
         
     } else if (type === 'together') {
         // 确定关系爱心锁和玫瑰效果
         for (let i = 0; i < 25; i++) {
             setTimeout(() => {
                 const love = document.createElement('div');
-                love.innerHTML = ['💕', '🔗', '🔓', '🗝️', '💘'][Math.floor(Math.random() * 5)];
+                love.innerHTML = ['💞', '🥰', '👩🏻‍❤️‍👨🏻', '💋', '💗'][Math.floor(Math.random() * 5)];
                 love.style.cssText = `
                     position: absolute;
                     left: ${Math.random() * 100}%;
@@ -935,8 +935,8 @@ function createSpecialEffect(type) {
         
         // 显示特殊祝福
         setTimeout(() => {
-            showMessage('💕 我最珍爱的Ashley，1月21日是我们确定关系的甜蜜日子 💕\n从那天起，你就是我的女朋友，我的心从此只为你跳动！\n谢谢你那天愿意成为我的女朋友，让我的世界充满了爱与希望！');
-        }, 15000);
+            showMessage('💕 我最珍爱的Ashley，1月21日是我们确定关系的甜蜜日子 💕\n从那天起，你就是我的女朋友，我的心从此只为你跳动！\n谢谢你愿意成为我的女朋友，让我的世界充满了爱与希望！');
+        }, 1000);
         
         setTimeout(() => {
             style.remove();
@@ -989,11 +989,11 @@ function createSpecialEffect(type) {
         // 显示特殊祝福
         setTimeout(() => {
             showMessage('💖 我的挚爱Ashley，情人节快乐！💖\n每一天和你在一起都是情人节，你是我心中永远的挚爱！\n我爱你不是因为你是谁，而是因为在你面前我是谁！');
-        }, 15000);
+        }, 1000);
         
         setTimeout(() => {
             style.remove();
-        }, 10000);
+        }, 7000);
         
     } else if (type === 'birthday') {
         // 生日蛋糕和气球效果
@@ -1030,19 +1030,19 @@ function createSpecialEffect(type) {
         
         // 显示特殊祝福
         setTimeout(() => {
-            showMessage('🎂 最美丽的Ashley，生日快乐！🎂\n愿你永远美丽动人，我爱你！\n在这特殊的日子里，我想对你说：遇见你是我最大的幸运！');
-        }, 10000);
+            showMessage('🎂 最美丽的Ashley，生日快乐！🎂\n愿你在我的陪伴下永远美丽动人，我爱你！\n在这特殊的日子里，我想对你说：遇见你是我最大的幸运！');
+        }, 1000);
         
         setTimeout(() => {
             style.remove();
-        }, 10000);
+        }, 8000);
         
     } else if (type === 'wedding') {
         // 婚礼日白玫瑰和教堂钟声效果
         for (let i = 0; i < 35; i++) {
             setTimeout(() => {
                 const flower = document.createElement('div');
-                flower.innerHTML = ['🤍', '🎉', '🕊️', '💒', '🌹'][Math.floor(Math.random() * 5)];
+                flower.innerHTML = ['🎉', '🤍', '🕊️', '💒', '🌹'][Math.floor(Math.random() * 5)];
                 flower.style.cssText = `
                     position: absolute;
                     left: ${Math.random() * 100}%;
@@ -1055,7 +1055,7 @@ function createSpecialEffect(type) {
                 
                 setTimeout(() => {
                     if (flower.parentNode) flower.remove();
-                }, 10000);
+                }, 8000);
             }, i * 200);
         }
         
@@ -1084,7 +1084,7 @@ function createSpecialEffect(type) {
         // 显示特殊祝福
         setTimeout(() => {
             showMessage('💒 最美的Ashley，6月28日是我们举办婚礼的神圣日子 💒\n在众人的祝福下，我们交换了誓言，你是我今生唯一的新娘！\n那一天，我对全世界宣告：你是我最珍贵的宝贝！');
-        }, 15000);
+        }, 1000);
         
         setTimeout(() => {
             style.remove();
@@ -1108,7 +1108,7 @@ function createSpecialEffect(type) {
                 
                 setTimeout(() => {
                     if (ring.parentNode) ring.remove();
-                }, 10000);
+                }, 3000);
             }, i * 150);
         }
         
@@ -1126,14 +1126,13 @@ function createSpecialEffect(type) {
         // 显示特殊祝福
         setTimeout(() => {
             showMessage('💍 亲爱的Ashley，还记得10月22日这个特殊的日子吗？💍\n那一天我们领取了结婚证，从此你是我法定的妻子！\n从那一刻起，我们就是法律认可的夫妻，此生此世永不分离！');
-        }, 15000);
+        }, 1000);
         
         setTimeout(() => {
             style.remove();
-        }, 10000);
+        }, 5000);
     }
 }
-
 
 // 生成关卡按钮
 function generateLevelButtons() {
