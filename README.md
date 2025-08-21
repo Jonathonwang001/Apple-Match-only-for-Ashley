@@ -3516,7 +3516,30 @@ function generateSmartApple(row, col) {
         }
     }
     
-    // 其他情况随机生成，但避免立即形成匹配（保持挑战性）
+    // 在高关卡增加特殊道具掉落概率
+    if (gameState.currentLevel >= 8) {
+        let specialChance = 0.05; // 基础5%概率
+        
+        // 根据关卡和连击数动态调整
+        if (gameState.currentLevel >= 10) specialChance = 0.08; // 10关以上8%
+        if (gameState.currentLevel >= 12) specialChance = 0.12; // 12关以上12%
+        
+        // 连击奖励
+        if (gameState.combo >= 5) specialChance += 0.03;
+        if (gameState.combo >= 8) specialChance += 0.05;
+        
+        if (Math.random() < specialChance) {
+            const specialTypes = [
+                { type: 'lightning', emoji: '⚡', class: 'apple-special' },
+                { type: 'bomb', emoji: '💣', class: 'apple-special' }
+            ];
+            
+            const chosen = specialTypes[Math.floor(Math.random() * specialTypes.length)];
+            return chosen;
+        }
+    }
+    
+    // 其他情况随机生成
     let attempts = 0;
     let randomType;
     
@@ -3531,6 +3554,7 @@ function generateSmartApple(row, col) {
         class: `apple-${randomType}`
     };
 }
+
 
 // 检查是否会立即形成匹配（避免太容易）
 function wouldCreateImmediateMatch(row, col, type) {
