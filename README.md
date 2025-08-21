@@ -816,83 +816,220 @@ function checkSpecialDate() {
         createSpecialEffect('birthday');
         setTimeout(() => showAchievement(ACHIEVEMENTS.find(a => a.id === 'ashley_special')), 2000);
     }
+    // 1月17日 - 第一次见面
+    else if (month === 1 && date === 17) {
+        createSpecialEffect('valentine');
+    }
     // 2月14日 - 情人节
     else if (month === 2 && date === 14) {
         createSpecialEffect('valentine');
     }
+    // 10月22日 - 领证日
+    else if (month === 10 && date === 22) {
+        createSpecialEffect('certificate');
+    }
+    // 6月28日 - 婚礼日
+    else if (month === 6 && date === 28) {
+        createSpecialEffect('wedding');
+    }
 }
-
+    
 // 创建特殊日期效果
 function createSpecialEffect(type) {
     const effectContainer = document.getElementById('specialDateEffect');
     
     if (type === 'birthday') {
-        // 生日烟花效果
-        for (let i = 0; i < 20; i++) {
+        // 生日蛋糕和气球效果
+        for (let i = 0; i < 30; i++) {
             setTimeout(() => {
-                const firework = document.createElement('div');
-                firework.className = 'firework';
-                firework.style.cssText = `
+                const balloon = document.createElement('div');
+                balloon.innerHTML = ['🎂', '🎈', '🎉', '🎊', '🌟'][Math.floor(Math.random() * 5)];
+                balloon.style.cssText = `
                     position: absolute;
-                    width: ${Math.random() * 100 + 50}px;
-                    height: ${Math.random() * 100 + 50}px;
                     left: ${Math.random() * 100}%;
-                    top: ${Math.random() * 100}%;
-                    background: hsl(${Math.random() * 360}, 70%, 60%);
-                    border-radius: 50%;
-                    animation: fireworkAnim 2s ease-out forwards;
+                    top: 100vh;
+                    font-size: ${Math.random() * 30 + 20}px;
+                    animation: balloonFloat 6s ease-out forwards;
+                    pointer-events: none;
                 `;
-                effectContainer.appendChild(firework);
+                effectContainer.appendChild(balloon);
                 
                 setTimeout(() => {
-                    if (firework.parentNode) firework.remove();
-                }, 2000);
-            }, i * 200);
+                    if (balloon.parentNode) balloon.remove();
+                }, 6000);
+            }, i * 100);
         }
         
-        // 添加烟花动画
+        // 添加气球上升动画
         const style = document.createElement('style');
         style.textContent = `
-            @keyframes fireworkAnim {
-                0% { transform: scale(0); opacity: 1; }
-                50% { transform: scale(1.5); opacity: 0.8; }
-                100% { transform: scale(3); opacity: 0; }
+            @keyframes balloonFloat {
+                0% { transform: translateY(0) scale(0); opacity: 0; }
+                20% { opacity: 1; transform: scale(1); }
+                100% { transform: translateY(-100vh) scale(1.2); opacity: 0; }
             }
         `;
         document.head.appendChild(style);
         
         // 显示特殊祝福
         setTimeout(() => {
-            showMessage('🎂 生日快乐，我最爱的Ashley！🎂\n愿你每天都像今天一样美丽动人！');
+            showMessage('🎂 最美丽的Ashley，生日快乐！🎂\n愿你永远像今天一样美丽动人，我爱你！');
+        }, 1000);
+        
+        setTimeout(() => {
+            style.remove();
+        }, 8000);
+        
+    } else if (type === 'valentine') {
+        // 情人节玫瑰花瓣效果
+        for (let i = 0; i < 40; i++) {
+            setTimeout(() => {
+                const heart = document.createElement('div');
+                heart.innerHTML = ['❤️', '💖', '💕', '🌹', '💝'][Math.floor(Math.random() * 5)];
+                heart.style.cssText = `
+                    position: absolute;
+                    left: ${Math.random() * 100}%;
+                    top: -50px;
+                    font-size: ${Math.random() * 35 + 15}px;
+                    animation: heartFall 5s ease-in forwards;
+                    pointer-events: none;
+                `;
+                effectContainer.appendChild(heart);
+                
+                setTimeout(() => {
+                    if (heart.parentNode) heart.remove();
+                }, 5000);
+            }, i * 100);
+        }
+        
+        // 添加爱心飘落动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes heartFall {
+                0% {
+                    transform: translateY(0) rotate(0deg);
+                    opacity: 0;
+                }
+                10% {
+                    opacity: 1;
+                }
+                90% {
+                    opacity: 0.8;
+                }
+                100% {
+                    transform: translateY(calc(100vh + 50px)) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // 显示特殊祝福 - 新增情人节弹窗
+        setTimeout(() => {
+            showMessage('💖 我的挚爱Ashley，情人节快乐！💖\n每一天和你在一起都是情人节，你是我心中永远的女神！');
+        }, 1000);
+        
+        setTimeout(() => {
+            style.remove();
+        }, 7000);
+        
+    } else if (type === 'certificate') {
+        // 领证日钻戒效果
+        for (let i = 0; i < 25; i++) {
+            setTimeout(() => {
+                const ring = document.createElement('div');
+                ring.innerHTML = '💍';
+                ring.style.cssText = `
+                    position: absolute;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    font-size: ${Math.random() * 30 + 20}px;
+                    animation: ringSparkle 3s ease-out forwards;
+                    pointer-events: none;
+                `;
+                effectContainer.appendChild(ring);
+                
+                setTimeout(() => {
+                    if (ring.parentNode) ring.remove();
+                }, 3000);
+            }, i * 150);
+        }
+        
+        // 添加钻戒闪烁动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ringSparkle {
+                0% { transform: scale(0) rotate(0deg); opacity: 1; }
+                50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+                100% { transform: scale(0.8) rotate(360deg); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // 显示特殊祝福
+        setTimeout(() => {
+            showMessage('💍 亲爱的Ashley，还记得10月22日这个特殊的日子吗？💍\n那一天我们领取了结婚证，从此你是我法定的妻子！');
         }, 1000);
         
         setTimeout(() => {
             style.remove();
         }, 5000);
         
-    } else if (type === 'valentine') {
-        // 情人节玫瑰花瓣效果
-        for (let i = 0; i < 30; i++) {
+    } else if (type === 'wedding') {
+        // 婚礼日白玫瑰和教堂钟声效果
+        for (let i = 0; i < 35; i++) {
             setTimeout(() => {
-                const petal = document.createElement('div');
-                petal.innerHTML = '🌸';
-                petal.style.cssText = `
+                const flower = document.createElement('div');
+                flower.innerHTML = ['🤍', '🕊️', '💒', '🌹'][Math.floor(Math.random() * 4)];
+                flower.style.cssText = `
                     position: absolute;
                     left: ${Math.random() * 100}%;
                     top: -50px;
-                    font-size: ${Math.random() * 20 + 10}px;
-                    animation: floatHeart 8s linear forwards;
+                    font-size: ${Math.random() * 25 + 15}px;
+                    animation: weddingFloat 8s linear forwards;
                     pointer-events: none;
                 `;
-                effectContainer.appendChild(petal);
+                effectContainer.appendChild(flower);
                 
                 setTimeout(() => {
-                    if (petal.parentNode) petal.remove();
+                    if (flower.parentNode) flower.remove();
                 }, 8000);
-            }, i * 300);
+            }, i * 200);
         }
+        
+        // 添加婚礼漂浮动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes weddingFloat {
+                0% {
+                    transform: translateY(0) rotate(0deg);
+                    opacity: 0;
+                }
+                10% {
+                    opacity: 1;
+                }
+                90% {
+                    opacity: 0.8;
+                }
+                100% {
+                    transform: translateY(calc(100vh + 50px)) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // 显示特殊祝福
+        setTimeout(() => {
+            showMessage('💒 最美的Ashley，6月28日是我们举办婚礼的神圣日子 💒\n在众人的祝福下，我们交换了誓言，你是我今生唯一的新娘！');
+        }, 1000);
+        
+        setTimeout(() => {
+            style.remove();
+        }, 10000);
     }
 }
+
 
 // 生成关卡按钮
 function generateLevelButtons() {
