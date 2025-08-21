@@ -631,6 +631,7 @@ Creating an interesting game only for my love, Ashley. Hope her happy everyday!
             <!-- 控制按钮 -->
             <div class="controls">
                 <button class="control-btn secondary" onclick="showHint()">提示 💡</button>
+                <button class="control-btn secondary" onclick="showGameInstructions()">说明 📖</button>
                 <button class="control-btn secondary" onclick="pauseGame()">暂停 ⏸️</button>
                 <button class="control-btn secondary" onclick="restartLevel()">重新开始 🔄</button>
                 <button class="control-btn secondary" onclick="backToLevelSelect()">返回选关 ⬅️</button>
