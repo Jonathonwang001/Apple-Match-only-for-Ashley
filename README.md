@@ -3109,6 +3109,142 @@ function showSettings() {
     alert(settings);
 }
 
+// 游戏内说明弹窗（保持游戏状态）
+function showGameInstructions() {
+    // 暂停游戏但不显示暂停菜单
+    const wasGameActive = gameState.isGameActive;
+    const wasPaused = gameState.isPaused;
+    gameState.isPaused = true;
+    
+    // 创建说明弹窗
+    const overlay = document.createElement('div');
+    overlay.id = 'gameInstructionsOverlay';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease-out;
+    `;
+    
+    overlay.innerHTML = `
+        <div style="background: linear-gradient(135deg, #667eea, #764ba2); 
+                    color: white; padding: 2rem; border-radius: 20px; 
+                    max-width: 90vw; max-height: 90vh; overflow-y: auto;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            
+            <h2 style="text-align: center; margin-bottom: 1.5rem;">📖 游戏说明</h2>
+            
+            <div style="background: rgba(255, 255, 255, 0.1); padding: 1.2rem; 
+                        border-radius: 15px; margin-bottom: 1.5rem;">
+                <h3 style="margin-bottom: 1rem; color: #ffd700;">🎮 游戏规则</h3>
+                <div style="line-height: 1.6;">
+                    • 点击相邻的苹果进行交换<br>
+                    • 形成3个或更多相同苹果的连线即可消除<br>
+                    • 达到目标分数即可过关<br>
+                    • 注意剩余步数，用完就失败了<br>
+                    • 连击可以获得更多分数奖励
+                </div>
+            </div>
+            
+            <div style="background: rgba(255, 255, 255, 0.1); padding: 1.2rem; 
+                        border-radius: 15px; margin-bottom: 1.5rem;">
+                <h3 style="margin-bottom: 1rem; color: #ffd700;">💎 道具详解</h3>
+                <div style="display: grid; grid-template-columns: auto 1fr; gap: 0.8rem; align-items: center;">
+                    <div style="font-size: 1.5rem;">💥</div>
+                    <div><strong>炸弹:</strong> 消除点击位置周围3×3范围内的所有苹果</div>
+                    
+                    <div style="font-size: 1.5rem;">⚡</div>
+                    <div><strong>闪电:</strong> 消除点击位置的整行和整列苹果</div>
+                    
+                    <div style="font-size: 1.5rem;">🌈</div>
+                    <div><strong>彩虹:</strong> 消除与点击苹果相同类型的所有苹果</div>
+                    
+                    <div style="font-size: 1.5rem;">🔨</div>
+                    <div><strong>锤子:</strong> 直接敲掉一个苹果</div>
+                    
+                    <div style="font-size: 1.5rem;">🔄</div>
+                    <div><strong>洗牌:</strong> 重新随机排列整个棋盘</div>
+                    
+                    <div style="font-size: 1.5rem;">⏰</div>
+                    <div><strong>时光:</strong> 增加5步额外操作机会</div>
+                </div>
+            </div>
+            
+            <div style="background: rgba(255, 255, 255, 0.1); padding: 1.2rem; 
+                        border-radius: 15px; margin-bottom: 1.5rem;">
+                <h3 style="margin-bottom: 1rem; color: #ffd700;">💡 游戏技巧</h3>
+                <div style="line-height: 1.6;">
+                    • 优先寻找能形成4个或5个连线的机会<br>
+                    • 合理使用道具，关键时刻能扭转局势<br>
+                    • 注意连击，连续消除能获得额外分数<br>
+                    • 练习模式可以无限练习，熟悉各种道具
+                </div>
+            </div>
+            
+            <div style="text-align: center; font-style: italic; opacity: 0.8; margin-bottom: 1.5rem;">
+                💕 这个游戏是专门为Ashley制作的爱心之作 💕
+            </div>
+            
+            <div style="text-align: center;">
+                <button onclick="closeGameInstructions()" 
+                        style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
+                               color: white; border: 2px solid white; border-radius: 25px; 
+                               cursor: pointer; font-size: 1.1rem; font-weight: bold;
+                               transition: all 0.3s;">
+                    继续游戏 ▶️
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
+    
+    // 添加淡入动画样式
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    setTimeout(() => style.remove(), 500);
+}
+
+// 关闭游戏说明并恢复游戏状态
+function closeGameInstructions() {
+    const overlay = document.getElementById('gameInstructionsOverlay');
+    if (overlay) {
+        overlay.style.animation = 'fadeOut 0.3s ease-in forwards';
+        
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        setTimeout(() => {
+            overlay.remove();
+            style.remove();
+            
+            // 恢复游戏状态
+            gameState.isPaused = false;
+        }, 300);
+    }
+}
+    
+    
 // 数据持久化
 function saveGameData() {
     const saveData = {
