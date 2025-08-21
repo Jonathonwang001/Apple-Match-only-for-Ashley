@@ -1416,6 +1416,19 @@ function bindCellEvents(cell, row, col) {
 // 处理单元格交互
 function handleCellInteraction(row, col) {
     const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+    const clickedApple = gameState.grid[row][col];
+    
+    // 检查是否点击了特殊道具苹果
+    if (clickedApple && (clickedApple.type === 'lightning' || clickedApple.type === 'bomb')) {
+        if (clickedApple.type === 'lightning') {
+            useLightning(row, col);
+            showMessage('⚡ 获得闪电道具效果！');
+        } else if (clickedApple.type === 'bomb') {
+            useBomb(row, col);
+            showMessage('💥 获得炸弹道具效果！');
+        }
+        return; // 使用特殊道具后直接返回
+    }
     
     // 如果有激活的道具
     if (gameState.activePowerUp) {
