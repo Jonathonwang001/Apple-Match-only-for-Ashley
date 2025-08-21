@@ -786,7 +786,7 @@ function createHeartBackground() {
     function createHeart() {
         const heart = document.createElement('div');
         heart.className = 'heart';
-        heart.innerHTML = ['❤️', '💕', '💖', '💘'][Math.floor(Math.random() * 4)];
+        heart.innerHTML = ['❤️', '💋', '💕', '💖', '💘'][Math.floor(Math.random() * 5)];
         heart.style.left = Math.random() * 100 + '%';
         heart.style.animationDelay = Math.random() * 6 + 's';
         heart.style.animationDuration = (6 + Math.random() * 4) + 's';
@@ -1754,21 +1754,68 @@ function dropCells() {
 
 // 补充空单元格
 function fillEmptyCells() {
+    let hasEmptyCells = false;
+    
     for (let col = 0; col < 8; col++) {
-        for (let row = 0; row < 8; row++) {
-            if (gameState.grid[row][col] === null) {
-                gameState.grid[row][col] = createRandomApple();
-                updateCellDisplay(row, col);
-                
-                // 恢复背景色
-                const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-                if (cell) {
-                    cell.style.background = '';
+        let writeIndex = 7; // 从底部开始写入
+        
+        // 先移动现有的苹果到底部
+        for (let row = 7; row >= 0; row--) {
+            if (gameState.grid[row][col] !== null) {
+                if (writeIndex !== row) {
+                    gameState.grid[writeIndex][col] = gameState.grid[row][col];
+                    gameState.grid[row][col] = null;
+                    updateCellDisplay(writeIndex, col);
+                    hasEmptyCells = true;
+                    
+                    // 清除原位置
+                    const oldCell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+                    if (oldCell) {
+                        oldCell.innerHTML = '';
+                        oldCell.style.background = '';
+                    }
                 }
+                writeIndex--;
+            }
+        }
+        
+        // 填充顶部的空白位置，使用智能填充增加combo概率
+        for (let row = 0; row <= writeIndex; row++) {
+            const newApple = generateSmartApple(row, col);
+            gameState.grid[row][col] = newApple;
+            updateCellDisplay(row, col);
+            hasEmptyCells = true;
+            
+            // 恢复背景色
+            const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+            if (cell) {
+                cell.style.background = '';
             }
         }
     }
+    
+    if (hasEmptyCells) {
+        setTimeout(() => {
+            const newMatches = findMatches();
+            if (newMatches.length > 0) {
+                processMatches(newMatches);
+            } else {
+                gameState.combo = 0;
+                
+                // 小概率触发幸运重排增加combo机会
+                if (Math.random() < 0.08) {
+                    setTimeout(() => {
+                        triggerLuckyReshuffle();
+                    }, 200);
+                }
+                
+                checkLevelComplete();
+                checkAchievements();
+            }
+        }, 300);
+    }
 }
+
 
 // 继续第四部分...
 // 道具系统
@@ -3243,7 +3290,243 @@ function closeGameInstructions() {
         }, 300);
     }
 }
+
+// 智能生成苹果，增加combo概率
+function generateSmartApple(row, col) {
+    const appleTypes = ['red', 'green', 'yellow', 'blue', 'purple', 'orange'];
+    const typeToEmoji = {
+        'red': '🍎',
+        'green': '🍏', 
+        'yellow': '🍌',
+        'blue': '🫐',
+        'purple': '🍇',
+        'orange': '🍊'
+    };
     
+    // 35%的概率进行智能生成，增加combo可能
+    if (Math.random() < 0.35) {
+        const potentialMatches = [];
+        
+        // 检查下方两个位置（垂直连击机会）
+        if (row < 6) {
+            const apple1 = gameState.grid[row + 1] && gameState.grid[row + 1][col];
+            const apple2 = gameState.grid[row + 2] && gameState.grid[row + 2][col];
+            if (apple1 && apple2 && apple1.type === apple2.type && apple1.type !== 'special') {
+                potentialMatches.push(apple1.type);
+            }
+        }
+        
+        // 检查左右两边（水平连击机会）
+        if (col > 1) {
+            const leftApple1 = gameState.grid[row] && gameState.grid[row][col - 1];
+            const leftApple2 = gameState.grid[row] && gameState.grid[row][col - 2];
+            if (leftApple1 && leftApple2 && leftApple1.type === leftApple2.type && leftApple1.type !== 'special') {
+                potentialMatches.push(leftApple1.type);
+            }
+        }
+        
+        if (col < 6) {
+            const rightApple1 = gameState.grid[row] && gameState.grid[row][col + 1];
+            const rightApple2 = gameState.grid[row] && gameState.grid[row][col + 2];
+            if (rightApple1 && rightApple2 && rightApple1.type === rightApple2.type && rightApple1.type !== 'special') {
+                potentialMatches.push(rightApple1.type);
+            }
+        }
+        
+        // 检查中间插入的可能性（左右各一个相同）
+        if (col > 0 && col < 7) {
+            const leftApple = gameState.grid[row] && gameState.grid[row][col - 1];
+            const rightApple = gameState.grid[row] && gameState.grid[row][col + 1];
+            if (leftApple && rightApple && leftApple.type === rightApple.type && leftApple.type !== 'special') {
+                potentialMatches.push(leftApple.type);
+            }
+        }
+        
+        // 如果找到了潜在的连击机会，75%概率生成对应苹果
+        if (potentialMatches.length > 0 && Math.random() < 0.75) {
+            const chosenType = potentialMatches[Math.floor(Math.random() * potentialMatches.length)];
+            return {
+                type: chosenType,
+                emoji: typeToEmoji[chosenType],
+                class: `apple-${chosenType}`
+            };
+        }
+    }
+    
+    // 增加附近相似苹果的概率（25%）
+    if (Math.random() < 0.25) {
+        const nearbyTypes = [];
+        
+        // 收集附近的苹果类型
+        for (let r = Math.max(0, row - 1); r <= Math.min(7, row + 1); r++) {
+            for (let c = Math.max(0, col - 1); c <= Math.min(7, col + 1); c++) {
+                if (gameState.grid[r] && gameState.grid[r][c] && gameState.grid[r][c].type !== 'special') {
+                    nearbyTypes.push(gameState.grid[r][c].type);
+                }
+            }
+        }
+        
+        if (nearbyTypes.length > 0) {
+            const chosenType = nearbyTypes[Math.floor(Math.random() * nearbyTypes.length)];
+            return {
+                type: chosenType,
+                emoji: typeToEmoji[chosenType],
+                class: `apple-${chosenType}`
+            };
+        }
+    }
+    
+    // 其他情况完全随机，但避免立即形成匹配
+    let attempts = 0;
+    let randomType;
+    
+    do {
+        randomType = appleTypes[Math.floor(Math.random() * appleTypes.length)];
+        attempts++;
+    } while (attempts < 5 && wouldCreateImmediateMatch(row, col, randomType));
+    
+    return {
+        type: randomType,
+        emoji: typeToEmoji[randomType],
+        class: `apple-${randomType}`
+    };
+}
+
+// 检查是否会立即形成匹配（避免太容易）
+function wouldCreateImmediateMatch(row, col, type) {
+    // 临时放置苹果
+    const tempApple = { type: type };
+    const originalApple = gameState.grid[row][col];
+    gameState.grid[row][col] = tempApple;
+    
+    let wouldMatch = false;
+    
+    // 检查水平匹配
+    let horizontalCount = 1;
+    
+    // 向左计数
+    for (let c = col - 1; c >= 0 && gameState.grid[row][c] && gameState.grid[row][c].type === type; c--) {
+        horizontalCount++;
+    }
+    
+    // 向右计数
+    for (let c = col + 1; c < 8 && gameState.grid[row][c] && gameState.grid[row][c].type === type; c++) {
+        horizontalCount++;
+    }
+    
+    if (horizontalCount >= 3) wouldMatch = true;
+    
+    // 检查垂直匹配
+    let verticalCount = 1;
+    
+    // 向上计数
+    for (let r = row - 1; r >= 0 && gameState.grid[r][col] && gameState.grid[r][col].type === type; r--) {
+        verticalCount++;
+    }
+    
+    // 向下计数
+    for (let r = row + 1; r < 8 && gameState.grid[r][col] && gameState.grid[r][col].type === type; r++) {
+        verticalCount++;
+    }
+    
+    if (verticalCount >= 3) wouldMatch = true;
+    
+    // 恢复原状态
+    gameState.grid[row][col] = originalApple;
+    
+    return wouldMatch;
+}
+
+// 幸运重排：小概率触发，轻微调整棋盘增加combo机会
+function triggerLuckyReshuffle() {
+    let adjustmentsMade = 0;
+    const maxAdjustments = 3; // 最多调整3个位置
+    
+    for (let attempts = 0; attempts < 30 && adjustmentsMade < maxAdjustments; attempts++) {
+        const row1 = Math.floor(Math.random() * 8);
+        const col1 = Math.floor(Math.random() * 8);
+        const row2 = Math.floor(Math.random() * 8);
+        const col2 = Math.floor(Math.random() * 8);
+        
+        // 确保不是同一个位置且都有苹果
+        if ((row1 === row2 && col1 === col2) || 
+            !gameState.grid[row1][col1] || !gameState.grid[row2][col2] ||
+            gameState.grid[row1][col1].type === 'special' || gameState.grid[row2][col2].type === 'special') {
+            continue;
+        }
+        
+        // 临时交换
+        const temp = gameState.grid[row1][col1];
+        gameState.grid[row1][col1] = gameState.grid[row2][col2];
+        gameState.grid[row2][col2] = temp;
+        
+        // 检查是否产生了新的潜在匹配机会（不是立即匹配）
+        const hasNewOpportunity = (
+            hasNearMatch(row1, col1) || hasNearMatch(row2, col2)
+        ) && !hasMatches(); // 不产生立即匹配
+        
+        if (hasNewOpportunity) {
+            adjustmentsMade++;
+            updateCellDisplay(row1, col1);
+            updateCellDisplay(row2, col2);
+            // 保持这个有利的交换
+        } else {
+            // 撤销交换
+            gameState.grid[row2][col2] = gameState.grid[row1][col1];
+            gameState.grid[row1][col1] = temp;
+        }
+    }
+    
+    if (adjustmentsMade > 0) {
+        // 显示微妙的提示
+        setTimeout(() => {
+            showMessage('✨ 感受到了幸运女神的眷顾...', 2000);
+        }, 500);
+    }
+}
+
+// 检查是否有接近匹配的情况（2个相邻的相同苹果）
+function hasNearMatch(row, col) {
+    const apple = gameState.grid[row][col];
+    if (!apple || apple.type === 'special') return false;
+    
+    const type = apple.type;
+    
+    // 检查水平方向是否有2个相邻
+    let horizontalNear = 1;
+    
+    // 向左检查
+    for (let c = col - 1; c >= 0 && gameState.grid[row][c] && gameState.grid[row][c].type === type; c--) {
+        horizontalNear++;
+        if (horizontalNear >= 2) return true;
+    }
+    
+    horizontalNear = 1; // 重置
+    // 向右检查
+    for (let c = col + 1; c < 8 && gameState.grid[row][c] && gameState.grid[row][c].type === type; c++) {
+        horizontalNear++;
+        if (horizontalNear >= 2) return true;
+    }
+    
+    // 检查垂直方向是否有2个相邻
+    let verticalNear = 1;
+    
+    // 向上检查
+    for (let r = row - 1; r >= 0 && gameState.grid[r][col] && gameState.grid[r][col].type === type; r--) {
+        verticalNear++;
+        if (verticalNear >= 2) return true;
+    }
+    
+    verticalNear = 1; // 重置
+    // 向下检查
+    for (let r = row + 1; r < 8 && gameState.grid[r][col] && gameState.grid[r][col].type === type; r++) {
+        verticalNear++;
+        if (verticalNear >= 2) return true;
+    }
+    
+    return false;
+}
+
     
 // 数据持久化
 function saveGameData() {
