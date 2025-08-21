@@ -750,14 +750,21 @@ const LEVELS = [
     { id: 12, name: "心有灵犀", target: 6500, moves: 340, quote: "不用言语，我们就能读懂彼此 💫", special: false }
 ];
 
-// 苹果类型定义
+// 苹果类型定义 - 支持关卡渐进式增加
 const APPLE_TYPES = [
     { type: 'red', emoji: '🍎', class: 'apple-red' },
     { type: 'green', emoji: '🍏', class: 'apple-green' },
     { type: 'yellow', emoji: '🍌', class: 'apple-yellow' },
     { type: 'blue', emoji: '🫐', class: 'apple-blue' },
     { type: 'purple', emoji: '🍇', class: 'apple-purple' },
-    { type: 'orange', emoji: '🍊', class: 'apple-orange' }
+    { type: 'orange', emoji: '🍊', class: 'apple-orange' },
+    // 新增水果类型 - 后期关卡解锁
+    { type: 'peach', emoji: '🍑', class: 'apple-peach' },
+    { type: 'strawberry', emoji: '🍓', class: 'apple-strawberry' },
+    { type: 'watermelon', emoji: '🍉', class: 'apple-watermelon' },
+    { type: 'pineapple', emoji: '🍍', class: 'apple-pineapple' },
+    { type: 'kiwi', emoji: '🥝', class: 'apple-kiwi' },
+    { type: 'mango', emoji: '🥭', class: 'apple-mango' }
 ];
 
 // 成就系统
@@ -1216,9 +1223,41 @@ function startLevel(levelId) {
     updateUI();
 }
 
-// 创建随机苹果
+// 创建随机苹果 - 根据关卡渐进式增加种类
 function createRandomApple() {
-    const randomType = APPLE_TYPES[Math.floor(Math.random() * APPLE_TYPES.length)];
+    // 根据当前关卡确定可用的苹果种类数量
+    let availableTypeCount;
+    
+    if (gameState.currentLevel === 0) {
+        // 练习模式：使用所有类型
+        availableTypeCount = APPLE_TYPES.length;
+    } else if (gameState.currentLevel <= 2) {
+        // 第1-2关：4种基础苹果
+        availableTypeCount = 4;
+    } else if (gameState.currentLevel <= 4) {
+        // 第3-4关：5种苹果
+        availableTypeCount = 5;
+    } else if (gameState.currentLevel <= 6) {
+        // 第5-6关：6种苹果
+        availableTypeCount = 6;
+    } else if (gameState.currentLevel <= 8) {
+        // 第7-8关：7种苹果
+        availableTypeCount = 7;
+    } else if (gameState.currentLevel <= 10) {
+        // 第9-10关：8种苹果
+        availableTypeCount = 8;
+    } else if (gameState.currentLevel <= 12) {
+        // 第11-12关：9种苹果
+        availableTypeCount = 9;
+    } else {
+        // 更高关卡：使用所有类型
+        availableTypeCount = APPLE_TYPES.length;
+    }
+    
+    // 从可用类型中随机选择
+    const availableTypes = APPLE_TYPES.slice(0, availableTypeCount);
+    const randomType = availableTypes[Math.floor(Math.random() * availableTypes.length)];
+    
     return {
         type: randomType.type,
         emoji: randomType.emoji,
@@ -3293,15 +3332,33 @@ function closeGameInstructions() {
 
 // 智能生成苹果，增加combo概率
 function generateSmartApple(row, col) {
-    const appleTypes = ['red', 'green', 'yellow', 'blue', 'purple', 'orange'];
-    const typeToEmoji = {
-        'red': '🍎',
-        'green': '🍏', 
-        'yellow': '🍌',
-        'blue': '🫐',
-        'purple': '🍇',
-        'orange': '🍊'
-    };
+    // 根据关卡动态获取可用苹果类型
+    let availableTypeCount;
+    if (gameState.currentLevel === 0) {
+        availableTypeCount = APPLE_TYPES.length;
+    } else if (gameState.currentLevel <= 2) {
+        availableTypeCount = 4;
+    } else if (gameState.currentLevel <= 4) {
+        availableTypeCount = 5;
+    } else if (gameState.currentLevel <= 6) {
+        availableTypeCount = 6;
+    } else if (gameState.currentLevel <= 8) {
+        availableTypeCount = 7;
+    } else if (gameState.currentLevel <= 10) {
+        availableTypeCount = 8;
+    } else if (gameState.currentLevel <= 12) {
+        availableTypeCount = 9;
+    } else {
+        availableTypeCount = APPLE_TYPES.length;
+    }
+
+    const appleTypes = APPLE_TYPES.slice(0, availableTypeCount).map(apple => apple.type);
+
+    // 创建类型到表情符号的映射
+    const typeToEmoji = {};
+    APPLE_TYPES.slice(0, availableTypeCount).forEach(apple => {
+        typeToEmoji[apple.type] = apple.emoji;
+    });
     
     // 35%的概率进行智能生成，增加combo可能
     if (Math.random() < 0.35) {
