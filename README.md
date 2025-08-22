@@ -782,7 +782,7 @@ const LEVELS = [
     { id: 13, name: "甜蜜回忆", target: 7000, moves: 330, quote: "每一个回忆都是我们爱情的见证 📸", special: false },
     { id: 14, name: "浪漫旅程", target: 7500, moves: 320, quote: "和你走过的每一处风景都成了诗 🗺️", special: false },
     { id: 15, name: "幸福密码", target: 8000, moves: 310, quote: "你就是我幸福生活的全部密码 🔐", special: true },
-    { id: 16, name: "终极挑战", target: 9000, moves: 300, quote: "最终关卡：用爆炸的力量见证我们的爱！⚡💥", special: true }
+    { id: 16, name: "终极挑战", target: 9000, moves: 300, quote: "最终关卡：用爆炸的力量见证我们的爱！🏁", special: true }
 ];
 
 // 苹果类型定义 - 支持关卡渐进式增加
@@ -805,7 +805,7 @@ const APPLE_TYPES = [
 // 成就系统
 const ACHIEVEMENTS = [
     { id: 'first_match', name: '初次消除', desc: '完成第一次消除', icon: '🎯' },
-    { id: 'combo_master', name: '连击高手', desc: '达成5连击', icon: '⚡' },
+    { id: 'combo_master', name: '连击高手', desc: '达成10连击', icon: '⚡' },
     { id: 'score_hunter', name: '分数猎人', desc: '单局得分超过5000', icon: '🏆' },
     { id: 'perfect_level', name: '完美通关', desc: '剩余步数≥10通关', icon: '💎' },
     { id: 'power_master', name: '道具大师', desc: '使用所有类型道具', icon: '🎮' },
@@ -1303,7 +1303,7 @@ function createRandomApple() {
     if (gameState.currentLevel === 16 && Math.random() < 0.08) {
         const specialFruits = [
             { type: 'bomb_fruit', emoji: '💥', class: 'special-bomb' },
-            { type: 'lightning_fruit', emoji: '⚡', class: 'special-lightning' }
+            { type: 'lightning_fruit', emoji: '🧜🏼‍♀️', class: 'special-lightning' }
         ];
         const special = specialFruits[Math.floor(Math.random() * specialFruits.length)];
         return special;
@@ -2610,7 +2610,7 @@ function triggerSpecialLightningEffect(row, col) {
         style.remove();
     }, 1000);
     
-    showMessage('⚡ X形闪电风暴！Ashley的电力满满！');
+    showMessage('🌪 X型风暴卷走一切，Ashley的能量满满！');
 }
     
 // 更新道具UI
@@ -3428,6 +3428,7 @@ function showSettings() {
     🔨 锤子 - 消除单个苹果
     🔄 洗牌 - 重新排列整个棋盘
     ⏰ 时光 - 增加5步额外步数
+    🌪 风暴 - X型风暴卷走一切
 
     💕 特别提醒:
     这个游戏是专门为Ashley制作的，每一个细节都充满了爱意！
@@ -3485,7 +3486,7 @@ function showGameInstructions() {
             
             <div style="background: rgba(255, 255, 255, 0.1); padding: 1.2rem; 
                         border-radius: 15px; margin-bottom: 1.5rem;">
-                <h3 style="margin-bottom: 1rem; color: #ffd700;">💎 道具详解</h3>
+                <h3 style="margin-bottom: 1rem; color: #ffd700;"> 道具详解</h3>
                 <div style="display: grid; grid-template-columns: auto 1fr; gap: 0.8rem; align-items: center;">
                     <div style="font-size: 1.5rem;">💥</div>
                     <div><strong>炸弹:</strong> 消除点击位置周围3×3范围内的所有苹果</div>
@@ -3504,6 +3505,9 @@ function showGameInstructions() {
                     
                     <div style="font-size: 1.5rem;">⏰</div>
                     <div><strong>时光:</strong> 增加5步额外操作机会</div>
+                                        
+                    <div style="font-size: 1.5rem;">【特殊关卡随机道具】🌪</div>
+                    <div><strong>时光:</strong> X型风暴卷走一切，Ashley的能量满满</div>
                 </div>
             </div>
             
@@ -3514,6 +3518,7 @@ function showGameInstructions() {
                     • 优先寻找能形成4个或5个连线的机会<br>
                     • 合理使用道具，关键时刻能扭转局势<br>
                     • 注意连击，连续消除能获得额外分数<br>
+                    • 特殊关卡，会有额外道具扭转乾坤<br>
                     • 练习模式可以无限练习，熟悉各种道具
                 </div>
             </div>
