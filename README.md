@@ -2484,7 +2484,7 @@ function showLevelComplete(success) {
                     <div>最高连击: ${gameState.maxCombo}</div>
                 </div>
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="nextLevel(); this.parentElement.parentElement.parentElement.remove();" 
+                    <button onclick="handleNextLevel(this);" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
                                    cursor: pointer; font-size: 1rem;">
