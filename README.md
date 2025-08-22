@@ -2467,10 +2467,10 @@ function triggerSpecialBombEffect(row, col) {
         document.body.style.animation = 'screenShake 0.5s ease-in-out';
     }
     
-    // 消除5x5范围
+    // 消除3x3范围
     const affectedCells = [];
-    for (let r = Math.max(0, row - 2); r <= Math.min(7, row + 2); r++) {
-        for (let c = Math.max(0, col - 2); c <= Math.min(7, col + 2); c++) {
+    for (let r = Math.max(0, row - 1); r <= Math.min(7, row + 1); r++) {
+        for (let c = Math.max(0, col - 1); c <= Math.min(7, col + 1); c++) {
             if (gameState.grid[r][c]) {
                 affectedCells.push({ row: r, col: c });
             }
@@ -2563,16 +2563,28 @@ function triggerSpecialLightningEffect(row, col) {
     gameGrid.appendChild(lightning1);
     gameGrid.appendChild(lightning2);
     
-    // 消除X形范围
+   // 消除以🌪为中心的5格X形对角线
     const affectedCells = [];
+    const range = 2; // 每边延伸2格，总共5格
     
-    // 主对角线
-    for (let i = 0; i < 8; i++) {
-        for (let j = 0; j < 8; j++) {
-            if (i === j || i + j === 7) {
-                if (gameState.grid[i][j]) {
-                    affectedCells.push({ row: i, col: j });
-                }
+    // 左上到右下的对角线
+    for (let offset = -range; offset <= range; offset++) {
+        const r = row + offset;
+        const c = col + offset;
+        if (r >= 0 && r < 8 && c >= 0 && c < 8) {
+            if (gameState.grid[r][c]) {
+                affectedCells.push({ row: r, col: c });
+            }
+        }
+    }
+    
+    // 左下到右上的对角线
+    for (let offset = -range; offset <= range; offset++) {
+        const r = row + offset;
+        const c = col - offset;
+        if (r >= 0 && r < 8 && c >= 0 && c < 8) {
+            if (gameState.grid[r][c]) {
+                affectedCells.push({ row: r, col: c });
             }
         }
     }
