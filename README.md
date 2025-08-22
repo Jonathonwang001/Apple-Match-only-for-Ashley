@@ -291,7 +291,38 @@ Creating an interesting game only for my love, Ashley. Hope her happy everyday!
             0% { filter: brightness(1) drop-shadow(0 0 5px rgba(255, 215, 0, 0.5)); }
             100% { filter: brightness(1.2) drop-shadow(0 0 10px rgba(255, 215, 0, 0.8)); }
         }
+
         
+.special-bomb {
+    animation: bombPulse 1.5s ease-in-out infinite alternate;
+}
+
+        .special-lightning {
+            animation: lightningFlicker 1s ease-in-out infinite alternate;
+        }
+        
+        @keyframes bombPulse {
+            0% { 
+                filter: brightness(1) drop-shadow(0 0 8px rgba(255, 0, 0, 0.6));
+                transform: scale(1);
+            }
+            100% { 
+                filter: brightness(1.3) drop-shadow(0 0 15px rgba(255, 0, 0, 0.9));
+                transform: scale(1.1);
+            }
+        }
+        
+        @keyframes lightningFlicker {
+            0% { 
+                filter: brightness(1) drop-shadow(0 0 8px rgba(255, 255, 0, 0.6));
+                transform: rotate(-2deg);
+            }
+            100% { 
+                filter: brightness(1.4) drop-shadow(0 0 15px rgba(255, 255, 0, 0.9));
+                transform: rotate(2deg);
+            }
+        }
+
         .power-ups {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -747,7 +778,11 @@ const LEVELS = [
     { id: 9, name: "情人节", target: 5000, moves: 370, quote: "玫瑰花海，不及你的笑颜 🌹", special: true },
     { id: 10, name: "永恒承诺", target: 5600, moves: 360, quote: "此生此世，只想和你在一起 💍", special: true },
     { id: 11, name: "梦中情人", target: 6000, moves: 350, quote: "梦里梦外，都是你的身影 💭", special: false },
-    { id: 12, name: "心有灵犀", target: 6500, moves: 340, quote: "不用言语，我们就能读懂彼此 💫", special: false }
+    { id: 12, name: "心有灵犀", target: 6500, moves: 340, quote: "不用言语，我们就能读懂彼此 💫", special: false },
+    { id: 13, name: "甜蜜回忆", target: 7000, moves: 330, quote: "每一个回忆都是我们爱情的见证 📸", special: false },
+    { id: 14, name: "浪漫旅程", target: 7500, moves: 320, quote: "和你走过的每一处风景都成了诗 🗺️", special: false },
+    { id: 15, name: "幸福密码", target: 8000, moves: 310, quote: "你就是我幸福生活的全部密码 🔐", special: true },
+    { id: 16, name: "终极挑战", target: 9000, moves: 300, quote: "最终关卡：用爆炸的力量见证我们的爱！⚡💥", special: true }
 ];
 
 // 苹果类型定义 - 支持关卡渐进式增加
@@ -1264,6 +1299,16 @@ function createRandomApple() {
     const availableTypes = APPLE_TYPES.slice(0, availableTypeCount);
     const randomType = availableTypes[Math.floor(Math.random() * availableTypes.length)];
     
+    // 第16关特殊处理：添加爆炸水果
+    if (gameState.currentLevel === 16 && Math.random() < 0.08) {
+        const specialFruits = [
+            { type: 'bomb_fruit', emoji: '💥', class: 'special-bomb' },
+            { type: 'lightning_fruit', emoji: '⚡', class: 'special-lightning' }
+        ];
+        const special = specialFruits[Math.floor(Math.random() * specialFruits.length)];
+        return special;
+    }
+    
     return {
         type: randomType.type,
         emoji: randomType.emoji,
@@ -1391,6 +1436,19 @@ function bindCellEvents(cell, row, col) {
 // 处理单元格交互
 function handleCellInteraction(row, col) {
     const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+
+    // 检查是否点击了特殊水果
+    if (gameState.grid[row][col]) {
+        const fruit = gameState.grid[row][col];
+        if (fruit.type === 'bomb_fruit') {
+            triggerSpecialBombEffect(row, col);
+            return;
+        }
+        if (fruit.type === 'lightning_fruit') {
+            triggerSpecialLightningEffect(row, col);
+            return;
+        }
+    }
     
     // 如果有激活的道具
     if (gameState.activePowerUp) {
@@ -2375,6 +2433,186 @@ function createTimeEffect() {
     }, 1000);
 }
 
+
+// 特殊炸弹水果效果
+function triggerSpecialBombEffect(row, col) {
+    // 创建超级爆炸动画
+    const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+    if (cell) {
+        const explosion = document.createElement('div');
+        explosion.innerHTML = '💥';
+        explosion.style.cssText = `
+            position: absolute;
+            font-size: 4rem;
+            z-index: 300;
+            animation: superExplode 1.2s ease-out forwards;
+            pointer-events: none;
+        `;
+        cell.appendChild(explosion);
+        
+        // 添加震屏效果
+        document.body.style.animation = 'screenShake 0.5s ease-in-out';
+    }
+    
+    // 消除5x5范围
+    const affectedCells = [];
+    for (let r = Math.max(0, row - 2); r <= Math.min(7, row + 2); r++) {
+        for (let c = Math.max(0, col - 2); c <= Math.min(7, col + 2); c++) {
+            if (gameState.grid[r][c]) {
+                affectedCells.push({ row: r, col: c });
+            }
+        }
+    }
+    
+    // 添加爆炸样式
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes superExplode {
+            0% { transform: scale(0); opacity: 1; }
+            30% { transform: scale(2); opacity: 1; }
+            60% { transform: scale(3); opacity: 0.8; }
+            100% { transform: scale(4); opacity: 0; }
+        }
+        @keyframes screenShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    setTimeout(() => {
+        affectedCells.forEach(cell => {
+            createParticleEffect(cell.row, cell.col);
+            gameState.grid[cell.row][cell.col] = null;
+            
+            const cellElement = document.querySelector(`[data-row="${cell.row}"][data-col="${cell.col}"]`);
+            if (cellElement) {
+                cellElement.innerHTML = '';
+                cellElement.style.background = '#f0f0f0';
+            }
+        });
+        
+        const score = affectedCells.length * 30;
+        gameState.score += score;
+        showScoreAnimation(score, row, col);
+        
+        document.body.style.animation = '';
+        
+        setTimeout(() => {
+            dropCells();
+            setTimeout(() => {
+                fillEmptyCells();
+                checkForMatches();
+            }, 300);
+        }, 300);
+        
+        style.remove();
+    }, 800);
+    
+    showMessage('💥 超级爆炸！Ashley的力量无人能敌！');
+}
+
+// 特殊闪电水果效果
+function triggerSpecialLightningEffect(row, col) {
+    // 创建超级闪电动画
+    const gameGrid = document.getElementById('gameGrid');
+    
+    // X形闪电效果
+    const lightning1 = document.createElement('div');
+    lightning1.style.cssText = `
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, transparent 48%, #ffff00 49%, #ffffff 50%, #ffff00 51%, transparent 52%);
+        z-index: 200;
+        opacity: 0;
+        animation: superLightning 1.5s ease-out forwards;
+        pointer-events: none;
+    `;
+    
+    const lightning2 = document.createElement('div');
+    lightning2.style.cssText = `
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(-45deg, transparent 48%, #ffff00 49%, #ffffff 50%, #ffff00 51%, transparent 52%);
+        z-index: 200;
+        opacity: 0;
+        animation: superLightning 1.5s ease-out forwards;
+        pointer-events: none;
+    `;
+    
+    gameGrid.appendChild(lightning1);
+    gameGrid.appendChild(lightning2);
+    
+    // 消除X形范围
+    const affectedCells = [];
+    
+    // 主对角线
+    for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+            if (i === j || i + j === 7) {
+                if (gameState.grid[i][j]) {
+                    affectedCells.push({ row: i, col: j });
+                }
+            }
+        }
+    }
+    
+    // 添加闪电样式
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes superLightning {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            20% { opacity: 0.3; }
+            30% { opacity: 1; }
+            40% { opacity: 0.2; }
+            50% { opacity: 1; }
+            60% { opacity: 0.4; }
+            70% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    setTimeout(() => {
+        affectedCells.forEach(cell => {
+            createParticleEffect(cell.row, cell.col);
+            gameState.grid[cell.row][cell.col] = null;
+            
+            const cellElement = document.querySelector(`[data-row="${cell.row}"][data-col="${cell.col}"]`);
+            if (cellElement) {
+                cellElement.innerHTML = '';
+                cellElement.style.background = '#f0f0f0';
+            }
+        });
+        
+        const score = affectedCells.length * 25;
+        gameState.score += score;
+        showScoreAnimation(score, row, col);
+        
+        setTimeout(() => {
+            dropCells();
+            setTimeout(() => {
+                fillEmptyCells();
+                checkForMatches();
+            }, 300);
+        }, 300);
+        
+        lightning1.remove();
+        lightning2.remove();
+        style.remove();
+    }, 1000);
+    
+    showMessage('⚡ X形闪电风暴！Ashley的电力满满！');
+}
+    
 // 更新道具UI
 function updatePowerUpUI() {
     Object.keys(gameState.powerUps).forEach(powerType => {
