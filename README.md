@@ -2753,16 +2753,16 @@ function showLevelComplete(success) {
                     <div>最高连击: ${gameState.maxCombo}</div>
                 </div>
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="var btn = this; btn.disabled = true; btn.parentElement.parentElement.parentElement.remove(); setTimeout(function(){ nextLevel(); }, 50);" 
+                    <button onclick="handleNextLevel(this)" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
-                                   cursor: pointer; font-size: 1rem;">
+                                   cursor: pointer; font-size: 1rem; font-weight: bold;">
                         ${gameState.currentLevel < LEVELS.length ? '下一关 ▶️' : '返回选关 🏠'}
                     </button>
-                    <button onclick="var btn = this; btn.disabled = true; btn.parentElement.parentElement.parentElement.remove(); setTimeout(function(){ nextLevel(); }, 50);" 
+                    <button onclick="handleRestartLevel(this)" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
-                                   cursor: pointer; font-size: 1rem;">
+                                   cursor: pointer; font-size: 1rem; font-weight: bold;">
                         重新挑战 🔄
                     </button>
                 </div>
@@ -2773,7 +2773,7 @@ function showLevelComplete(success) {
         createCelebrationEffect();
         
     } else {
-        // 失败界面
+        // 失败界面（保持不变）
         overlay.innerHTML = `
             <div style="background: linear-gradient(135deg, #f44336, #d32f2f); 
                         color: white; padding: 2rem; border-radius: 20px; text-align: center; 
@@ -2787,22 +2787,23 @@ function showLevelComplete(success) {
                     <div>差距: ${gameState.target - gameState.score}</div>
                 </div>
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="restartLevel(); this.parentElement.parentElement.parentElement.remove();" 
+                    <button onclick="handleRestartLevel(this)" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
-                                   cursor: pointer; font-size: 1rem;">
+                                   cursor: pointer; font-size: 1rem; font-weight: bold;">
                         重新挑战 🔄
                     </button>
-                    <button onclick="backToLevelSelect(); this.parentElement.parentElement.parentElement.remove();" 
+                    <button onclick="handleBackToLevelSelect(this)" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
-                                   cursor: pointer; font-size: 1rem;">
+                                   cursor: pointer; font-size: 1rem; font-weight: bold;">
                         返回选关 ⬅️
                     </button>
                 </div>
             </div>
         `;
     }
+
     
     document.body.appendChild(overlay);
     
@@ -4071,6 +4072,71 @@ document.addEventListener('visibilitychange', function() {
     }
 });
 
+// 处理下一关按钮点击
+function handleNextLevel(button) {
+    // 禁用按钮防止重复点击
+    button.disabled = true;
+    button.textContent = '加载中...';
+    
+    // 移除弹窗
+    const overlay = button.closest('div[style*="position: fixed"]');
+    if (overlay) {
+        overlay.remove();
+    }
+    
+    // 延迟执行下一关逻辑
+    setTimeout(() => {
+        if (gameState.currentLevel < LEVELS.length) {
+            startLevel(gameState.currentLevel + 1);
+        } else {
+            backToLevelSelect();
+            showMessage('🎉 恭喜完成所有关卡！');
+        }
+    }, 100);
+}
+
+// 处理重新挑战按钮点击
+function handleRestartLevel(button) {
+    // 禁用按钮防止重复点击
+    button.disabled = true;
+    button.textContent = '重新开始...';
+    
+    // 移除弹窗
+    const overlay = button.closest('div[style*="position: fixed"]');
+    if (overlay) {
+        overlay.remove();
+    }
+    
+    // 延迟执行重启逻辑
+    setTimeout(() => {
+        if (gameState.currentLevel === 0) {
+            startLevel(0);
+        } else {
+            startLevel(gameState.currentLevel);
+        }
+        resumeGame();
+    }, 100);
+}
+
+// 处理返回选关按钮点击
+function handleBackToLevelSelect(button) {
+    // 禁用按钮防止重复点击
+    button.disabled = true;
+    button.textContent = '返回中...';
+    
+    // 移除弹窗
+    const overlay = button.closest('div[style*="position: fixed"]');
+    if (overlay) {
+        overlay.remove();
+    }
+    
+    // 延迟执行返回逻辑
+    setTimeout(() => {
+        backToLevelSelect();
+    }, 100);
+}
+
+    
 </script>
 </body>
 </html>
