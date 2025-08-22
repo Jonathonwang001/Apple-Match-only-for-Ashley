@@ -2753,19 +2753,18 @@ function showLevelComplete(success) {
                     <div>最高连击: ${gameState.maxCombo}</div>
                 </div>
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="const overlay = this.closest('[style*=\"position: fixed\"]'); if(overlay) overlay.remove(); setTimeout(nextLevel, 50);" 
+                    <button onclick="this.parentElement.parentElement.parentElement.remove(); setTimeout(nextLevel, 10);" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
                                    cursor: pointer; font-size: 1rem;">
                         ${gameState.currentLevel < LEVELS.length ? '下一关 ▶️' : '返回选关 🏠'}
                     </button>
-                    <button onclick="const overlay = this.closest('[style*=\"position: fixed\"]'); if(overlay) overlay.remove(); setTimeout(restartLevel, 50);" 
+                    <button onclick="this.parentElement.parentElement.parentElement.remove(); setTimeout(restartLevel, 10);" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
                                    cursor: pointer; font-size: 1rem;">
                         重新挑战 🔄
                     </button>
-
                 </div>
             </div>
         `;
@@ -2788,18 +2787,18 @@ function showLevelComplete(success) {
                     <div>差距: ${gameState.target - gameState.score}</div>
                 </div>
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                   <button onclick="const overlay = this.closest('[style*=\"position: fixed\"]'); if(overlay) overlay.remove(); setTimeout(restartLevel, 50);" 
-                        style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
-                               color: white; border: 2px solid white; border-radius: 25px; 
-                               cursor: pointer; font-size: 1rem;">
-                    重新挑战 🔄
-                </button>
-                <button onclick="const overlay = this.closest('[style*=\"position: fixed\"]'); if(overlay) overlay.remove(); setTimeout(backToLevelSelect, 50);" 
-                        style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
-                               color: white; border: 2px solid white; border-radius: 25px; 
-                               cursor: pointer; font-size: 1rem;">
-                    返回选关 ⬅️
-                </button>
+                    <button onclick="restartLevel(); this.parentElement.parentElement.parentElement.remove();" 
+                            style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
+                                   color: white; border: 2px solid white; border-radius: 25px; 
+                                   cursor: pointer; font-size: 1rem;">
+                        重新挑战 🔄
+                    </button>
+                    <button onclick="backToLevelSelect(); this.parentElement.parentElement.parentElement.remove();" 
+                            style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
+                                   color: white; border: 2px solid white; border-radius: 25px; 
+                                   cursor: pointer; font-size: 1rem;">
+                        返回选关 ⬅️
+                    </button>
                 </div>
             </div>
         `;
