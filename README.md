@@ -1841,13 +1841,13 @@ function fillEmptyCells() {
             } else {
                 gameState.combo = 0;
                 
-                // 小概率触发幸运重排增加combo机会
-                if (Math.random() < 0.08) {
+                // 小概率触发幸运重排增加combo机会（初期关卡禁用）
+                if (gameState.currentLevel > 4 && Math.random() < 0.08) {
                     setTimeout(() => {
                         triggerLuckyReshuffle();
                     }, 200);
                 }
-                
+          
                 checkLevelComplete();
                 checkAchievements();
             }
@@ -3364,13 +3364,13 @@ function generateSmartApple(row, col) {
     let smartGenerationChance = 0.45; // 基础概率45%
     
     if (gameState.combo >= 3) {
-        smartGenerationChance = 0.60; // 3连击后提升到60%
+        smartGenerationChance = 0.50; // 3连击后提升到50%
     }
     if (gameState.combo >= 5) {
         smartGenerationChance = 0.75; // 5连击后提升到75%
     }
     if (gameState.combo >= 7) {
-        smartGenerationChance = 0.85; // 7连击后提升到85%
+        smartGenerationChance = 0.15; // 7连击后提升到85%
     }
     
     // 智能生成逻辑 - 增强连击机会
@@ -3453,11 +3453,29 @@ function generateSmartApple(row, col) {
         }
     }
     
-    // 增加附近相似苹果的概率 - 根据连击数动态调整
+    // 增加附近相似苹果的概率 - 根据连击数和关卡动态调整
     let nearbyChance = 0.25; // 基础25%
-    if (gameState.combo >= 3) nearbyChance = 0.40; // 连击时提升到40%
-    if (gameState.combo >= 5) nearbyChance = 0.55; // 高连击时提升到55%
     
+    // 初期关卡特殊处理，防止无限连击
+    if (gameState.currentLevel <= 2) {
+        nearbyChance = gameState.combo >= 1 ? 0.10 : 0.25; // 前2关连击后降至10%
+    } else if (gameState.currentLevel <= 4) {
+        nearbyChance = gameState.combo >= 2 ? 0.15 : 0.25; // 前4关连击2次后降至15%
+    } else {
+        // 后期关卡保持原有逻辑
+        if (gameState.combo >= 3) nearbyChance = 0.40;
+        if (gameState.combo >= 5) nearbyChance = 0.25;
+    }
+
+
+    // 智能生成逻辑 - 增强连击机会（初期关卡降低概率）
+    let adjustedChance = smartGenerationChance;
+    if (gameState.currentLevel <= 4 && gameState.combo >= 2) {
+        adjustedChance *= 0.3; // 前4关连击2次后大幅降低智能生成概率
+    } else if (gameState.currentLevel <= 2 && gameState.combo >= 1) {
+        adjustedChance *= 0.5; // 前2关连击1次后就降低概率
+    }
+
     if (Math.random() < nearbyChance) {
         const nearbyTypes = [];
         
