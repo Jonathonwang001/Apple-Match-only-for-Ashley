@@ -2606,55 +2606,37 @@ function createCelebrationEffect() {
 }
 
 // 防止双击的安全处理函数
-function handleNextLevel(button) {
-    // 禁用按钮防止重复点击
+unction handleNextLevel(button) {
     button.disabled = true;
     button.style.opacity = '0.5';
-    button.style.cursor = 'not-allowed';
-    
-    // 移除弹窗
     const overlay = button.closest('[style*="position: fixed"]');
     if (overlay) {
         overlay.remove();
     }
-    
-    // 延迟执行下一关，确保弹窗已关闭
     setTimeout(() => {
         nextLevel();
     }, 100);
 }
 
 function handleRestartLevel(button) {
-    // 禁用按钮防止重复点击
     button.disabled = true;
     button.style.opacity = '0.5';
-    button.style.cursor = 'not-allowed';
-    
-    // 移除弹窗
     const overlay = button.closest('[style*="position: fixed"]');
     if (overlay) {
         overlay.remove();
     }
-    
-    // 延迟执行重新开始
     setTimeout(() => {
         restartLevel();
     }, 100);
 }
-// 防止双击的安全处理函数
+
 function handleBackToLevelSelect(button) {
-    // 禁用按钮防止重复点击
     button.disabled = true;
     button.style.opacity = '0.5';
-    button.style.cursor = 'not-allowed';
-    
-    // 移除弹窗
     const overlay = button.closest('[style*="position: fixed"]');
     if (overlay) {
         overlay.remove();
     }
-    
-    // 延迟执行返回选关
     setTimeout(() => {
         backToLevelSelect();
     }, 100);
