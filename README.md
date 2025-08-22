@@ -1196,7 +1196,7 @@ function generateLevelButtons() {
         const button = document.createElement('button');
         button.className = `level-button ${level.special ? 'special' : ''}`;
         button.innerHTML = `
-            <div style="font-size: 1.2em;">${level.special ? '💎' : '🍎'}</div>
+            <div style="font-size: 1.2em;">${level.special ? '🧜🏼‍♀️' : '❣️'}</div>
             <div>${level.name}</div>
             <div class="love-quote">"${level.quote}"</div>
         `;
