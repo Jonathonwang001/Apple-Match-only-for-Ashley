@@ -2450,119 +2450,116 @@ function checkLevelComplete() {
 }
 
 // 显示关卡完成界面
-function showLevelComplete(isWin) {
-    // 移除可能存在的旧弹窗
-    const existingModal = document.getElementById('level-complete-modal');
-    if (existingModal) {
-        existingModal.remove();
-    }
-    
-    const modal = document.createElement('div');
-    modal.id = 'level-complete-modal';
-    modal.style.cssText = `
+function showLevelComplete(success) {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0,0,0,0.8);
+        background: rgba(0, 0, 0, 0.8);
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
         z-index: 1000;
-        animation: fadeIn 0.3s ease-out;
+        animation: fadeIn 0.5s ease-out;
     `;
     
-    const content = document.createElement('div');
-    content.style.cssText = `
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 3rem;
-        border-radius: 20px;
-        text-align: center;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        transform: scale(0.9);
-        animation: scaleIn 0.3s ease-out forwards;
-        max-width: 400px;
-        width: 90%;
-    `;
+    const currentLevel = LEVELS.find(l => l.id === gameState.currentLevel);
     
-    if (isWin) {
-        content.innerHTML = `
-            <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
-            <h2 style="color: white; margin: 0 0 1rem 0; font-size: 2rem;">恭喜过关！</h2>
-            <p style="color: rgba(255,255,255,0.9); margin: 0 0 2rem 0; font-size: 1.2rem;">
-                步数: ${gameState.moves} | 时间: ${Math.floor(gameState.time / 60)}:${String(gameState.time % 60).padStart(2, '0')}
-            </p>
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                <button id="next-level-btn" style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); color: white; border: 2px solid white; border-radius: 25px; cursor: pointer; font-size: 1rem; transition: all 0.3s;">
-                    ${gameState.currentLevel < LEVELS.length ? '下一关 ▶️' : '返回选关 🏠'}
-                </button>
-                <button id="restart-level-btn" style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); color: white; border: 2px solid white; border-radius: 25px; cursor: pointer; font-size: 1rem; transition: all 0.3s;">
-                    重新挑战 🔄
-                </button>
+    if (success) {
+        // 胜利界面
+        overlay.innerHTML = `
+            <div style="background: linear-gradient(135deg, #4CAF50, #45a049); 
+                        color: white; padding: 2rem; border-radius: 20px; text-align: center; 
+                        max-width: 90vw; animation: successBounce 0.6s ease-out;">
+                <h2 style="margin-bottom: 1rem;">🎉 关卡完成！</h2>
+                <div style="font-size: 1.2rem; margin-bottom: 1rem;">
+                    ${currentLevel ? `"${currentLevel.quote}"` : ''}
+                </div>
+                <div style="margin-bottom: 2rem;">
+                    <div>得分: ${gameState.score} / ${gameState.target}</div>
+                    <div>剩余步数: ${gameState.moves}</div>
+                    <div>最高连击: ${gameState.maxCombo}</div>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="nextLevel(); this.parentElement.parentElement.parentElement.remove();" 
+                            style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
+                                   color: white; border: 2px solid white; border-radius: 25px; 
+                                   cursor: pointer; font-size: 1rem;">
+                        ${gameState.currentLevel < LEVELS.length ? '下一关 ▶️' : '返回选关 🏠'}
+                    </button>
+                    <button onclick="restartLevel(); this.parentElement.parentElement.parentElement.remove();" 
+                            style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
+                                   color: white; border: 2px solid white; border-radius: 25px; 
+                                   cursor: pointer; font-size: 1rem;">
+                        重新挑战 🔄
+                    </button>
+                </div>
             </div>
         `;
+        
+        // 庆祝效果
+        createCelebrationEffect();
+        
     } else {
-        content.innerHTML = `
-            <div style="font-size: 4rem; margin-bottom: 1rem;">😅</div>
-            <h2 style="color: white; margin: 0 0 1rem 0; font-size: 2rem;">再试试吧！</h2>
-            <p style="color: rgba(255,255,255,0.9); margin: 0 0 2rem 0; font-size: 1.2rem;">
-                不要放弃，你一定可以的！
-            </p>
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                <button id="restart-level-btn" style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); color: white; border: 2px solid white; border-radius: 25px; cursor: pointer; font-size: 1rem; transition: all 0.3s;">
-                    重新挑战 🔄
-                </button>
-                <button id="back-to-select-btn" style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); color: white; border: 2px solid white; border-radius: 25px; cursor: pointer; font-size: 1rem; transition: all 0.3s;">
-                    返回选关 🏠
-                </button>
+        // 失败界面
+        overlay.innerHTML = `
+            <div style="background: linear-gradient(135deg, #f44336, #d32f2f); 
+                        color: white; padding: 2rem; border-radius: 20px; text-align: center; 
+                        max-width: 90vw;">
+                <h2 style="margin-bottom: 1rem;">😔 挑战失败</h2>
+                <div style="font-size: 1.1rem; margin-bottom: 1rem;">
+                    别灰心，再试一次！
+                </div>
+                <div style="margin-bottom: 2rem;">
+                    <div>得分: ${gameState.score} / ${gameState.target}</div>
+                    <div>差距: ${gameState.target - gameState.score}</div>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="restartLevel(); this.parentElement.parentElement.parentElement.remove();" 
+                            style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
+                                   color: white; border: 2px solid white; border-radius: 25px; 
+                                   cursor: pointer; font-size: 1rem;">
+                        重新挑战 🔄
+                    </button>
+                    <button onclick="backToLevelSelect(); this.parentElement.parentElement.parentElement.remove();" 
+                            style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
+                                   color: white; border: 2px solid white; border-radius: 25px; 
+                                   cursor: pointer; font-size: 1rem;">
+                        返回选关 ⬅️
+                    </button>
+                </div>
             </div>
         `;
     }
     
-    modal.appendChild(content);
-    document.body.appendChild(modal);
+    document.body.appendChild(overlay);
     
-    // 使用事件委托和延迟执行确保按钮点击正常工作
-    setTimeout(() => {
-        const nextBtn = document.getElementById('next-level-btn');
-        const restartBtn = document.getElementById('restart-level-btn');
-        const backBtn = document.getElementById('back-to-select-btn');
-        
-        if (nextBtn) {
-            nextBtn.addEventListener('click', function() {
-                modal.remove();
-                setTimeout(() => {
-                    nextLevel();
-                }, 100);
-            });
+    // 添加动画样式
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
-        
-        if (restartBtn) {
-            restartBtn.addEventListener('click', function() {
-                modal.remove();
-                setTimeout(() => {
-                    restartLevel();
-                }, 100);
-            });
+        @keyframes successBounce {
+            0% { transform: scale(0.3); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
-        
-        if (backBtn) {
-            backBtn.addEventListener('click', function() {
-                modal.remove();
-                setTimeout(() => {
-                    showLevelSelect();
-                }, 100);
-            });
-        }
-        
-        // 点击背景关闭弹窗
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                modal.remove();
-            }
-        });
-    }, 50);
+    `;
+    document.head.appendChild(style);
+    
+    setTimeout(() => style.remove(), 2000);
+    
+    // 更新游戏统计
+    gameState.gamesPlayed++;
+    if (success) {
+        gameState.totalScore += gameState.score;
+    }
+    saveGameData();
 }
 
 // 创建庆祝效果
