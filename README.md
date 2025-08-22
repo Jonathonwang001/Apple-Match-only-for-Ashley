@@ -1300,25 +1300,25 @@ function createRandomApple() {
     const randomType = availableTypes[Math.floor(Math.random() * availableTypes.length)];
     
     // 第15-16关都有特殊水果，但概率不同
-    if (gameState.currentLevel === 15 && Math.random() < 0.05) {  // 第15关5%概率
+    if (gameState.currentLevel === 15) {  // 第15关5%概率
         const bombChance = 0.06;      // 💥炸弹6%概率
-        const lightningChance = 0.04; // ⚡闪电4%概率
+        const lightningChance = 0.04; // 🌪龙卷风4%概率
         
         const random = Math.random();
         if (random < bombChance) {
             return { type: 'bomb_fruit', emoji: '💥', class: 'special-bomb' };
         } else if (random < bombChance + lightningChance) {
-            return { type: 'lightning_fruit', emoji: '⚡', class: 'special-lightning' };
+            return { type: 'lightning_fruit', emoji: '🌪', class: 'special-lightning' };
         }
-    } else if (gameState.currentLevel === 16 && Math.random() < 0.10) {  // 第16关10%概率
+    } else if (gameState.currentLevel === 16) {  // 第16关10%概率
         const bombChance = 0.06;      // 💥炸弹6%概率
-        const lightningChance = 0.04; // ⚡闪电4%概率
+        const lightningChance = 0.04; // 🌪龙卷风4%概率
         
         const random = Math.random();
         if (random < bombChance) {
             return { type: 'bomb_fruit', emoji: '💥', class: 'special-bomb' };
         } else if (random < bombChance + lightningChance) {
-            return { type: 'lightning_fruit', emoji: '⚡', class: 'special-lightning' };
+            return { type: 'lightning_fruit', emoji: '🌪', class: 'special-lightning' };
         }
     }
     
