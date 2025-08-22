@@ -1233,18 +1233,24 @@ function createRandomApple() {
         availableTypeCount = APPLE_TYPES.length;
     } else if (gameState.currentLevel <= 2) {
         // 第1-2关：4种基础苹果
+        availableTypeCount = 5;
+     } else if (gameState.currentLevel <= 3) {
+        // 第1-2关：4种基础苹果
         availableTypeCount = 6;
     } else if (gameState.currentLevel <= 4) {
         // 第3-4关：5种苹果
-        availableTypeCount = 5;
+        availableTypeCount = 6;
     } else if (gameState.currentLevel <= 6) {
         // 第5-6关：6种苹果
-        availableTypeCount = 6;
+        availableTypeCount = 7;
     } else if (gameState.currentLevel <= 8) {
         // 第7-8关：7种苹果
         availableTypeCount = 7;
     } else if (gameState.currentLevel <= 10) {
         // 第9-10关：8种苹果
+        availableTypeCount = 8;
+    } else if (gameState.currentLevel <= 11) {
+        // 第11-12关：9种苹果
         availableTypeCount = 8;
     } else if (gameState.currentLevel <= 12) {
         // 第11-12关：9种苹果
