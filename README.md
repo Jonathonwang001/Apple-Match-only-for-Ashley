@@ -2484,13 +2484,13 @@ function showLevelComplete(success) {
                     <div>最高连击: ${gameState.maxCombo}</div>
                 </div>
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="var modal = this.parentElement.parentElement.parentElement; nextLevel(); setTimeout(() => modal.remove(), 10);" 
+                    <button onclick="nextLevel(); this.parentElement.parentElement.parentElement.remove();" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
                                    cursor: pointer; font-size: 1rem;">
                         ${gameState.currentLevel < LEVELS.length ? '下一关 ▶️' : '返回选关 🏠'}
                     </button>
-                    <button onclick="var modal = this.parentElement.parentElement.parentElement; restartLevel(); setTimeout(() => modal.remove(), 10);" 
+                    <button onclick="restartLevel(); this.parentElement.parentElement.parentElement.remove();" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
                                    cursor: pointer; font-size: 1rem;">
@@ -3036,13 +3036,13 @@ function showAchievements() {
             </div>
             
             <div style="display: flex; justify-content: center; gap: 1rem;">
-                <button onclick="this.parentElement.parentElement.parentElement.remove();" 
+                <button onclick="event.stopPropagation(); var modal = this.parentElement.parentElement.parentElement; modal.style.display = 'none'; nextLevel(); setTimeout(() => modal.remove(), 100);" 
                         style="padding: 0.8rem 1.5rem; background: rgba(255,255,255,0.2); 
                                color: white; border: 2px solid white; border-radius: 25px; 
                                cursor: pointer;">
                     关闭
                 </button>
-                <button onclick="resetAchievements(); this.parentElement.parentElement.parentElement.remove();" 
+                <button onclick="event.stopPropagation(); var modal = this.parentElement.parentElement.parentElement; modal.style.display = 'none'; restartLevel(); setTimeout(() => modal.remove(), 100);" 
                         style="padding: 0.8rem 1.5rem; background: rgba(255,0,0,0.3); 
                                color: white; border: 2px solid #ff6b6b; border-radius: 25px; 
                                cursor: pointer;">
