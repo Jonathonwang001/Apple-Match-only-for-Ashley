@@ -1233,22 +1233,22 @@ function createRandomApple() {
         availableTypeCount = APPLE_TYPES.length;
     } else if (gameState.currentLevel <= 2) {
         // 第1-2关：4种基础苹果
-        availableTypeCount = 6;
+        availableTypeCount = 4;
     } else if (gameState.currentLevel <= 4) {
         // 第3-4关：5种苹果
-        availableTypeCount = 7;
+        availableTypeCount = 5;
     } else if (gameState.currentLevel <= 6) {
         // 第5-6关：6种苹果
-        availableTypeCount = 7;
+        availableTypeCount = 6;
     } else if (gameState.currentLevel <= 8) {
         // 第7-8关：7种苹果
-        availableTypeCount = 8;
+        availableTypeCount = 7;
     } else if (gameState.currentLevel <= 10) {
         // 第9-10关：8种苹果
-        availableTypeCount = 9;
+        availableTypeCount = 8;
     } else if (gameState.currentLevel <= 12) {
         // 第11-12关：9种苹果
-        availableTypeCount = 11;
+        availableTypeCount = 9;
     } else {
         // 更高关卡：使用所有类型
         availableTypeCount = APPLE_TYPES.length;
@@ -2484,13 +2484,13 @@ function showLevelComplete(success) {
                     <div>最高连击: ${gameState.maxCombo}</div>
                 </div>
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="setTimeout(() => { this.parentElement.parentElement.parentElement.remove(); nextLevel(); }, 50);" 
+                    <button onclick="var modal = this.parentElement.parentElement.parentElement; nextLevel(); setTimeout(() => modal.remove(), 10);" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
                                    cursor: pointer; font-size: 1rem;">
                         ${gameState.currentLevel < LEVELS.length ? '下一关 ▶️' : '返回选关 🏠'}
                     </button>
-                    <button onclick="setTimeout(() => { this.parentElement.parentElement.parentElement.remove(); restartLevel(); }, 50);" 
+                    <button onclick="var modal = this.parentElement.parentElement.parentElement; restartLevel(); setTimeout(() => modal.remove(), 10);" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
                                    cursor: pointer; font-size: 1rem;">
