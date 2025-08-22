@@ -2484,13 +2484,13 @@ function showLevelComplete(success) {
                     <div>最高连击: ${gameState.maxCombo}</div>
                 </div>
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="nextLevel(); this.parentElement.parentElement.parentElement.remove();" 
+                    <button onclick="setTimeout(() => { this.parentElement.parentElement.parentElement.remove(); nextLevel(); }, 50);" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
                                    cursor: pointer; font-size: 1rem;">
                         ${gameState.currentLevel < LEVELS.length ? '下一关 ▶️' : '返回选关 🏠'}
                     </button>
-                    <button onclick="restartLevel(); this.parentElement.parentElement.parentElement.remove();" 
+                    <button onclick="setTimeout(() => { this.parentElement.parentElement.parentElement.remove(); restartLevel(); }, 50);" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
                                    cursor: pointer; font-size: 1rem;">
