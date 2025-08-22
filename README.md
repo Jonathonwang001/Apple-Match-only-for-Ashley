@@ -4,7 +4,7 @@ Creating an interesting game only for my love, Ashley. Hope her happy everyday!
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>苹果消消乐 - 献给最爱的Ashley</title>
+    <title>水果消消乐 - 献给最爱的Ashley</title>
     <style>
         * {
             margin: 0;
@@ -581,7 +581,7 @@ Creating an interesting game only for my love, Ashley. Hope her happy everyday!
     
     <!-- 主菜单 -->
     <div class="main-menu" id="mainMenu">
-        <h1 class="game-title">🍎 苹果消消乐</h1>
+        <h1 class="game-title">🍎 水果消消乐</h1>
         <p class="subtitle">献给最爱的Ashley ❤️</p>
         <div class="menu-buttons">
             <button class="menu-btn" onclick="showLevelSelect()">开始游戏 🎮</button>
@@ -807,7 +807,7 @@ const ACHIEVEMENTS = [
     { id: 'first_match', name: '初次消除', desc: '完成第一次消除', icon: '🎯' },
     { id: 'combo_master', name: '连击高手', desc: '达成10连击', icon: '⚡' },
     { id: 'score_hunter', name: '分数猎人', desc: '单局得分超过5000', icon: '🏆' },
-    { id: 'perfect_level', name: '完美通关', desc: '剩余步数≥10通关', icon: '💎' },
+    { id: 'perfect_level', name: '完美通关', desc: '剩余步数≥200通关', icon: '💎' },
     { id: 'power_master', name: '道具大师', desc: '使用所有类型道具', icon: '🎮' },
     { id: 'ashley_special', name: '最爱的Ashley', desc: '专属成就：为爱而战', icon: '👑' },
     { id: 'love_master', name: '爱情达人', desc: '完成所有特殊关卡', icon: '💕' }
@@ -1237,12 +1237,12 @@ function startLevel(levelId) {
         gameState.moves = level.moves;
         // 重置道具
         gameState.powerUps = {
-            bomb: 30,
-            lightning: 30,
-            rainbow: 20,
-            hammer: 50,
-            shuffle: 20,
-            time: 20
+            bomb: 40,
+            lightning: 40,
+            rainbow: 40,
+            hammer: 40,
+            shuffle: 40,
+            time: 40
         };
     }
     
@@ -2880,7 +2880,7 @@ function checkAchievements() {
         newAchievements.push('first_match');
     }
     
-    if (gameState.maxCombo >= 5 && !gameState.achievements.has('combo_master')) {
+    if (gameState.maxCombo >= 10 && !gameState.achievements.has('combo_master')) {
         newAchievements.push('combo_master');
     }
     
@@ -2888,13 +2888,13 @@ function checkAchievements() {
         newAchievements.push('score_hunter');
     }
     
-    if (gameState.moves >= 10 && gameState.score >= gameState.target && !gameState.achievements.has('perfect_level')) {
+    if (gameState.moves >= 200 && gameState.score >= gameState.target && !gameState.achievements.has('perfect_level')) {
         newAchievements.push('perfect_level');
         gameState.perfectGames++;
     }
     
     // 检查是否使用过所有道具
-    const usedAllPowerUps = Object.values(gameState.powerUps).every(count => count < 3);
+    const usedAllPowerUps = Object.values(gameState.powerUps).every(count => count < 40);
     if (usedAllPowerUps && !gameState.achievements.has('power_master')) {
         newAchievements.push('power_master');
     }
@@ -3502,16 +3502,16 @@ function showGameInstructions() {
                 <h3 style="margin-bottom: 1rem; color: #ffd700;"> 道具详解</h3>
                 <div style="display: grid; grid-template-columns: auto 1fr; gap: 0.8rem; align-items: center;">
                     <div style="font-size: 1.5rem;">💥</div>
-                    <div><strong>炸弹:</strong> 消除点击位置周围3×3范围内的所有苹果</div>
+                    <div><strong>炸弹:</strong> 消除点击位置周围3×3范围内的所有水果</div>
                     
                     <div style="font-size: 1.5rem;">⚡</div>
-                    <div><strong>闪电:</strong> 消除点击位置的整行和整列苹果</div>
+                    <div><strong>闪电:</strong> 消除点击位置的整行和整列水果</div>
                     
                     <div style="font-size: 1.5rem;">🌈</div>
-                    <div><strong>彩虹:</strong> 消除与点击苹果相同类型的所有苹果</div>
+                    <div><strong>彩虹:</strong> 消除与点击水果相同类型的所有水果</div>
                     
                     <div style="font-size: 1.5rem;">🔨</div>
-                    <div><strong>锤子:</strong> 直接敲掉一个苹果</div>
+                    <div><strong>锤子:</strong> 直接敲掉一个水果</div>
                     
                     <div style="font-size: 1.5rem;">🔄</div>
                     <div><strong>洗牌:</strong> 重新随机排列整个棋盘</div>
@@ -3519,7 +3519,7 @@ function showGameInstructions() {
                     <div style="font-size: 1.5rem;">⏰</div>
                     <div><strong>时光:</strong> 增加5步额外操作机会</div>
                                         
-                    <div style="font-size: 1.5rem;">【特殊关卡随机道具】🌪</div>
+                    <div style="font-size: 1.5rem;">🌪</div>
                     <div><strong>时光:</strong> X型风暴卷走一切，Ashley的能量满满</div>
                 </div>
             </div>
@@ -3632,6 +3632,9 @@ function generateSmartApple(row, col) {
         smartGenerationChance = 0.75; // 5连击后提升到75%
     }
     if (gameState.combo >= 7) {
+        smartGenerationChance = 0.85; // 7连击后提升到85%
+    }
+    if (gameState.combo >= 10) {
         smartGenerationChance = 0.15; // 7连击后提升到85%
     }
     
