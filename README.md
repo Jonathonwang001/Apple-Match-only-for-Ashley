@@ -2753,10 +2753,10 @@ function showLevelComplete(success) {
                     <div>最高连击: ${gameState.maxCombo}</div>
                 </div>
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="this.parentElement.parentElement.parentElement.remove(); setTimeout(nextLevel, 10);" 
+                    <button onclick="handleNextLevel(this);" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
-                                   cursor: pointer; font-size: 1rem;">
+                                   cursor: pointer; font-size: 1rem; touch-action: manipulation;">
                         ${gameState.currentLevel < LEVELS.length ? '下一关 ▶️' : '返回选关 🏠'}
                     </button>
                     <button onclick="this.parentElement.parentElement.parentElement.remove(); setTimeout(restartLevel, 10);" 
@@ -2873,6 +2873,26 @@ function createCelebrationEffect() {
     
     setTimeout(() => style.remove(), 8000);
 }
+// 处理下一关按钮点击
+function handleNextLevel(button) {
+    // 防止重复点击
+    if (button.disabled) return;
+    button.disabled = true;
+    button.style.opacity = '0.5';
+    
+    // 关闭弹窗
+    const overlay = button.closest('[style*="position: fixed"]');
+    if (overlay) {
+        overlay.remove();
+    }
+    
+    // 延迟执行下一关逻辑
+    setTimeout(() => {
+        nextLevel();
+    }, 100);
+}
+
+    
 // 下一关
 function nextLevel() {
     if (gameState.currentLevel < LEVELS.length) {
