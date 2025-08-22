@@ -2518,13 +2518,13 @@ function showLevelComplete(success) {
                     <div>差距: ${gameState.target - gameState.score}</div>
                 </div>
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="restartLevel(); this.parentElement.parentElement.parentElement.remove();" 
+                    <button onclick="handleRestartLevel(this);" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
                                    cursor: pointer; font-size: 1rem;">
                         重新挑战 🔄
                     </button>
-                    <button onclick="backToLevelSelect(); this.parentElement.parentElement.parentElement.remove();" 
+                    <button onclick="handleBackToLevelSelect(this);" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
                                    cursor: pointer; font-size: 1rem;">
@@ -2604,6 +2604,62 @@ function createCelebrationEffect() {
     
     setTimeout(() => style.remove(), 8000);
 }
+
+// 防止双击的安全处理函数
+function handleNextLevel(button) {
+    // 禁用按钮防止重复点击
+    button.disabled = true;
+    button.style.opacity = '0.5';
+    button.style.cursor = 'not-allowed';
+    
+    // 移除弹窗
+    const overlay = button.closest('[style*="position: fixed"]');
+    if (overlay) {
+        overlay.remove();
+    }
+    
+    // 延迟执行下一关，确保弹窗已关闭
+    setTimeout(() => {
+        nextLevel();
+    }, 100);
+}
+
+function handleRestartLevel(button) {
+    // 禁用按钮防止重复点击
+    button.disabled = true;
+    button.style.opacity = '0.5';
+    button.style.cursor = 'not-allowed';
+    
+    // 移除弹窗
+    const overlay = button.closest('[style*="position: fixed"]');
+    if (overlay) {
+        overlay.remove();
+    }
+    
+    // 延迟执行重新开始
+    setTimeout(() => {
+        restartLevel();
+    }, 100);
+}
+// 防止双击的安全处理函数
+function handleBackToLevelSelect(button) {
+    // 禁用按钮防止重复点击
+    button.disabled = true;
+    button.style.opacity = '0.5';
+    button.style.cursor = 'not-allowed';
+    
+    // 移除弹窗
+    const overlay = button.closest('[style*="position: fixed"]');
+    if (overlay) {
+        overlay.remove();
+    }
+    
+    // 延迟执行返回选关
+    setTimeout(() => {
+        backToLevelSelect();
+    }, 100);
+}
+    
 // 下一关
 function nextLevel() {
     if (gameState.currentLevel < LEVELS.length) {
