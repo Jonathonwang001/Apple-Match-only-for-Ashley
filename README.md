@@ -553,10 +553,10 @@ Creating an interesting game only for my love, Ashley. Hope her happy everyday!
         <h1 class="game-title">🍎 苹果消消乐</h1>
         <p class="subtitle">献给最爱的Ashley ❤️</p>
         <div class="menu-buttons">
-            <button class="menu-btn" ="showLevelSelect()">开始游戏 🎮</button>
-            <button class="menu-btn" ="showAchievements()">成就系统 🏆</button>
-            <button class="menu-btn" ="showLoveMessages()">专属情话 💕</button>
-            <button class="menu-btn" ="showSettings()">游戏说明 ⚙️</button>
+            <button class="menu-btn" onclick="showLevelSelect()">开始游戏 🎮</button>
+            <button class="menu-btn" onclick="showAchievements()">成就系统 🏆</button>
+            <button class="menu-btn" onclick="showLoveMessages()">专属情话 💕</button>
+            <button class="menu-btn" onclick="showSettings()">游戏说明 ⚙️</button>
         </div>
     </div>
     
@@ -565,7 +565,7 @@ Creating an interesting game only for my love, Ashley. Hope her happy everyday!
         <h2>选择关卡</h2>
         <div class="level-grid" id="levelGrid"></div>
         <div style="text-align: center; margin-top: 2rem;">
-            <button class="menu-btn" ="showMainMenu()">返回主菜单</button>
+            <button class="menu-btn" onclick="showMainMenu()">返回主菜单</button>
         </div>
     </div>
     <!-- 游戏界面 -->
@@ -630,11 +630,11 @@ Creating an interesting game only for my love, Ashley. Hope her happy everyday!
             
             <!-- 控制按钮 -->
             <div class="controls">
-                <button class="control-btn secondary" ="showHint()">提示 💡</button>
-                <button class="control-btn secondary" ="showGameInstructions()">说明 📖</button>
-                <button class="control-btn secondary" ="pauseGame()">暂停 ⏸️</button>
-                <button class="control-btn secondary" ="restartLevel()">重新开始 🔄</button>
-                <button class="control-btn secondary" ="backToLevelSelect()">返回选关 ⬅️</button>
+                <button class="control-btn secondary" onclick="showHint()">提示 💡</button>
+                <button class="control-btn secondary" onclick="showGameInstructions()">说明 📖</button>
+                <button class="control-btn secondary" onclick="pauseGame()">暂停 ⏸️</button>
+                <button class="control-btn secondary" onclick="restartLevel()">重新开始 🔄</button>
+                <button class="control-btn secondary" onclick="backToLevelSelect()">返回选关 ⬅️</button>
             </div>
         </div>
     </div>
@@ -3036,13 +3036,13 @@ function showAchievements() {
             </div>
             
             <div style="display: flex; justify-content: center; gap: 1rem;">
-                <button onclick="event.stopPropagation(); var modal = this.parentElement.parentElement.parentElement; modal.style.display = 'none'; nextLevel(); setTimeout(() => modal.remove(), 100);" 
+                <button onclick="this.parentElement.parentElement.parentElement.remove();" 
                         style="padding: 0.8rem 1.5rem; background: rgba(255,255,255,0.2); 
                                color: white; border: 2px solid white; border-radius: 25px; 
                                cursor: pointer;">
                     关闭
                 </button>
-                <button onclick="event.stopPropagation(); var modal = this.parentElement.parentElement.parentElement; modal.style.display = 'none'; restartLevel(); setTimeout(() => modal.remove(), 100);" 
+                <button onclick="resetAchievements(); this.parentElement.parentElement.parentElement.remove();" 
                         style="padding: 0.8rem 1.5rem; background: rgba(255,0,0,0.3); 
                                color: white; border: 2px solid #ff6b6b; border-radius: 25px; 
                                cursor: pointer;">
