@@ -2831,6 +2831,36 @@ function showLevelComplete(success) {
     saveGameData();
 }
 
+    // 处理下一关按钮点击 - 修复版本
+    function handleNextLevel(button) {
+        // 防止重复点击
+        if (button.disabled) return;
+        
+        // 立即禁用按钮
+        button.disabled = true;
+        button.style.opacity = '0.5';
+        button.style.cursor = 'not-allowed';
+        
+        // 关闭弹窗
+        const overlay = button.closest('[style*="position: fixed"]');
+        if (overlay) {
+            overlay.style.animation = 'fadeOut 0.3s ease-in forwards';
+            setTimeout(() => {
+                overlay.remove();
+            }, 300);
+        }
+        
+        // 执行下一关逻辑
+        setTimeout(() => {
+            if (gameState.currentLevel < LEVELS.length) {
+                nextLevel();
+            } else {
+                backToLevelSelect();
+            }
+        }, 400);
+    }
+
+    
 // 创建庆祝效果
 function createCelebrationEffect() {
     for (let i = 0; i < 50; i++) {
@@ -2873,26 +2903,6 @@ function createCelebrationEffect() {
     
     setTimeout(() => style.remove(), 8000);
 }
-// 处理下一关按钮点击
-function handleNextLevel(button) {
-    // 防止重复点击
-    if (button.disabled) return;
-    button.disabled = true;
-    button.style.opacity = '0.5';
-    
-    // 关闭弹窗
-    const overlay = button.closest('[style*="position: fixed"]');
-    if (overlay) {
-        overlay.remove();
-    }
-    
-    // 延迟执行下一关逻辑
-    setTimeout(() => {
-        nextLevel();
-    }, 100);
-}
-
-    
 // 下一关
 function nextLevel() {
     if (gameState.currentLevel < LEVELS.length) {
