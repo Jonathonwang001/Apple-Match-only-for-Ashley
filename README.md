@@ -1,5 +1,5 @@
 # Apple-Match-only-for-Ashley
-Creating an interesting game only for my love, Ashley.
+Creating an interesting game only for my love, Ashley. Hope Ashley happy everyday
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -2787,7 +2787,7 @@ function showLevelComplete(success) {
                     <div>差距: ${gameState.target - gameState.score}</div>
                 </div>
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="if(!this.clicked){this.clicked=true; gameState.currentLevel = gameState.currentLevel < LEVELS.length ? gameState.currentLevel + 1 : gameState.currentLevel; var restartBtn = this.parentElement.querySelector('button:last-child'); restartBtn.textContent = '进入游戏 🎮'; this.style.display = 'none';};" 
+                    <button onclick="if(!this.clicked){this.clicked=true; gameState.currentLevel = gameState.currentLevel < LEVELS.length ? gameState.currentLevel + 1 : gameState.currentLevel; var buttons = this.parentElement.querySelectorAll('button'); for(var i=0; i<buttons.length; i++){ if(buttons[i].textContent.includes('重新挑战')){ buttons[i].textContent = '进入游戏 🎮'; break; } } this.textContent = '已选择下一关'; this.disabled = true; this.style.opacity = '0.5';};" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
                                    cursor: pointer; font-size: 1rem;">
