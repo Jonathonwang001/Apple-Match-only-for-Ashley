@@ -1,5 +1,5 @@
 # Apple-Match-only-for-Ashley
-Creating an interesting game only for my love, Ashley. Hope Ashley happy everyday
+Creating an interesting game only for my love, Ashley.
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -2859,13 +2859,13 @@ function handleNextLevel(button) {
     if (button.clicked) return;
     button.clicked = true;
     
-    // 正确找到并移除整个弹窗
-    const overlay = button.closest('div[style*="position: fixed"]');
-    if (overlay) {
-        overlay.remove();
+    // 改变重新挑战按钮的文字为"进入游戏"
+    const restartButton = button.parentElement.querySelector('button:last-child');
+    if (restartButton) {
+        restartButton.innerHTML = '进入游戏 🎮';
     }
     
-    // 延迟执行，确保弹窗完全移除
+    // 执行下一关逻辑（背景会切换到下一关）
     setTimeout(function() {
         if (gameState.currentLevel < LEVELS.length) {
             gameState.currentLevel++;
