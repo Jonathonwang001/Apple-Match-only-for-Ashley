@@ -2787,7 +2787,7 @@ function showLevelComplete(success) {
                     <div>差距: ${gameState.target - gameState.score}</div>
                 </div>
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <button onclick=if(!this.clicked){this.clicked=true; gameState.currentLevel = gameState.currentLevel < LEVELS.length ? gameState.currentLevel + 1 : gameState.currentLevel; var restartBtn = this.parentElement.querySelector('button:last-child'); restartBtn.textContent = '进入游戏 🎮'; this.style.display = 'none';};" 
+                    <button onclick="if(!this.clicked){this.clicked=true; gameState.currentLevel = gameState.currentLevel < LEVELS.length ? gameState.currentLevel + 1 : gameState.currentLevel; var restartBtn = this.parentElement.querySelector('button:last-child'); restartBtn.textContent = '进入游戏 🎮'; this.style.display = 'none';};" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
                                    cursor: pointer; font-size: 1rem;">
