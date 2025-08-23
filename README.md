@@ -2876,25 +2876,6 @@ function handleNextLevel(button) {
     }, 100);
 }
 
-// 处理重新挑战
-function handleRestartLevel(button) {
-    // 防止重复点击
-    if (button.clicked) return;
-    button.clicked = true;
-    
-    // 正确找到并移除整个弹窗
-    const overlay = button.closest('div[style*="position: fixed"]');
-    if (overlay) {
-        overlay.remove();
-    }
-    
-    // 延迟执行，确保弹窗完全移除
-    setTimeout(function() {
-        startLevel(gameState.currentLevel); // 重新开始当前关
-    }, 100);
-}
-
-
     
 // 创建庆祝效果
 function createCelebrationEffect() {
