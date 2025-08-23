@@ -1,5 +1,5 @@
 # Apple-Match-only-for-Ashley
-Creating an interesting game only for my love, Ashley. Hope Ashley happy everyday
+Creating an interesting game only for my love, Ashley. Hope Ashley happy everyday!
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -2753,13 +2753,13 @@ function showLevelComplete(success) {
                     <div>最高连击: ${gameState.maxCombo}</div>
                 </div>
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="if(!this.disabled){this.disabled=true;this.style.opacity='0.5';setTimeout(function(){var overlay=document.querySelector('div[style*=\"position: fixed\"]');if(!overlay){overlay=document.querySelector('div[style*=\"position:fixed\"]');}if(overlay){overlay.remove();}if(gameState.currentLevel<LEVELS.length){gameState.currentLevel++;startLevel(gameState.currentLevel);}else{backToLevelSelect();}},100);}"
+                    <button onclick="this.parentElement.parentElement.parentElement.remove(); setTimeout(nextLevel, 10);" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
-                                   cursor: pointer; font-size: 1rem; touch-action: manipulation;">
+                                   cursor: pointer; font-size: 1rem;">
                         ${gameState.currentLevel < LEVELS.length ? '下一关 ▶️' : '返回选关 🏠'}
                     </button>
-                    <button onclick="if(!this.disabled){this.disabled=true;this.style.opacity='0.5';var overlay=this.closest('div');while(overlay&&!overlay.style.position.includes('fixed')){overlay=overlay.parentElement;}if(overlay){overlay.remove();}setTimeout(function(){startLevel(gameState.currentLevel);},100);}"
+                    <button onclick="this.parentElement.parentElement.parentElement.remove(); setTimeout(restartLevel, 10);" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
                                    cursor: pointer; font-size: 1rem;">
@@ -2787,7 +2787,7 @@ function showLevelComplete(success) {
                     <div>差距: ${gameState.target - gameState.score}</div>
                 </div>
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <button onclick=if(!this.clicked){this.clicked=true; gameState.currentLevel = gameState.currentLevel < LEVELS.length ? gameState.currentLevel + 1 : gameState.currentLevel; var restartBtn = this.parentElement.querySelector('button:last-child'); restartBtn.textContent = '进入游戏 🎮'; this.style.display = 'none';};" 
+                    <button onclick="restartLevel(); this.parentElement.parentElement.parentElement.remove();" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
                                    cursor: pointer; font-size: 1rem;">
@@ -2831,71 +2831,6 @@ function showLevelComplete(success) {
     saveGameData();
 }
 
-// 处理重新挑战
-function handleRestart() {
-    const overlay = document.querySelector('div[style*="position: fixed"]');
-    if (overlay) overlay.remove();
-    setTimeout(() => {
-        startLevel(gameState.currentLevel);
-    }, 100);
-}
-
-// 处理下一关
-function handleNextLevel() {
-    const overlay = document.querySelector('div[style*="position: fixed"]');
-    if (overlay) overlay.remove();
-    setTimeout(() => {
-        if (gameState.currentLevel < LEVELS.length) {
-            nextLevel();
-        } else {
-            backToLevelSelect();
-        }
-    }, 100);
-}
-
-// 处理下一关
-function handleNextLevel(button) {
-    // 防止重复点击
-    if (button.clicked) return;
-    button.clicked = true;
-    
-    // 正确找到并移除整个弹窗
-    const overlay = button.closest('div[style*="position: fixed"]');
-    if (overlay) {
-        overlay.remove();
-    }
-    
-    // 延迟执行，确保弹窗完全移除
-    setTimeout(function() {
-        if (gameState.currentLevel < LEVELS.length) {
-            gameState.currentLevel++;
-            startLevel(gameState.currentLevel);
-        } else {
-            backToLevelSelect();
-        }
-    }, 100);
-}
-
-// 处理重新挑战
-function handleRestartLevel(button) {
-    // 防止重复点击
-    if (button.clicked) return;
-    button.clicked = true;
-    
-    // 正确找到并移除整个弹窗
-    const overlay = button.closest('div[style*="position: fixed"]');
-    if (overlay) {
-        overlay.remove();
-    }
-    
-    // 延迟执行，确保弹窗完全移除
-    setTimeout(function() {
-        startLevel(gameState.currentLevel); // 重新开始当前关
-    }, 100);
-}
-
-
-    
 // 创建庆祝效果
 function createCelebrationEffect() {
     for (let i = 0; i < 50; i++) {
@@ -3597,7 +3532,7 @@ function showGameInstructions() {
                     <div><strong>时光:</strong> 增加5步额外操作机会</div>
                                         
                     <div style="font-size: 1.5rem;">🌪</div>
-                    <div><strong>时光:</strong> X型风暴卷走一切，Ashley的能量满满</div>
+                    <div><strong>风暴:</strong> X型风暴卷走一切，Ashley的能量满满</div>
                 </div>
             </div>
             
