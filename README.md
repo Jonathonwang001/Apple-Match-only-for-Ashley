@@ -2759,7 +2759,7 @@ function showLevelComplete(success) {
                                    cursor: pointer; font-size: 1rem; touch-action: manipulation;">
                         ${gameState.currentLevel < LEVELS.length ? '下一关 ▶️' : '返回选关 🏠'}
                     </button>
-                    <button onclick="this.parentElement.parentElement.parentElement.remove(); setTimeout(restartLevel, 10);" 
+                    <button onclick="document.body.removeChild(this.closest('div[style*=\"position: fixed\"]')); setTimeout(nextLevel, 50);"
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
                                    cursor: pointer; font-size: 1rem;">
