@@ -2719,117 +2719,66 @@ function checkLevelComplete() {
 }
 
 // 显示关卡完成界面
-function showLevelComplete(success) {
+function showLevelComplete() {
     const overlay = document.createElement('div');
     overlay.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.8);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-        animation: fadeIn 0.5s ease-out;
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.8); display: flex; align-items: center;
+        justify-content: center; z-index: 1000; animation: fadeIn 0.5s ease-in;
     `;
     
-    const currentLevel = LEVELS.find(l => l.id === gameState.currentLevel);
-    
-    if (success) {
-        // 胜利界面
-        overlay.innerHTML = `
-            <div style="background: linear-gradient(135deg, #4CAF50, #45a049); 
-                        color: white; padding: 2rem; border-radius: 20px; text-align: center; 
-                        max-width: 90vw; animation: successBounce 0.6s ease-out;">
-                <h2 style="margin-bottom: 1rem;">🎉 关卡完成！</h2>
-                <div style="font-size: 1.2rem; margin-bottom: 1rem;">
-                    ${currentLevel ? `"${currentLevel.quote}"` : ''}
-                </div>
-                <div style="margin-bottom: 2rem;">
-                    <div>得分: ${gameState.score} / ${gameState.target}</div>
-                    <div>剩余步数: ${gameState.moves}</div>
-                    <div>最高连击: ${gameState.maxCombo}</div>
-                </div>
-                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="handleNextLevel(this);" 
-                            style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
-                                   color: white; border: 2px solid white; border-radius: 25px; 
-                                   cursor: pointer; font-size: 1rem; touch-action: manipulation;">
-                        ${gameState.currentLevel < LEVELS.length ? '下一关 ▶️' : '返回选关 🏠'}
-                    </button>
-                    <button onclick="document.body.removeChild(this.closest('div[style*=\"position: fixed\"]')); setTimeout(nextLevel, 50);"
-                            style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
-                                   color: white; border: 2px solid white; border-radius: 25px; 
-                                   cursor: pointer; font-size: 1rem;">
-                        重新挑战 🔄
-                    </button>
-                </div>
+    overlay.innerHTML = `
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    padding: 3rem; border-radius: 20px; text-align: center;
+                    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                    transform: scale(0.9); animation: popIn 0.5s ease-out forwards;">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
+            <h2 style="color: white; margin: 0 0 1rem 0; font-size: 2rem;">恭喜过关！</h2>
+            <p style="color: rgba(255,255,255,0.9); margin: 0 0 2rem 0; font-size: 1.1rem;">
+                第${gameState.currentLevel}关完成
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <button onclick="handleRestart()" 
+                        style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
+                               color: white; border: 2px solid white; border-radius: 25px; 
+                               cursor: pointer; font-size: 1rem;">
+                    重新挑战 🔄
+                </button>
+                <button onclick="handleNextLevel()" 
+                        style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
+                               color: white; border: 2px solid white; border-radius: 25px; 
+                               cursor: pointer; font-size: 1rem;">
+                    ${gameState.currentLevel < LEVELS.length ? '下一关 ▶️' : '返回选关 🏠'}
+                </button>
             </div>
-        `;
-        
-        // 庆祝效果
-        createCelebrationEffect();
-        
-    } else {
-        // 失败界面
-        overlay.innerHTML = `
-            <div style="background: linear-gradient(135deg, #f44336, #d32f2f); 
-                        color: white; padding: 2rem; border-radius: 20px; text-align: center; 
-                        max-width: 90vw;">
-                <h2 style="margin-bottom: 1rem;">😔 挑战失败</h2>
-                <div style="font-size: 1.1rem; margin-bottom: 1rem;">
-                    别灰心，再试一次！
-                </div>
-                <div style="margin-bottom: 2rem;">
-                    <div>得分: ${gameState.score} / ${gameState.target}</div>
-                    <div>差距: ${gameState.target - gameState.score}</div>
-                </div>
-                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="restartLevel(); this.parentElement.parentElement.parentElement.remove();" 
-                            style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
-                                   color: white; border: 2px solid white; border-radius: 25px; 
-                                   cursor: pointer; font-size: 1rem;">
-                        重新挑战 🔄
-                    </button>
-                    <button onclick="backToLevelSelect(); this.parentElement.parentElement.parentElement.remove();" 
-                            style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
-                                   color: white; border: 2px solid white; border-radius: 25px; 
-                                   cursor: pointer; font-size: 1rem;">
-                        返回选关 ⬅️
-                    </button>
-                </div>
-            </div>
-        `;
-    }
+        </div>
+    `;
     
     document.body.appendChild(overlay);
-    
-    // 添加动画样式
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes successBounce {
-            0% { transform: scale(0.3); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-    `;
-    document.head.appendChild(style);
-    
-    setTimeout(() => style.remove(), 2000);
-    
-    // 更新游戏统计
-    gameState.gamesPlayed++;
-    if (success) {
-        gameState.totalScore += gameState.score;
-    }
-    saveGameData();
 }
+
+// 处理重新挑战
+function handleRestart() {
+    const overlay = document.querySelector('div[style*="position: fixed"]');
+    if (overlay) overlay.remove();
+    setTimeout(() => {
+        startLevel(gameState.currentLevel);
+    }, 100);
+}
+
+// 处理下一关
+function handleNextLevel() {
+    const overlay = document.querySelector('div[style*="position: fixed"]');
+    if (overlay) overlay.remove();
+    setTimeout(() => {
+        if (gameState.currentLevel < LEVELS.length) {
+            nextLevel();
+        } else {
+            backToLevelSelect();
+        }
+    }, 100);
+}
+
 
     // 处理下一关按钮点击 - 修复版本
     function handleNextLevel(button) {
