@@ -1,5 +1,5 @@
 # Apple-Match-only-for-Ashley
-Creating an interesting game only for my love, Ashley. Hope Ashley happy everyday
+Creating an interesting game only for my love, Ashley.
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -2753,13 +2753,13 @@ function showLevelComplete(success) {
                     <div>最高连击: ${gameState.maxCombo}</div>
                 </div>
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="handleNextLevel(this);" 
+                    <button onclick="if(!this.disabled){this.disabled=true;this.style.opacity='0.5';setTimeout(function(){var overlay=document.querySelector('[style*=\\'position: fixed\\']');if(overlay)overlay.remove();if(gameState.currentLevel<LEVELS.length){gameState.currentLevel++;startLevel(gameState.currentLevel);}else{backToLevelSelect();}},100);}"
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
                                    cursor: pointer; font-size: 1rem; touch-action: manipulation;">
                         ${gameState.currentLevel < LEVELS.length ? '下一关 ▶️' : '返回选关 🏠'}
                     </button>
-                    <button onclick="handleRestartLevel(this);"
+                    <button onclick="if(!this.disabled){this.disabled=true;this.style.opacity='0.5';setTimeout(function(){var overlay=document.querySelector('[style*=\\'position: fixed\\']');if(overlay)overlay.remove();startLevel(gameState.currentLevel);},100);}"
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
                                    cursor: pointer; font-size: 1rem;">
