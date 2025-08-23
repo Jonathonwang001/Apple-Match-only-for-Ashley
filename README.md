@@ -1301,8 +1301,8 @@ function createRandomApple() {
     
     // 第15-16关都有特殊水果，但概率不同
     if (gameState.currentLevel === 15) {  // 第15关5%概率
-        const bombChance = 0.06;      // 💥炸弹6%概率
-        const lightningChance = 0.04; // 🌪龙卷风4%概率
+        const bombChance = 0.08;      // 💥炸弹6%概率
+        const lightningChance = 0.10; // 🌪龙卷风4%概率
         
         const random = Math.random();
         if (random < bombChance) {
@@ -1312,7 +1312,7 @@ function createRandomApple() {
         }
     } else if (gameState.currentLevel === 16) {  // 第16关10%概率
         const bombChance = 0.06;      // 💥炸弹6%概率
-        const lightningChance = 0.04; // 🌪龙卷风4%概率
+        const lightningChance = 0.08; // 🌪龙卷风4%概率
         
         const random = Math.random();
         if (random < bombChance) {
@@ -1761,7 +1761,7 @@ function showComboEffect() {
     
     // 根据连击数显示不同的效果
     let comboText = `${gameState.combo}连击! `;
-    if (gameState.combo >= 5) comboText += '💥💥💥💥💥';
+    if (gameState.combo >= 5) comboText += '💥💥💥💥';
     else if (gameState.combo >= 4) comboText += '☄️☄️☄️☄️';
     else if (gameState.combo >= 3) comboText += '❤️‍🔥❤️‍🔥❤️‍🔥';
     else if (gameState.combo >= 2) comboText += '🌋🌋';
@@ -3507,15 +3507,15 @@ function showSettings() {
     ⚙️ 游戏设置 ⚙️
 
     🎮 游戏说明:
-    • 交换相邻的苹果来消除3个或更多相同的苹果
+    • 交换相邻的水果来消除3个或更多相同的水果
     • 达到目标分数即可过关
     • 使用道具帮助完成挑战
 
     💎 道具说明:
-    💥 炸弹 - 消除3x3范围内的所有苹果
-    ⚡ 闪电 - 消除整行和整列的苹果  
-    🌈 彩虹 - 消除所有相同类型的苹果
-    🔨 锤子 - 消除单个苹果
+    💥 炸弹 - 消除3x3范围内的所有水果
+    ⚡ 闪电 - 消除整行和整列的水果  
+    🌈 彩虹 - 消除所有相同类型的水果
+    🔨 锤子 - 消除单个水果
     🔄 洗牌 - 重新排列整个棋盘
     ⏰ 时光 - 增加5步额外步数
     🌪 风暴 - X型风暴卷走一切
@@ -3566,8 +3566,8 @@ function showGameInstructions() {
                         border-radius: 15px; margin-bottom: 1.5rem;">
                 <h3 style="margin-bottom: 1rem; color: #ffd700;">🎮 游戏规则</h3>
                 <div style="line-height: 1.6;">
-                    • 点击相邻的苹果进行交换<br>
-                    • 形成3个或更多相同苹果的连线即可消除<br>
+                    • 点击相邻的水果进行交换<br>
+                    • 形成3个或更多相同水果的连线即可消除<br>
                     • 达到目标分数即可过关<br>
                     • 注意剩余步数，用完就失败了<br>
                     • 连击可以获得更多分数奖励
