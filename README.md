@@ -1,5 +1,5 @@
 # Apple-Match-only-for-Ashley
-Creating an interesting game only for my love, Ashley. 
+Creating an interesting game only for my love, Ashley. Hope Ashley happy everyday
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -2753,13 +2753,13 @@ function showLevelComplete(success) {
                     <div>最高连击: ${gameState.maxCombo}</div>
                 </div>
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="if(!this.clicked){this.clicked=true; this.parentElement.parentElement.parentElement.remove(); setTimeout(function(){ if(gameState.currentLevel < LEVELS.length) { gameState.currentLevel++; startLevel(gameState.currentLevel); } else { backToLevelSelect(); } }, 100);};" 
+                    <button onclick="handleNextLevel(this);" 
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
                                    cursor: pointer; font-size: 1rem; touch-action: manipulation;">
                         ${gameState.currentLevel < LEVELS.length ? '下一关 ▶️' : '返回选关 🏠'}
                     </button>
-                    <button onclick="if(!this.clicked){this.clicked=true; this.parentElement.parentElement.parentElement.remove(); setTimeout(function(){ startLevel(gameState.currentLevel); }, 100);};"
+                    <button onclick="handleRestartLevel(this);"
                             style="padding: 1rem 2rem; background: rgba(255,255,255,0.2); 
                                    color: white; border: 2px solid white; border-radius: 25px; 
                                    cursor: pointer; font-size: 1rem;">
@@ -2853,35 +2853,47 @@ function handleNextLevel() {
     }, 100);
 }
 
-
-// 处理下一关按钮点击 - 修复版本
+// 处理下一关
 function handleNextLevel(button) {
     // 防止重复点击
-    if (button.disabled) return;
+    if (button.clicked) return;
+    button.clicked = true;
     
-    // 立即禁用按钮
-    button.disabled = true;
-    button.style.opacity = '0.5';
-    button.style.cursor = 'not-allowed';
-    
-    // 关闭弹窗
-    const overlay = button.closest('[style*="position: fixed"]');
+    // 正确找到并移除整个弹窗
+    const overlay = button.closest('div[style*="position: fixed"]');
     if (overlay) {
-        overlay.style.animation = 'fadeOut 0.3s ease-in forwards';
-        setTimeout(() => {
-            overlay.remove();
-        }, 300);
+        overlay.remove();
     }
     
-    // 执行下一关逻辑
-    setTimeout(() => {
+    // 延迟执行，确保弹窗完全移除
+    setTimeout(function() {
         if (gameState.currentLevel < LEVELS.length) {
-            nextLevel();
+            gameState.currentLevel++;
+            startLevel(gameState.currentLevel);
         } else {
             backToLevelSelect();
         }
-    }, 400);
+    }, 100);
 }
+
+// 处理重新挑战
+function handleRestartLevel(button) {
+    // 防止重复点击
+    if (button.clicked) return;
+    button.clicked = true;
+    
+    // 正确找到并移除整个弹窗
+    const overlay = button.closest('div[style*="position: fixed"]');
+    if (overlay) {
+        overlay.remove();
+    }
+    
+    // 延迟执行，确保弹窗完全移除
+    setTimeout(function() {
+        startLevel(gameState.currentLevel); // 重新开始当前关
+    }, 100);
+}
+
 
     
 // 创建庆祝效果
